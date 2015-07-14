@@ -1,3 +1,5 @@
+package drawable
+
 apply plugin: 'com.android.application'
 
 android {
@@ -5,8 +7,8 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.nectar.timeby"
-        minSdkVersion 15
+        applicationId "com.sbz_dy.www.clocktouchingtest"
+        minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -20,7 +22,6 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile project(':SMSSDK')
 }

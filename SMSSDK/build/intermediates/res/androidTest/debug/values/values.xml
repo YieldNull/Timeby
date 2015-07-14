@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/home/finalize/workspace/Android/Timeby/SMSSDK/build/intermediates/bundles/debug/res/values/values.xml -->
+    <!-- From: file:/D:/Android/Projects/Timeby/SMSSDK/build/intermediates/bundles/debug/res/values/values.xml -->
     <eat-comment/>
     <string-array name="smssdk_country_group_a">
 		<item>阿尔巴尼亚,355,110,27601|27602|27603|27604</item>

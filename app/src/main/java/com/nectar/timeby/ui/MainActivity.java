@@ -1,45 +1,44 @@
 package com.nectar.timeby.ui;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.nectar.timeby.R;
-import com.nectar.timeby.service.NotifyService;
-import com.nectar.timeby.service.ScreenOnReceiver;
 
 
-public class MainActivity extends ActionBarActivity {
-
-    private static final String TAG = "MainActivity";
+public class MainActivity extends Activity {
+    //ImageView minuteHand=null;
+    private RelativeLayout dialLayout = null;
+    private MinuteHandView minuteHandView =null;
+    private HourHandView hourHandView =null;
+    private double currMinuHandDegr=0.0;
+    private double currHourHandDegr=0.0;
+    //private RelativeLayout full = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //minuteHand=(ImageView)findViewById(R.id.minute_hand);
 
-        Intent theIntent = new Intent(this, NotifyService.class);
-        theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startService(theIntent);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        Log.i(TAG,"activity is invisible, tell ScreenOnReceiver to work");
-
-        //当APP不可见时，发送广播，使ScreenReceiver生效
-        Intent intent = new Intent();
-        intent.setAction(ScreenOnReceiver.ENABLE_ACTION);
-        sendBroadcast(intent);
+        dialLayout=(RelativeLayout)findViewById(R.id.dial_layout);
+        dialLayout.setOnTouchListener(new DialTouchListener());
+        minuteHandView =new MinuteHandView(MainActivity.this, 0);
+        dialLayout.addView(minuteHandView);
+        hourHandView =new HourHandView(MainActivity.this,0);
+        dialLayout.addView(hourHandView);
     }
 
     @Override
@@ -62,5 +61,154 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class MinuteHandView extends View {
+        private float degree;
+        public MinuteHandView(Context context, float degree) {
+            super(context);
+            this.degree=degree;
+        }
+        @Override
+        protected void onDraw(Canvas canvas){
+            Bitmap minuteHandBitmap= BitmapFactory.decodeResource(MainActivity.this.getResources(),R.drawable.minute_hand);
+            Matrix matrix=new Matrix();
+            float percent=(float)((double)getHeight()/2/(double)minuteHandBitmap.getHeight());
+            matrix.postScale(percent, percent);
+            matrix.postTranslate(getWidth() / 2 - minuteHandBitmap.getWidth() * percent / 2, getHeight() / 2 - minuteHandBitmap.getHeight() * percent);
+            matrix.postRotate(degree,getWidth() / 2, getHeight() / 2);
+            canvas.drawBitmap(minuteHandBitmap, matrix, new Paint());
+        }
+    }
+
+    public class HourHandView extends View {
+        private float degree;
+        public HourHandView(Context context, float degree) {
+            super(context);
+            this.degree=degree;
+        }
+        @Override
+        protected void onDraw(Canvas canvas){
+            Bitmap hourHandBitmap= BitmapFactory.decodeResource(MainActivity.this.getResources(),R.drawable.minute_hand);
+            Matrix matrix=new Matrix();
+            float percent=0.7f*(float)((double)getHeight()/2/(double)hourHandBitmap.getHeight());
+            matrix.postScale(percent*1.5f, percent);
+            matrix.postTranslate(getWidth() / 2 - hourHandBitmap.getWidth() * percent*1.5f / 2, getHeight() / 2 - hourHandBitmap.getHeight() * percent);
+            matrix.postRotate(degree,getWidth() / 2, getHeight() / 2);
+            canvas.drawBitmap(hourHandBitmap, matrix, new Paint());
+        }
+    }
+
+    private class DialTouchListener implements View.OnTouchListener {
+        private boolean isMinuHandMove=false;
+        private boolean isHourHandMove=false;
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            double x,y;
+            x=(double)event.getX();
+            y=(double)event.getY();
+            double dial_layout_width=(double)((RelativeLayout)findViewById(R.id.dial_layout)).getWidth();
+            double radius=Math.sqrt(Math.pow((x - dial_layout_width / 2), 2) + Math.pow((y - dial_layout_width / 2), 2));
+            int enventType=event.getAction();
+            if(enventType==MotionEvent.ACTION_DOWN&&radius>135)
+                return false;
+            double degree=90-180/3.1415926*(Math.asin((dial_layout_width/2-y)/radius));
+            if((x-dial_layout_width/2)<0)
+                degree=360-degree;
+
+            //当鼠标刚刚点击的时候（Down）
+            if(enventType==MotionEvent.ACTION_DOWN){
+                double handsAngle=Math.abs(currMinuHandDegr-currHourHandDegr);
+                if(handsAngle>180.0)
+                    handsAngle=360.0-handsAngle;
+                if(handsAngle<=10.0){
+                    if(currMinuHandDegr>=0.0&&currMinuHandDegr<15.0){
+                        if((degree<(currMinuHandDegr+15.0)&&degree>=0.0)||(degree>(345.0+currMinuHandDegr)&&degree<=360.0)){
+                            isMinuHandMove=true;
+                        }
+                        else
+                            return false;
+                    }
+                    else if(currMinuHandDegr<=360.0&&currMinuHandDegr>345.0){
+                        if((degree>(currMinuHandDegr-15.0)&&degree<=360.0)||(degree<(currMinuHandDegr-345.0)&&degree>=0.0)){
+                            isMinuHandMove=true;
+                        }
+                        else
+                            return false;
+                    }
+                    else{
+                        if(degree<(currMinuHandDegr+15.0)&&(degree>currMinuHandDegr-15.0)){
+                            isMinuHandMove=true;
+                        }
+                        else
+                            return false;
+                    }
+                }
+                else {
+                    if (currMinuHandDegr >= 0.0 && currMinuHandDegr < 15.0) {
+                        if ((degree < (currMinuHandDegr + 15.0) && degree >= 0.0) || (degree > (345.0 + currMinuHandDegr) && degree <= 360.0)) {
+                            isMinuHandMove = true;
+                        }
+                    } else if (currMinuHandDegr <= 360.0 && currMinuHandDegr > 345.0) {
+                        if ((degree > (currMinuHandDegr - 15.0) && degree <= 360.0) || (degree < (currMinuHandDegr - 345.0) && degree >= 0.0)) {
+                            isMinuHandMove = true;
+                        }
+                    } else {
+                        if (degree < (currMinuHandDegr + 15.0) && (degree > currMinuHandDegr - 15.0)) {
+                            isMinuHandMove = true;
+                        }
+                    }
+
+                    //时针检测
+                    if (isMinuHandMove == false) {
+                        if (currHourHandDegr >= 0.0 && currHourHandDegr < 15.0) {
+                            if ((degree < (currHourHandDegr + 15.0) && degree >= 0.0) || (degree > (345.0 + currHourHandDegr) && degree <= 360.0)) {
+                                isHourHandMove = true;
+                            } else
+                                return false;
+                        } else if (currHourHandDegr <= 360.0 && currHourHandDegr > 345.0) {
+                            if ((degree > (currHourHandDegr - 15.0) && degree <= 360.0) || (degree < (currHourHandDegr - 345.0) && degree >= 0.0)) {
+                                isHourHandMove = true;
+                            } else
+                                return false;
+                        } else {
+                            if (degree < (currHourHandDegr + 15.0) && (degree > currHourHandDegr - 15.0)) {
+                                isHourHandMove = true;
+                            } else
+                                return false;
+                        }
+                    }
+                }
+            }
+            else if(enventType==MotionEvent.ACTION_MOVE){
+                if(isMinuHandMove==true){
+                    dialLayout.removeView(minuteHandView);
+                    minuteHandView =new MinuteHandView(MainActivity.this,(float)degree);
+                    dialLayout.addView(minuteHandView);
+                }
+                else if(isHourHandMove==true){
+                    dialLayout.removeView(hourHandView);
+                    hourHandView =new HourHandView(MainActivity.this,(float)degree);
+                    dialLayout.addView(hourHandView);
+                }
+            }
+            else if(enventType==MotionEvent.ACTION_UP){
+                if(isMinuHandMove==true){
+                    dialLayout.removeView(minuteHandView);
+                    currMinuHandDegr=degree;
+                    minuteHandView =new MinuteHandView(MainActivity.this,(float)degree);
+                    dialLayout.addView(minuteHandView);
+                    isMinuHandMove=false;
+                }
+                else if(isHourHandMove==true){
+                    dialLayout.removeView(hourHandView);
+                    currHourHandDegr=degree;
+                    hourHandView =new HourHandView(MainActivity.this,(float)degree);
+                    dialLayout.addView(hourHandView);
+                    isHourHandMove=false;
+                }
+            }
+            return true;
+        }
     }
 }
