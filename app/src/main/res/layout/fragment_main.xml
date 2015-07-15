@@ -1,0 +1,46 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nectar.timeby.ui.fragment.MainFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/layout_dial_left"
+            android:layout_width="180dp"
+            android:layout_height="180dp">
+
+            <ImageView
+                android:id="@+id/imageView_dial_left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="30dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/clock_dial" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_dial_right"
+            android:layout_alignParentRight="true"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_gravity="right">
+
+            <ImageView
+                android:id="@+id/imageView_dial_right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="30dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/clock_dial" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

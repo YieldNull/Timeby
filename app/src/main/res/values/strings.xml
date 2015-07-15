@@ -5,4 +5,13 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_notify">NotifyActivity</string>
+
+    <string name="smssdk_app_key">8be7864566fc</string>
+    <string name="smssdk_app_secret">8633b1b251d8a0ee021c20eef3d0534c</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_register_phone">RegisterPhoneActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_user_info">UserInfoActivity</string>
 </resources>

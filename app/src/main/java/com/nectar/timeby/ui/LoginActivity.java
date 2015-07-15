@@ -1,12 +1,18 @@
 package com.nectar.timeby.ui;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.nectar.timeby.R;
 
@@ -16,67 +22,91 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import cn.smssdk.gui.RegisterPage;
 
-public class LoginActivity extends ActionBarActivity {
+/**
+ * 2015.7.13 by finalize
+ */
+
+public class LoginActivity extends Activity {
+
+    private static final String TAG = "LoginActivity";
 
     private EditText mUserText;
     private EditText mPasswordText;
     private Button mLoginButton;
-    private Button mRegisterButton;
+    private TextView mRegisterTextView;
+    private TextView mResetTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        SMSSDK.initSDK(this, "8be7864566fc", "8633b1b251d8a0ee021c20eef3d0534c");
-
         mUserText = (EditText) findViewById(R.id.editText_login_user);
-        mPasswordText = (EditText) findViewById(R.id.editText_login_passwd);
+        mPasswordText = (EditText) findViewById(R.id.editText_login_password);
         mLoginButton = (Button) findViewById(R.id.button_login_login);
-        mRegisterButton = (Button) findViewById(R.id.button_login_register);
+        mRegisterTextView = (TextView) findViewById(R.id.textView_login_register);
+        mResetTextView = (TextView) findViewById(R.id.textView_login_reset);
 
-        mRegisterButton.setOnClickListener(new View.OnClickListener() {
+        initOnClickListening();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+    }
+
+    private void initOnClickListening() {
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //打开注册页面
-                RegisterPage registerPage = new RegisterPage();
-                registerPage.setRegisterCallback(new EventHandler() {
-                    public void afterEvent(int event, int result, Object data) {
-                        // 解析注册结果
-                        if (result == SMSSDK.RESULT_COMPLETE) {
-                            HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
-                            String country = (String) phoneMap.get("country");
-                            String phone = (String) phoneMap.get("phone");
+                if (verifyUser()) {
+                    storeUserInfo();
 
-                            // 提交用户信息
-                            // registerUser(country, phone);
-                        }
-                    }
-                });
-                registerPage.show(LoginActivity.this);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    LoginActivity.this.startActivity(intent);
+
+                    LoginActivity.this.finish();
+                }
+            }
+        });
+
+        mRegisterTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginActivity.this.startActivity(
+                        new Intent(LoginActivity.this, RegisterActivity.class));
+
+                LoginActivity.this.finish();
+            }
+        });
+
+        mUserText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //此时s为输入后的值
+                //TODO 监听非法字符，在显示之前提示用户非法输入
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //TODO 输入合法时更改登录按钮的颜色
             }
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
+
+    private boolean verifyUser() {
+        //TODO 验证用户登录
+        return false;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    private void storeUserInfo() {
+        //TODO 将用户信息存入ContentProvider以及本地数据库
     }
 }
