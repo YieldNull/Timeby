@@ -16,7 +16,10 @@
 按上述教程会生成SSH key,把SSH key发给我就ok了
 
 ###使用须知
-开发时请新建一个branch，一般是dev，不要直接往master分支传数据
+1.先将代码pull到本地
+必须使用git@github.com:jun-kai-xin/Timeby.git
+
+2.开发时请新建一个branch，一般是dev，不要直接往master分支传数据
 
 功能完成后再合并到master分支
 
