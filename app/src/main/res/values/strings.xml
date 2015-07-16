@@ -16,6 +16,7 @@
     <string name="title_activity_user_info">UserInfoActivity</string>
     <string name="context_menu">Context menu</string>
 
+
     <string name="server_base_url">http://caelum.oicp.net:40018/TimebyServer/</string>
     <!--<string name="server_base_url">http://192.168.150.116:8081/AndroidInterface/</string>-->
 </resources>
