@@ -1,4 +1,4 @@
-package com.nectar.timeby.ui.fragment;
+package com.nectar.timeby.gui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -43,14 +43,9 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
-    public void onButtonPressed() {
-        if (mListener != null) {
-            mListener.onToggleClick();
-        }
-    }
 
     public interface OnToggleClickListener {
-        public void onToggleClick();
+        public void onToggleClick(Fragment fragment, boolean addToBackStack);
     }
 
     @Override

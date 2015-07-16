@@ -27,7 +27,7 @@ public class NotifyService extends Service {
         super.onCreate();
 
         Log.i(TAG, "notify service start");
-        Log.i(TAG, "activity_register screenOn broadcast receiver");
+        Log.i(TAG, "fragment_register screenOn broadcast receiver");
 
         mScreenOnReceiver = new ScreenOnReceiver();
         registerReceiver(mScreenOnReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));

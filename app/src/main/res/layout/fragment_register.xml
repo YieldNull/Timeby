@@ -1,0 +1,83 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:background="@color/bgd_login"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/img_login_icon" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+
+        <EditText
+            android:id="@+id/editText_register_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:singleLine="true"
+            android:background="@android:color/white"
+            android:drawableRight="@drawable/icn_login_valid"
+            android:hint="输入用户名"
+            android:padding="10dp"
+            android:textColor="@color/edittext_login"
+            android:textColorHint="@color/edittext_login"
+            android:textCursorDrawable="@null"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/editText_register_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:background="@android:color/white"
+            android:ellipsize="start"
+            android:hint="输入密码"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:padding="10dp"
+            android:textColor="@color/edittext_login"
+            android:textColorHint="@color/edittext_login"
+            android:textCursorDrawable="@null"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/editText_register_password2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:background="@android:color/white"
+            android:drawableRight="@drawable/icn_login_valid"
+            android:ellipsize="start"
+            android:hint="再次输入密码"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:padding="10dp"
+            android:textColor="@color/edittext_login"
+            android:textColorHint="@color/edittext_login"
+            android:textCursorDrawable="@null"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/button_register_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="@color/bgd_login"
+            android:src="@drawable/btn_login_next"
+            android:textColorHint="@color/edittext_login" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -2,11 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context="com.nectar.timeby.ui.fragment.DrawerFragment">
+    tools:context="com.nectar.timeby.gui.fragment.DrawerFragment">
 
 
     <ListView
+        android:id="@+id/listView_drawer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView_drawer" />
+        android:divider="@null"
+        android:listSelector="#00000000" />
 </FrameLayout>

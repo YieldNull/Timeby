@@ -1,4 +1,4 @@
-package com.nectar.timeby.ui;
+package com.nectar.timeby.gui;
 
 import android.app.Activity;
 import android.os.PersistableBundle;

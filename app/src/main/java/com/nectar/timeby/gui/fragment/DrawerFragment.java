@@ -1,4 +1,4 @@
-package com.nectar.timeby.ui.fragment;
+package com.nectar.timeby.gui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -69,6 +70,17 @@ public class DrawerFragment extends Fragment {
         mArrayAdapter = new DrawerListAdapter(getActivity(),
                 R.layout.drawer_list_item, initListView());
         mDrawerListView.setAdapter(mArrayAdapter);
+        mDrawerListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectItem(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // 打开app时，选中抽屉被选初始值或则最近一次选中的值
         selectItem(mCurrentSelectedPosition);
@@ -77,19 +89,18 @@ public class DrawerFragment extends Fragment {
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
-        if (mDrawerListView != null)
-            mDrawerListView.setItemChecked(position, true);
         if (mCallbacks != null)
             mCallbacks.onDrawerListItemSelected(position);
     }
 
+
     public List<DrawerListItem> initListView() {
         List<DrawerListItem> itemList = new ArrayList<DrawerListItem>();
-        DrawerListItem item1 = new DrawerListItem(R.drawable.nav_user, "用户");
-        DrawerListItem item2 = new DrawerListItem(R.drawable.nav_friends, "好友");
-        DrawerListItem item3 = new DrawerListItem(R.drawable.nav_form, "表单");
-        DrawerListItem item4 = new DrawerListItem(R.drawable.nav_mode, "模式");
-        DrawerListItem item5 = new DrawerListItem(R.drawable.nav_setting, "设置");
+        DrawerListItem item1 = new DrawerListItem(R.drawable.icn_1, "用户");
+        DrawerListItem item2 = new DrawerListItem(R.drawable.icn_2, "好友");
+        DrawerListItem item3 = new DrawerListItem(R.drawable.icn_3, "表单");
+        DrawerListItem item4 = new DrawerListItem(R.drawable.icn_4, "模式");
+        DrawerListItem item5 = new DrawerListItem(R.drawable.icn_5, "设置");
         itemList.add(item1);
         itemList.add(item2);
         itemList.add(item3);
@@ -127,7 +138,7 @@ public class DrawerFragment extends Fragment {
         }
 
         @Override
-        public View getView(int postion, View convertView, ViewGroup parent) {
+        public View getView(final int postion, View convertView, ViewGroup parent) {
             DrawerListItem drawerListItem = getItem(postion);
             View view;
             ViewHolder viewHolder;
@@ -136,6 +147,12 @@ public class DrawerFragment extends Fragment {
                 viewHolder = new ViewHolder();
                 viewHolder.listViewItemImage = (ImageView) view
                         .findViewById(R.id.drawer_list_item_image);
+                viewHolder.listViewItemImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectItem(postion);
+                    }
+                });
                 viewHolder.listViewItemText = (TextView) view
                         .findViewById(R.id.drawer_list_item_text);
                 view.setTag(viewHolder);

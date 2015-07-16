@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="text_color">#222222</color>
+    <color name="bgd_login">#598A84</color>
+    <color name="edittext_login">#87A696</color>
+</resources>

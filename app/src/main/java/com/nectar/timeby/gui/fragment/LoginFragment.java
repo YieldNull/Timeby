@@ -1,59 +1,55 @@
-package com.nectar.timeby.ui;
+package com.nectar.timeby.gui.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nectar.timeby.R;
 
-import java.util.HashMap;
-
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
-import cn.smssdk.gui.RegisterPage;
 
 /**
  * 2015.7.13 by finalize
  */
 
-public class LoginActivity extends Activity {
+public class LoginFragment extends Fragment {
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "LoginFragment";
 
     private EditText mUserText;
     private EditText mPasswordText;
     private Button mLoginButton;
     private TextView mRegisterTextView;
     private TextView mResetTextView;
+    private MainFragment.OnToggleClickListener mToggleClickListener;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        mUserText = (EditText) findViewById(R.id.editText_login_user);
-        mPasswordText = (EditText) findViewById(R.id.editText_login_password);
-        mLoginButton = (Button) findViewById(R.id.button_login_login);
-        mRegisterTextView = (TextView) findViewById(R.id.textView_login_register);
-        mResetTextView = (TextView) findViewById(R.id.textView_login_reset);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup rootView = (ViewGroup) inflater.inflate(
+                R.layout.fragment_login, container, false);
+        mUserText = (EditText) rootView.findViewById(R.id.editText_login_user);
+        mPasswordText = (EditText) rootView.findViewById(R.id.editText_login_password);
+        mLoginButton = (Button) rootView.findViewById(R.id.button_login_login);
+        mRegisterTextView = (TextView) rootView.findViewById(R.id.textView_login_register);
+        mResetTextView = (TextView) rootView.findViewById(R.id.textView_login_reset);
 
         initOnClickListening();
+
+        return rootView;
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume");
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        mToggleClickListener = (MainFragment.OnToggleClickListener) activity;
     }
 
     private void initOnClickListening() {
@@ -62,11 +58,7 @@ public class LoginActivity extends Activity {
             public void onClick(View v) {
                 if (verifyUser()) {
                     storeUserInfo();
-
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    LoginActivity.this.startActivity(intent);
-
-                    LoginActivity.this.finish();
+                    mToggleClickListener.onToggleClick(new MainFragment(), true);
                 }
             }
         });
@@ -74,10 +66,7 @@ public class LoginActivity extends Activity {
         mRegisterTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginActivity.this.startActivity(
-                        new Intent(LoginActivity.this, RegisterActivity.class));
-
-                LoginActivity.this.finish();
+                mToggleClickListener.onToggleClick(new RegisterFragment(), true);
             }
         });
 
@@ -103,6 +92,12 @@ public class LoginActivity extends Activity {
 
     private boolean verifyUser() {
         //TODO 验证用户登录
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+//                HttpUtil
+            }
+        }).run();
         return false;
     }
 

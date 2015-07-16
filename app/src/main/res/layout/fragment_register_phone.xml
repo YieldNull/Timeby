@@ -1,0 +1,98 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:background="@color/bgd_login"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/img_login_icon" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <EditText
+            android:id="@+id/editText_register_phone_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:background="@android:color/white"
+            android:drawableRight="@drawable/icn_login_valid"
+            android:hint="输入手机号"
+            android:padding="10dp"
+            android:textColor="@color/edittext_login"
+            android:textColorHint="@color/edittext_login"
+            android:textCursorDrawable="@null"
+            android:singleLine="true"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <EditText
+                android:id="@+id/editText_register_phone_captcha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="1dp"
+                android:layout_weight="1.07"
+                android:background="@android:color/white"
+                android:hint="验证码"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:padding="10dp"
+                android:textColor="@color/edittext_login"
+                android:textColorHint="@color/edittext_login"
+                android:textCursorDrawable="@null"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/button_register_phone_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="10dp"
+                android:text="重新发送(50秒)"
+                android:textColor="@color/edittext_login"
+                android:textColorHint="@color/edittext_login"
+                android:textCursorDrawable="@null"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <ImageButton
+            android:id="@+id/button_register_phone_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/bgd_login"
+            android:src="@drawable/btn_login_back"
+            android:layout_marginRight="40dp" />
+
+        <ImageButton
+            android:id="@+id/button_register_phone_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/bgd_login"
+            android:src="@drawable/btn_login_submit" />
+    </LinearLayout>
+
+</LinearLayout>

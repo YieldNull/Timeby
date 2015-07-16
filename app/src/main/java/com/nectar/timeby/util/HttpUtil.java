@@ -1,5 +1,9 @@
 package com.nectar.timeby.util;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,9 +21,25 @@ import java.util.Map;
 /**
  * Created by finalize on 7/14/15.
  */
-public class NetManager {
+public class HttpUtil {
 
-    public JSONObject doPost(String url, Map<String, String> datas) throws IOException {
+    public static boolean isNetAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        //并没有打开网络设备
+        if (networkInfo == null)
+            return false;
+        else
+            return true;
+
+//        NetworkInfo MobileState = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+//        NetworkInfo wifiState = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+    }
+
+    public static JSONObject doPost(String url, Map<String, String> datas) throws IOException {
 
         //设置连接参数
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -52,7 +72,7 @@ public class NetManager {
         return readResponse(responseStream);
     }
 
-    public JSONObject doGet(String url) throws IOException {
+    public static JSONObject doGet(String url) throws IOException {
         //设置连接参数
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setDoInput(true);
@@ -68,7 +88,7 @@ public class NetManager {
     }
 
 
-    private JSONObject readResponse(InputStream responseStream) throws IOException {
+    private static JSONObject readResponse(InputStream responseStream) throws IOException {
 
         ByteArrayOutputStream resultOutStream = new ByteArrayOutputStream();
 
@@ -84,6 +104,7 @@ public class NetManager {
         try {
             result = new JSONObject(response);
         } catch (JSONException e) {
+            e.printStackTrace();
         }
         return result;
     }
