@@ -1,12 +1,7 @@
 package com.nectar.timeby.gui;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,25 +11,19 @@ import android.support.v4.widget.ViewDragHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 
 import com.nectar.timeby.R;
 import com.nectar.timeby.gui.fragment.DrawerFragment;
 import com.nectar.timeby.gui.fragment.LoginFragment;
-import com.nectar.timeby.service.NotifyService;
+import com.nectar.timeby.gui.fragment.UserFragment;
+import com.nectar.timeby.gui.util.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.fragment.MainFragment;
-import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
-import com.yalantis.contextmenu.lib.MenuObject;
-import com.yalantis.contextmenu.lib.MenuParams;
+import com.nectar.timeby.gui.util.OnDrawerToggleClickListener;
+import com.nectar.timeby.service.NotifyService;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.smssdk.SMSSDK;
 
 /**
  * 2015.7.13 by finalize
@@ -42,82 +31,86 @@ import cn.smssdk.SMSSDK;
 //DrawerFragment.OnDrawerItemSelectedListener,
 //MainFragment.OnToggleClickListener
 public class MainActivity extends AppCompatActivity
-        implements MainFragment.OnToggleClickListener,
+        implements OnDrawerToggleClickListener,
         DrawerFragment.OnDrawerItemSelectedListener {
 
     private static final String TAG = "MainActivity";
     private FragmentManager mFragmentManager;
-    private DialogFragment mMenuDialogFragment;
     private DrawerLayout mDrawerLayout;
+    private OnDrawerStatusChangedListener mDrawerStatusChangedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         //开启Service
         Intent theIntent = new Intent(this, NotifyService.class);
         theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startService(theIntent);
 
-        //初始化toolbar、menuFragment
-        // initActionbar();
-        //initMenuFragment();
         initDrawer();
-
-        //初始时使用主Fragment
-        // addFragment(new MainFragment(), true, R.id.main_fragment);
-
-        SMSSDK.initSDK(this, getResources().getString(R.string.smssdk_app_key),
-                getResources().getString(R.string.smssdk_app_secret));
     }
 
     @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        //设置主菜单
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //点击菜单时，显示下拉菜单
-        switch (item.getItemId()) {
-            case R.id.context_menu:
-                mMenuDialogFragment.show(mFragmentManager, "ContextMenuDialogFragment");
-                break;
+    public void onBackPressed() {
+        //将Fragment栈弹栈，到栈底之后结束Activity
+        int count = mFragmentManager.getBackStackEntryCount();
+        Log.i(TAG, count + "");
+        if (count == 1) {
+            finish();
+        } else {
+            mFragmentManager.popBackStack();
+            try {
+                mDrawerStatusChangedListener = (OnDrawerStatusChangedListener)
+                        mFragmentManager.getBackStackEntryAt(count - 1);
+            } catch (ClassCastException e) {
+                mDrawerStatusChangedListener = null;
+            }
         }
-        return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (mMenuDialogFragment != null && mMenuDialogFragment.isAdded()) {
-//            mMenuDialogFragment.dismiss();
-//        } else {
-//            finish();
-//        }
-//    }
 
     /**
-     * 初始化toolbar
+     * 初始化抽屉
      */
-    private void initActionbar() {
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setBackgroundDrawable(
-                new ColorDrawable(Color.parseColor("#88F696A1")));
-    }
-
     private void initDrawer() {
         //设置Drawer
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.setScrimColor(Color.TRANSPARENT);
+        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            private boolean isClosed = true;//是否处于关闭状态
 
-        // 主界面能滑动拉开抽屉
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                isClosed = false;
+                Log.i(TAG, "onDrawerOpened");
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                Log.i(TAG, "onDrawerClosed");
+                isClosed = true;
+                if (mDrawerStatusChangedListener != null)
+                    mDrawerStatusChangedListener.onDrawerClosed();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                Log.i(TAG, "onDrawerStateChanged" + newState);
+                if (isClosed & newState == DrawerLayout.STATE_SETTLING) {
+                    if (mDrawerStatusChangedListener != null)
+                        mDrawerStatusChangedListener.onDrawerOpening();
+                }
+            }
+        });
+
+        // 增大EdgeSize,使主界面能更轻松滑动拉开抽屉
         try {
             Field mDragger = mDrawerLayout.getClass().getDeclaredField(
                     "mLeftDragger");// mRightDragger or mLeftDragger based on
@@ -138,82 +131,35 @@ public class MainActivity extends AppCompatActivity
 
 
     /**
-     * 初始化弹出菜单
-     */
-    private void initMenuFragment() {
-        MenuParams menuParams = new MenuParams();
-        menuParams.setActionBarSize((int) getResources().getDimension(R.dimen.tool_bar_height));
-        menuParams.setMenuObjects(getMenuObjects());
-        menuParams.setClosableOutside(true);
-        mMenuDialogFragment = ContextMenuDialogFragment.newInstance(menuParams);
-    }
-
-
-    /**
-     * 设置弹出菜单的图片啊什么的
-     *
-     * @return
-     */
-    private List<MenuObject> getMenuObjects() {
-        List<MenuObject> menuObjects = new ArrayList<>();
-
-        MenuObject close = new MenuObject();
-        close.setResource(R.drawable.icn_close);
-
-        MenuObject send = new MenuObject("Send message");
-        send.setResource(R.drawable.icn_1);
-
-        MenuObject like = new MenuObject("Like profile");
-        Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.icn_2);
-        like.setBitmap(b);
-
-        MenuObject addFr = new MenuObject("Add to friends");
-        BitmapDrawable bd = new BitmapDrawable(getResources(),
-                BitmapFactory.decodeResource(getResources(), R.drawable.icn_3));
-        addFr.setDrawable(bd);
-
-        MenuObject addFav = new MenuObject("Add to favorites");
-        addFav.setResource(R.drawable.icn_4);
-
-        MenuObject block = new MenuObject("Block user");
-        block.setResource(R.drawable.icn_5);
-
-        menuObjects.add(close);
-        menuObjects.add(send);
-        menuObjects.add(like);
-        menuObjects.add(addFr);
-        menuObjects.add(addFav);
-        menuObjects.add(block);
-        return menuObjects;
-    }
-
-    /**
      * 在主container中添加fragment
      *
      * @param fragment
      * @param addToBackStack 是否放入栈中
-     * @param containerId    container
      */
-    protected void addFragment(Fragment fragment, boolean addToBackStack, int containerId) {
-        invalidateOptionsMenu();
+    protected void addFragment(Fragment fragment, boolean addToBackStack) {
+        try {
+            mDrawerStatusChangedListener = (OnDrawerStatusChangedListener) fragment;
+        } catch (ClassCastException e) {
+            mDrawerStatusChangedListener = null;
+        }
+
         String backStackName = fragment.getClass().getName();
         mFragmentManager = getSupportFragmentManager();
         boolean fragmentPopped = mFragmentManager.popBackStackImmediate(backStackName, 0);
         if (!fragmentPopped) {
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
-            transaction.add(containerId, fragment, backStackName)
+            transaction.add(R.id.main_fragment, fragment, backStackName)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             if (addToBackStack)
                 transaction.addToBackStack(backStackName);
             transaction.commit();
-
         }
     }
 
-    /**
-     * 以下是实现的接口
-     */
 
+    /**
+     * 当抽屉中的元素点击时触发，更换主页面的Fragment
+     */
     @Override
     public void onDrawerListItemSelected(int position) {
         Log.i(TAG, "DrawerListItemSelected:" + position);
@@ -223,14 +169,29 @@ public class MainActivity extends AppCompatActivity
         if (mDrawerLayout != null)
             mDrawerLayout.closeDrawer(Gravity.RIGHT);
 
-        if (position == -1)
-            addFragment(new MainFragment(), true, R.id.main_fragment);
-        else if (position == 0)
-            addFragment(new LoginFragment(), true, R.id.main_fragment);
+        switch (position) {
+            case 0:
+                addFragment(new UserFragment(), true);
+                break;
+            case 1:
+                addFragment(new LoginFragment(), true);
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                addFragment(new MainFragment(), true);
+                break;
+        }
     }
 
+    /**
+     * 当界面中的抽屉开关点击时触发，打开抽屉
+     */
+
     @Override
-    public void onToggleClick(Fragment fragment, boolean addToBackStack) {
-        addFragment(fragment, addToBackStack, R.id.main_fragment);
+    public void onDrawerToggleClick() {
+        mDrawerLayout.openDrawer(Gravity.RIGHT);
     }
 }

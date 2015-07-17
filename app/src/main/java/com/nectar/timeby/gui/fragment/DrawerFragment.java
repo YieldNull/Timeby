@@ -13,9 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.nectar.timeby.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +25,10 @@ public class DrawerFragment extends Fragment {
     private ArrayAdapter<DrawerListItem> mArrayAdapter;
 
     // 记录当前选定、按下的Position
-    private int mCurrentSelectedPosition = 0;
+    private int mCurrentSelectedPosition = -1;
 
     private final String TAG = "DrawerFragment";
+
 
     /**
      * 回调接口，与这个fragment关联的Activity必须要实现这个接口<br>
@@ -87,6 +86,12 @@ public class DrawerFragment extends Fragment {
         return drawerFragment;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG,"pause");
+    }
+
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
         if (mCallbacks != null)
@@ -96,16 +101,14 @@ public class DrawerFragment extends Fragment {
 
     public List<DrawerListItem> initListView() {
         List<DrawerListItem> itemList = new ArrayList<DrawerListItem>();
-        DrawerListItem item1 = new DrawerListItem(R.drawable.icn_1, "用户");
-        DrawerListItem item2 = new DrawerListItem(R.drawable.icn_2, "好友");
-        DrawerListItem item3 = new DrawerListItem(R.drawable.icn_3, "表单");
-        DrawerListItem item4 = new DrawerListItem(R.drawable.icn_4, "模式");
-        DrawerListItem item5 = new DrawerListItem(R.drawable.icn_5, "设置");
+        DrawerListItem item1 = new DrawerListItem(R.drawable.icn_drawer_user, "用户");
+        DrawerListItem item2 = new DrawerListItem(R.drawable.icn_drawer_freinds, "好友");
+        DrawerListItem item3 = new DrawerListItem(R.drawable.icn_drawer_report, "表单");
+        DrawerListItem item4 = new DrawerListItem(R.drawable.icn_drawer_setting, "设置");
         itemList.add(item1);
         itemList.add(item2);
         itemList.add(item3);
         itemList.add(item4);
-        itemList.add(item5);
         return itemList;
     }
 
@@ -171,6 +174,4 @@ public class DrawerFragment extends Fragment {
         }
 
     }
-
-
 }

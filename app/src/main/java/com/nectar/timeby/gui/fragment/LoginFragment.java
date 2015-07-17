@@ -28,7 +28,6 @@ public class LoginFragment extends Fragment {
     private Button mLoginButton;
     private TextView mRegisterTextView;
     private TextView mResetTextView;
-    private MainFragment.OnToggleClickListener mToggleClickListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,7 +48,7 @@ public class LoginFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        mToggleClickListener = (MainFragment.OnToggleClickListener) activity;
+//        mToggleClickListener = (MainFragment.OnToggleClickListener) activity;
     }
 
     private void initOnClickListening() {
@@ -58,7 +57,7 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 if (verifyUser()) {
                     storeUserInfo();
-                    mToggleClickListener.onToggleClick(new MainFragment(), true);
+//                    mToggleClickListener.onToggleClick(new MainFragment(), true);
                 }
             }
         });
@@ -66,7 +65,7 @@ public class LoginFragment extends Fragment {
         mRegisterTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mToggleClickListener.onToggleClick(new RegisterFragment(), true);
+//                mToggleClickListener.onToggleClick(new RegisterFragment(), true);
             }
         });
 

@@ -2,15 +2,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    android:background="@color/bgd_login"
+    android:background="@color/login_bgd"
     android:orientation="vertical">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/img_login_icon"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="80dp"
-        android:layout_gravity="center_horizontal" />
+        android:src="@drawable/img_login_logo" />
 
     <LinearLayout
         android:id="@+id/linearLayout_login"
@@ -25,12 +25,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
             android:background="@android:color/white"
-            android:drawableLeft="@drawable/nav_user"
-            android:hint="手机号\\用户名"
+            android:hint="用户名或手机号"
+            android:padding="14dp"
             android:singleLine="true"
-            android:padding="10dp"
-            android:textColorHint="@color/bgd_login"
-            android:textColor="@color/bgd_login"
+            android:textColor="@color/login_text"
+            android:textColorHint="@color/login_text"
             android:textCursorDrawable="@null"
             android:textSize="20sp" />
 
@@ -40,14 +39,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
             android:background="@android:color/white"
-            android:drawableLeft="@drawable/nav_mode"
             android:ellipsize="start"
-            android:textColorHint="@color/bgd_login"
-            android:hint="密码"
-            android:singleLine="true"
+            android:hint="请输入密码"
             android:inputType="textPassword"
-            android:padding="10dp"
-            android:textColor="@color/bgd_login"
+            android:padding="14dp"
+            android:singleLine="true"
+            android:textColor="@color/login_text"
+            android:textColorHint="@color/login_text"
             android:textCursorDrawable="@null"
             android:textSize="20sp" />
 
@@ -59,7 +57,7 @@
             android:background="@android:color/white"
             android:padding="10dp"
             android:text="登录"
-            android:textColor="@color/bgd_login"
+            android:textColor="@color/login_text"
             android:textSize="20sp" />
     </LinearLayout>
 
@@ -83,7 +81,7 @@
             android:text="忘记密码"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/white"
-            android:textSize="26sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/textView"
@@ -93,7 +91,7 @@
             android:layout_centerHorizontal="true"
             android:text="|"
             android:textColor="@android:color/white"
-            android:textSize="26sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/textView_login_register"
@@ -106,7 +104,7 @@
             android:text="注    册"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/white"
-            android:textSize="26sp" />
+            android:textSize="22sp" />
     </RelativeLayout>
 
 </LinearLayout>

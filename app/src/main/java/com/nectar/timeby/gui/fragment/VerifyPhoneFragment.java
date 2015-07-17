@@ -1,51 +1,59 @@
 package com.nectar.timeby.gui.fragment;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.nectar.timeby.R;
 import com.nectar.timeby.util.HttpUtil;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
 public class VerifyPhoneFragment extends Fragment {
+    private static final String TAG = "VerifyPhoneFragment";
+    private static final String SEND_BUTTON_TEXT = "点击获取验证码";
+
+    //有强迫症的小子发这么多消息干嘛啊啊啊啊啊啊啊
     private static final int MSG_RESEND_BUTTON_CHANGE = 0x0001;
     private static final int MSG_RESEND_BUTTON_RESET = 0x0002;
-    private static final String SEND_BUTTON_TEXT = "点击获取验证码";
-    private static final String TAG = "VerifyPhoneFragment";
+    private static final int MSG_SMSSDK_RECALL = 0x0003;
+    private static final int MSG_PHONE_VALID = 0x0004;
+    private static final int MSG_PHONE_INVALID = 0x0005;
+    private static final int MSG_REGISTRE_SUCCESS = 0x0006;
+    private static final int MSG_SERVER_ERROR = 0x0007;
+    private static final int MSG_NET_INACTIVE = 0x0008;
 
     private static final int RESENT_TIME_INTERVAL = 60;
     private int mTimeRemain = RESENT_TIME_INTERVAL;
+    private static final String phoneReg = "^(145|147|176)\\d{8}$|^(1700|1705|1709)\\d{7}$" +
+            "|^1[38]\\d{9}$|^15[012356789]\\d{8}$";
+
 
     //记录发送短信时输入框内的手机号，防止申请验证码后改变手机号
-    private String mPhoneStr = "VerifyPhoneFragment";
+    private String mPhoneStr = TAG;
     private String mUser;
     private String mPassword;
 
     private ImageButton mSubmitButton;
-    private Button mSendButton;
+    private TextView mSendButton;
     private ImageButton mBackButton;
 
     private EditText mPhoneText;
@@ -56,8 +64,6 @@ public class VerifyPhoneFragment extends Fragment {
     private TimerTask mTask;
     private EventHandler mSMSHandler;
 
-
-    private MainFragment.OnToggleClickListener mToggleClickListener;
 
     @Override
     public void onAttach(Activity activity) {
@@ -71,7 +77,7 @@ public class VerifyPhoneFragment extends Fragment {
                 R.layout.fragment_register_phone, container, false);
 
         mSubmitButton = (ImageButton) rootView.findViewById(R.id.button_register_phone_login);
-        mSendButton = (Button) rootView.findViewById(R.id.button_register_phone_send);
+        mSendButton = (TextView) rootView.findViewById(R.id.button_register_phone_send);
         mPhoneText = (EditText) rootView.findViewById(R.id.editText_register_phone_phone);
         mCaptchaText = (EditText) rootView.findViewById(R.id.editText_register_phone_captcha);
         mBackButton = (ImageButton) rootView.findViewById(R.id.button_register_phone_back);
@@ -105,6 +111,7 @@ public class VerifyPhoneFragment extends Fragment {
             public void afterEvent(int event, int resultCode, Object data) {
                 super.afterEvent(event, resultCode, data);
                 Message msg = Message.obtain();
+                msg.what = MSG_SMSSDK_RECALL;
                 msg.arg1 = event;
                 msg.arg2 = resultCode;
                 msg.obj = data;
@@ -115,6 +122,9 @@ public class VerifyPhoneFragment extends Fragment {
         SMSSDK.registerEventHandler(mSMSHandler);
     }
 
+    /**
+     * 初始化提交按钮
+     */
     private void initButton() {
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +135,7 @@ public class VerifyPhoneFragment extends Fragment {
                     SMSSDK.submitVerificationCode("86", mPhoneStr,
                             mCaptchaText.getText().toString());
                 } else {
-                    if (mPhoneStr.equals("VerifyPhoneFragment")) {
+                    if (mPhoneStr.equals(TAG)) {
                         Toast.makeText(getActivity(),
                                 "请先填发送验证短信", Toast.LENGTH_SHORT).show();
                     } else {
@@ -156,18 +166,17 @@ public class VerifyPhoneFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (mTimeRemain == RESENT_TIME_INTERVAL) {
-                    //获取短信验证码
-                    if (!TextUtils.isEmpty(mPhoneText.getText().toString())) {
-                        //设置重发倒计时
-                        mTimer.scheduleAtFixedRate(mTask, 0, 1 * 1000);
+                    //电话号码合法则发送验证码
+                    Pattern pattern = Pattern.compile(phoneReg);
+                    Matcher matcher = pattern.matcher(mPhoneText.getText().toString());
 
+                    if (matcher.matches()) {
                         //记录发送短信时的手机号
                         mPhoneStr = mPhoneText.getText().toString();
-                        SMSSDK.getVerificationCode("86", mPhoneStr);
-
+                        checkPhoneUnique(true);//判断是否注册过
                     } else {
                         Toast.makeText(getActivity(),
-                                "电话号码不能为空", Toast.LENGTH_SHORT).show();
+                                "电话号码非法", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -184,28 +193,60 @@ public class VerifyPhoneFragment extends Fragment {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
 
-                if (msg.what == MSG_RESEND_BUTTON_CHANGE) {
-                    mSendButton.setText("重新发送（"
-                            + Integer.toString(msg.arg1)
-                            + "秒)");
-                } else if (msg.what == MSG_RESEND_BUTTON_RESET) {
-                    resetSendButton();
-                } else {//接受SMSSDK的回调
-                    int event = msg.arg1;
-                    int result = msg.arg2;
-                    if (result == SMSSDK.RESULT_COMPLETE) {
-                        if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
-                            Log.i(TAG, "Valid Captcha");
-                            resetSendButton();
-                            storeUserInfo();
-
-                        } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-                            Log.i(TAG, "Captcha has been sent");
+                switch (msg.what) {
+                    case MSG_RESEND_BUTTON_CHANGE:
+                        //改变倒计时
+                        mSendButton.setText("重新发送（"
+                                + Integer.toString(msg.arg1)
+                                + "秒)");
+                        break;
+                    case MSG_RESEND_BUTTON_RESET:
+                        //重设发送倒计时
+                        resetSendButton();
+                        break;
+                    case MSG_PHONE_VALID:
+                        //手机号没被注册，发送验证码
+                        mTimer.scheduleAtFixedRate(mTask, 0, 1 * 1000);
+                        Drawable rightImg = getActivity().getResources()
+                                .getDrawable(R.drawable.icn_login_valid);
+                        mPhoneText.setCompoundDrawablesWithIntrinsicBounds(null, null, rightImg, null);
+                        SMSSDK.getVerificationCode("86", mPhoneStr);
+                        break;
+                    case MSG_PHONE_INVALID:
+                        //手机号已被注册，不发送验证码
+                        Toast.makeText(getActivity(), "手机号已被注册", Toast.LENGTH_SHORT).show();
+                        break;
+                    case MSG_SERVER_ERROR:
+                        //服务器错误
+                        Toast.makeText(getActivity(), "服务器错误，请稍后再试",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case MSG_NET_INACTIVE:
+                        //没有连接互联网
+                        Toast.makeText(getActivity(), "无网络连接，请打开数据网络", Toast.LENGTH_SHORT).show();
+                        break;
+                    case MSG_REGISTRE_SUCCESS:
+                        //存储信息成功
+                        break;
+                    case MSG_SMSSDK_RECALL:
+                        int event = msg.arg1;
+                        int result = msg.arg2;
+                        switch (result) {
+                            case SMSSDK.RESULT_COMPLETE:
+                                Log.i(TAG, "Valid Captcha");
+                                resetSendButton();
+                                storeUserInfo();
+                                break;
+                            case SMSSDK.EVENT_GET_VERIFICATION_CODE:
+                                Log.i(TAG, "Captcha has been sent");
+                                break;
+                            default:
+                                Toast.makeText(getActivity(),
+                                        "验证码错误", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        Toast.makeText(getActivity(),
-                                "验证码错误", Toast.LENGTH_SHORT).show();
-                    }
+                        break;
+                    default:
+                        break;
                 }
             }
         };
@@ -255,9 +296,15 @@ public class VerifyPhoneFragment extends Fragment {
      */
     private void storeUserInfo() {
         Log.i(TAG, "storing user info");
+
+    }
+
+    /**
+     * @param isTest 是否是在测试手机号是否已被注册
+     */
+    private void checkPhoneUnique(final boolean isTest) {
         if (!HttpUtil.isNetAvailable(getActivity())) {
-            //TODO 弹出联网窗口
-            Log.i(TAG, "network inactive");
+            mHandler.sendEmptyMessage(MSG_NET_INACTIVE);
             return;
         }
 
@@ -272,7 +319,6 @@ public class VerifyPhoneFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Looper.prepare();
                 Log.i(TAG, "data was sent to server");
 
                 //发送数据，获取结果
@@ -285,7 +331,7 @@ public class VerifyPhoneFragment extends Fragment {
 
                 //连接服务器失败
                 if (jsonResult == null) {
-                    Toast.makeText(getActivity(), "连接服务器失败", Toast.LENGTH_SHORT).show();
+                    mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
                     return;
                 }
 
@@ -295,17 +341,13 @@ public class VerifyPhoneFragment extends Fragment {
                     status = jsonResult.getInt("status");
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
+                    return;
                 }
 
                 //状态码=-1则表示服务器错误
                 if (status == -1) {
-                    String err = null;
-                    try {
-                        err = jsonResult.getString("errorStr");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    Toast.makeText(getActivity(), err, Toast.LENGTH_SHORT).show();
+                    mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
                 } else {
                     //获取返回的数据，是否能成功注册
                     String result = null;
@@ -315,16 +357,17 @@ public class VerifyPhoneFragment extends Fragment {
                         e.printStackTrace();
                     }
 
+                    //根据返回结果判断手机号是否被注册过
                     if (result.equalsIgnoreCase("true")) {
-                        Toast.makeText(getActivity(), "注册成功", Toast.LENGTH_SHORT).show();
+                        if (isTest)
+                            mHandler.sendEmptyMessage(MSG_PHONE_VALID);
+                        else
+                            mHandler.sendEmptyMessage(MSG_REGISTRE_SUCCESS);
                     } else {
-                        Toast.makeText(getActivity(), "注册失败", Toast.LENGTH_SHORT).show();
+                        mHandler.sendEmptyMessage(MSG_PHONE_INVALID);
                     }
                 }
-                Looper.loop();
             }
         }).start();
-
     }
-
 }

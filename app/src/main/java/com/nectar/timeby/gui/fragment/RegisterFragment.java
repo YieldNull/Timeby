@@ -40,13 +40,13 @@ public class RegisterFragment extends Fragment {
     private EditText mPasswordText2;
     private ImageButton mNextButton;
 
-    private MainFragment.OnToggleClickListener mToggleClickListener;
+//    private MainFragment.OnToggleClickListener mToggleClickListener;
 
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mToggleClickListener = (MainFragment.OnToggleClickListener) activity;
+//        mToggleClickListener = (MainFragment.OnToggleClickListener) activity;
         Log.i(TAG, "" + HttpUtil.isNetAvailable(activity));
     }
 
@@ -61,7 +61,24 @@ public class RegisterFragment extends Fragment {
         mPasswordText = (EditText) rootView.findViewById(R.id.editText_register_password);
         mPasswordText2 = (EditText) rootView.findViewById(R.id.editText_register_password2);
         mNextButton = (ImageButton) rootView.findViewById(R.id.button_register_next);
-        initEditTextVerify();
+        //initEditTextVerify();
+
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mPasswordText2.getText().toString().equals(
+                        mPasswordText.getText().toString())) {
+                    Toast.makeText(getActivity(), "两次输入密码不匹配"
+                            , Toast.LENGTH_SHORT).show();
+                } else if (mUserText.getText().length() == 0) {
+                    Toast.makeText(getActivity(), "请输入用户名"
+                            , Toast.LENGTH_SHORT).show();
+                } else {
+                    startVerifyPage();
+                }
+
+            }
+        });
 
         return rootView;
     }
@@ -125,23 +142,6 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        mNextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mPasswordText2.getText().toString().equals(
-                        mPasswordText.getText().toString())) {
-                    Toast.makeText(getActivity(), "两次输入密码不匹配"
-                            , Toast.LENGTH_SHORT).show();
-                } else if (mUserText.getText().length() == 0) {
-                    Toast.makeText(getActivity(), "请输入用户名"
-                            , Toast.LENGTH_SHORT).show();
-                } else {
-                    startVerifyPage();
-                }
-
-            }
-        });
-
     }
 
     /**
@@ -156,6 +156,6 @@ public class RegisterFragment extends Fragment {
 
         Fragment verifyFragment = new VerifyPhoneFragment();
         verifyFragment.setArguments(bundle);
-        mToggleClickListener.onToggleClick(verifyFragment, true);
+//        mToggleClickListener.onToggleClick(verifyFragment, true);
     }
 }

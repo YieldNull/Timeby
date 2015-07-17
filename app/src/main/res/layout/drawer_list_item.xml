@@ -10,9 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:background="@android:color/white"
         android:padding="10dp"
-        android:src="@drawable/icn_1" />
+        android:src="@drawable/icn_drawer_user" />
 
     <TextView
         android:id="@+id/drawer_list_item_text"
@@ -23,7 +22,7 @@
         android:layout_marginRight="20dp"
         android:layout_toLeftOf="@id/drawer_list_item_image"
         android:text="设置"
-        android:textColor="@android:color/white"
+        android:textColor="@color/main_text_bgd"
         android:textSize="20sp" />
 
 </RelativeLayout>

@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    android:background="@color/bgd_login"
+    android:background="@color/login_bgd"
     android:orientation="vertical">
 
     <ImageView
@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="80dp"
-        android:src="@drawable/img_login_icon" />
+        android:src="@drawable/img_login_logo" />
 
     <LinearLayout
         android:id="@+id/linearLayout_login"
@@ -25,18 +25,19 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
             android:background="@android:color/white"
-            android:drawableRight="@drawable/icn_login_valid"
+            android:drawableRight="@drawable/icn_login_valid_none"
             android:hint="输入手机号"
             android:padding="10dp"
-            android:textColor="@color/edittext_login"
-            android:textColorHint="@color/edittext_login"
-            android:textCursorDrawable="@null"
             android:singleLine="true"
+            android:textColor="@color/login_text"
+            android:textColorHint="@color/login_text"
+            android:textCursorDrawable="@null"
             android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
             android:orientation="horizontal"
             android:weightSum="1">
 
@@ -49,23 +50,21 @@
                 android:background="@android:color/white"
                 android:hint="验证码"
                 android:inputType="textPassword"
-                android:singleLine="true"
                 android:padding="10dp"
-                android:textColor="@color/edittext_login"
-                android:textColorHint="@color/edittext_login"
+                android:singleLine="true"
+                android:textColor="@color/login_text"
+                android:textColorHint="@color/login_text"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp" />
 
-            <Button
+            <TextView
                 android:id="@+id/button_register_phone_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:padding="10dp"
                 android:text="重新发送(50秒)"
-                android:textColor="@color/edittext_login"
-                android:textColorHint="@color/edittext_login"
-                android:textCursorDrawable="@null"
+                android:textColor="@color/login_text"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -74,24 +73,24 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/button_register_phone_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@color/bgd_login"
-            android:src="@drawable/btn_login_back"
-            android:layout_marginRight="40dp" />
+            android:layout_marginRight="40dp"
+            android:background="@color/login_bgd"
+            android:src="@drawable/btn_login_back" />
 
         <ImageButton
             android:id="@+id/button_register_phone_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@color/bgd_login"
+            android:background="@color/login_bgd"
             android:src="@drawable/btn_login_submit" />
     </LinearLayout>
 

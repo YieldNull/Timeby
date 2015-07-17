@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="text_color">#222222</color>
-    <color name="bgd_login">#598A84</color>
-    <color name="edittext_login">#87A696</color>
+    <color name="main_bgd">#ffffe3</color>
+    <color name="main_text_bgd">#adccad</color>
+    <color name="main_time">#cbcbcb</color>
+    <color name="main_time_hint">#7d827e</color>
+    <color name="main_text">#ffffe3</color>
+    <color name="main_text_hint">#4c4c4b</color>
+
+    <color name="user_top_bgd">#b4deb4</color>
+    <color name="user_bottom_bgd">#c7f1c7</color>
+    <color name="user_text">#676767</color>
+
+    <color name="login_bgd">#598A84</color>
+    <color name="login_text">#87A696</color>
 </resources>
