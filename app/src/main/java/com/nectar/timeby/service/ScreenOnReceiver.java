@@ -19,6 +19,7 @@ public class ScreenOnReceiver extends BroadcastReceiver {
 
 
     public ScreenOnReceiver() {
+        Log.i(TAG, "screenOn receiver created");
     }
 
     @Override

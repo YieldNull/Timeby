@@ -1,10 +1,10 @@
 package com.nectar.timeby.gui;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.ViewDragHelper;
@@ -12,8 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-
 import com.nectar.timeby.R;
 import com.nectar.timeby.gui.fragment.DrawerFragment;
 import com.nectar.timeby.gui.fragment.LoginFragment;
@@ -46,6 +44,9 @@ public class MainActivity extends AppCompatActivity
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        Log.i(TAG, "Main Activity Create");
+        Log.i(TAG, "trying to start notify service");
+
         //开启Service
         Intent theIntent = new Intent(this, NotifyService.class);
         theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -59,19 +60,27 @@ public class MainActivity extends AppCompatActivity
         //将Fragment栈弹栈，到栈底之后结束Activity
         int count = mFragmentManager.getBackStackEntryCount();
         Log.i(TAG, count + "");
+
         if (count == 1) {
             finish();
+            return;
         } else {
             mFragmentManager.popBackStack();
-            try {
-                mDrawerStatusChangedListener = (OnDrawerStatusChangedListener)
-                        mFragmentManager.getBackStackEntryAt(count - 1);
-            } catch (ClassCastException e) {
-                mDrawerStatusChangedListener = null;
-            }
         }
-    }
 
+        String fragmentTag = mFragmentManager.getBackStackEntryAt(
+                count - 2).getName();
+        try {
+            mDrawerStatusChangedListener = (OnDrawerStatusChangedListener) mFragmentManager
+                    .findFragmentByTag(fragmentTag);
+        } catch (ClassCastException e) {
+            mDrawerStatusChangedListener = null;
+        }
+
+        Log.i(TAG, "" + (mDrawerStatusChangedListener == null));
+        if (mDrawerStatusChangedListener != null)
+            mDrawerStatusChangedListener.onDrawerClosed();
+    }
 
     /**
      * 初始化抽屉
@@ -144,7 +153,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         String backStackName = fragment.getClass().getName();
-        mFragmentManager = getSupportFragmentManager();
+        mFragmentManager = getFragmentManager();
         boolean fragmentPopped = mFragmentManager.popBackStackImmediate(backStackName, 0);
         if (!fragmentPopped) {
             FragmentTransaction transaction = mFragmentManager.beginTransaction();

@@ -101,10 +101,10 @@ public class DrawerFragment extends Fragment {
 
     public List<DrawerListItem> initListView() {
         List<DrawerListItem> itemList = new ArrayList<DrawerListItem>();
-        DrawerListItem item1 = new DrawerListItem(R.drawable.icn_drawer_user, "用户");
-        DrawerListItem item2 = new DrawerListItem(R.drawable.icn_drawer_freinds, "好友");
-        DrawerListItem item3 = new DrawerListItem(R.drawable.icn_drawer_report, "表单");
-        DrawerListItem item4 = new DrawerListItem(R.drawable.icn_drawer_setting, "设置");
+        DrawerListItem item1 = new DrawerListItem(R.drawable.icn_drawer_user, "");
+        DrawerListItem item2 = new DrawerListItem(R.drawable.icn_drawer_freinds, "");
+        DrawerListItem item3 = new DrawerListItem(R.drawable.icn_drawer_report, "");
+        DrawerListItem item4 = new DrawerListItem(R.drawable.icn_drawer_setting, "");
         itemList.add(item1);
         itemList.add(item2);
         itemList.add(item3);

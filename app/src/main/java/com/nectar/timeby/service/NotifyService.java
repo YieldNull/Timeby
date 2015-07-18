@@ -1,7 +1,6 @@
 package com.nectar.timeby.service;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
@@ -26,8 +25,8 @@ public class NotifyService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        Log.i(TAG, "notify service start");
-        Log.i(TAG, "fragment_register screenOn broadcast receiver");
+        Log.i(TAG, "notify service create");
+        Log.i(TAG, "trying to register screenOn broadcast receiver");
 
         mScreenOnReceiver = new ScreenOnReceiver();
         registerReceiver(mScreenOnReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
@@ -37,6 +36,11 @@ public class NotifyService extends Service {
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override

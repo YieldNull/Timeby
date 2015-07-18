@@ -1,6 +1,7 @@
 package com.nectar.timeby.gui.fragment;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,7 +9,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -59,6 +59,7 @@ public class MainFragment extends Fragment
 
     @Override
     public void onDrawerClosed() {
+
         mDrawerToggle.setVisibility(View.VISIBLE);
     }
 
@@ -108,7 +109,6 @@ public class MainFragment extends Fragment
         initClockWidget();
         return rootView;
     }
-
 
     @Override
     public void onDetach() {
