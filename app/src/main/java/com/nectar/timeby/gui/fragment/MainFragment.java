@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.nectar.timeby.R;
 import com.nectar.timeby.gui.util.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.util.OnDrawerToggleClickListener;

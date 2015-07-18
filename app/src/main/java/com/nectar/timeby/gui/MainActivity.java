@@ -12,13 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+
 import com.nectar.timeby.R;
 import com.nectar.timeby.gui.fragment.DrawerFragment;
-import com.nectar.timeby.gui.fragment.LoginFragment;
 import com.nectar.timeby.gui.fragment.UserFragment;
 import com.nectar.timeby.gui.util.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.fragment.MainFragment;
 import com.nectar.timeby.gui.util.OnDrawerToggleClickListener;
+import com.nectar.timeby.gui.util.TopNotification;
 import com.nectar.timeby.service.NotifyService;
 
 import java.lang.reflect.Field;
@@ -53,13 +54,13 @@ public class MainActivity extends AppCompatActivity
         startService(theIntent);
 
         initDrawer();
+        new TopNotification(this, "Hello World!", 1000 * 1).show();
     }
 
     @Override
     public void onBackPressed() {
         //将Fragment栈弹栈，到栈底之后结束Activity
         int count = mFragmentManager.getBackStackEntryCount();
-        Log.i(TAG, count + "");
 
         if (count == 1) {
             finish();
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity
             mFragmentManager.popBackStack();
         }
 
+        //获取当前栈顶的Fragment
         String fragmentTag = mFragmentManager.getBackStackEntryAt(
                 count - 2).getName();
         try {
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity
             mDrawerStatusChangedListener = null;
         }
 
-        Log.i(TAG, "" + (mDrawerStatusChangedListener == null));
+        //返回时要显示抽屉开关
         if (mDrawerStatusChangedListener != null)
             mDrawerStatusChangedListener.onDrawerClosed();
     }
@@ -157,7 +159,7 @@ public class MainActivity extends AppCompatActivity
         boolean fragmentPopped = mFragmentManager.popBackStackImmediate(backStackName, 0);
         if (!fragmentPopped) {
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
-            transaction.add(R.id.main_fragment, fragment, backStackName)
+            transaction.add(R.id.main_fragment_holder, fragment, backStackName)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             if (addToBackStack)
                 transaction.addToBackStack(backStackName);
@@ -183,7 +185,6 @@ public class MainActivity extends AppCompatActivity
                 addFragment(new UserFragment(), true);
                 break;
             case 1:
-                addFragment(new LoginFragment(), true);
                 break;
             case 2:
                 break;

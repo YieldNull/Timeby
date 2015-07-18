@@ -1,28 +1,23 @@
-package com.nectar.timeby.gui.fragment;
+package com.nectar.timeby.gui;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nectar.timeby.R;
 
-
 /**
- * 2015.7.13 by finalize
+ * Created by finalize on 7/18/15.
  */
+public class LoginActivity extends Activity {
 
-public class LoginFragment extends Fragment {
-
-    private static final String TAG = "LoginFragment";
-
+    private static final String TAG = "LoginActivity";
     private EditText mUserText;
     private EditText mPasswordText;
     private Button mLoginButton;
@@ -30,26 +25,19 @@ public class LoginFragment extends Fragment {
     private TextView mResetTextView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.fragment_login, container, false);
-        mUserText = (EditText) rootView.findViewById(R.id.editText_login_user);
-        mPasswordText = (EditText) rootView.findViewById(R.id.editText_login_password);
-        mLoginButton = (Button) rootView.findViewById(R.id.button_login_login);
-        mRegisterTextView = (TextView) rootView.findViewById(R.id.textView_login_register);
-        mResetTextView = (TextView) rootView.findViewById(R.id.textView_login_reset);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        mUserText = (EditText) findViewById(R.id.editText_login_user);
+        mPasswordText = (EditText) findViewById(R.id.editText_login_password);
+        mLoginButton = (Button) findViewById(R.id.button_login_login);
+        mRegisterTextView = (TextView) findViewById(R.id.textView_login_register);
+        mResetTextView = (TextView) findViewById(R.id.textView_login_reset);
 
         initOnClickListening();
-
-        return rootView;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-//        mToggleClickListener = (MainFragment.OnToggleClickListener) activity;
-    }
 
     private void initOnClickListening() {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +45,6 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 if (verifyUser()) {
                     storeUserInfo();
-//                    mToggleClickListener.onToggleClick(new MainFragment(), true);
                 }
             }
         });
@@ -65,7 +52,7 @@ public class LoginFragment extends Fragment {
         mRegisterTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                mToggleClickListener.onToggleClick(new RegisterFragment(), true);
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
 
@@ -94,7 +81,6 @@ public class LoginFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-//                HttpUtil
             }
         }).run();
         return false;
@@ -103,4 +89,5 @@ public class LoginFragment extends Fragment {
     private void storeUserInfo() {
         //TODO 将用户信息存入ContentProvider以及本地数据库
     }
+
 }
