@@ -44,11 +44,11 @@ public class RegisterActivity extends Activity {
     private static final int MSG_SERVER_ERROR = 0x0003;
 
 
+    private boolean isUserValid;//用户名是否已经被注册
     private EditText mUserText;
     private EditText mPasswordText;
     private EditText mPasswordText2;
     private ImageButton mNextButton;
-
     private Handler mHandler;
 
 
@@ -73,8 +73,16 @@ public class RegisterActivity extends Activity {
                 } else if (mUserText.getText().length() == 0) {
                     Toast.makeText(RegisterActivity.this, "请输入用户名"
                             , Toast.LENGTH_SHORT).show();
+                } else if (mPasswordText.getText().length() == 0) {
+                    Toast.makeText(RegisterActivity.this, "请填写密码"
+                            , Toast.LENGTH_SHORT).show();
                 } else {
-                    RegisterActivity.this.startVerifyPage();
+                    if (isUserValid) {
+                        RegisterActivity.this.startVerifyPage();
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "用户名已经被注册，请重新输入"
+                                , Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -85,8 +93,12 @@ public class RegisterActivity extends Activity {
                 super.handleMessage(msg);
                 switch (msg.what) {
                     case MSG_USERNAME_INVALID:
+                        isUserValid = false;
                         Toast.makeText(RegisterActivity.this, "用户名已被注册",
                                 Toast.LENGTH_SHORT).show();
+                        break;
+                    case MSG_USERNAME_VALID:
+                        isUserValid = true;
                         break;
                     case MSG_NET_INACTIVE:
                         Toast.makeText(RegisterActivity.this, "无网络连接，请打开数据网络",
@@ -181,6 +193,9 @@ public class RegisterActivity extends Activity {
         startActivity(intent);
     }
 
+    /**
+     * 用户名是否已经被注册
+     */
     private void checkUserName() {
         if (!HttpUtil.isNetAvailable(this)) {
             mHandler.sendEmptyMessage(MSG_NET_INACTIVE);

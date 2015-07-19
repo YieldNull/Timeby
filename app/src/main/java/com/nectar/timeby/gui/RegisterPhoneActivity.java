@@ -2,6 +2,7 @@ package com.nectar.timeby.gui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.nectar.timeby.R;
 import com.nectar.timeby.util.HttpUtil;
+import com.nectar.timeby.util.PrefsUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,9 +89,16 @@ public class RegisterPhoneActivity extends Activity {
 
         initSMSSDK();
         initHandler();
-        initTimer();
-        initButton();
+        initRendButton();
+        initSubmitButton();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "Destroying...Unregister  all SMSSDK event handler");
+        SMSSDK.unregisterAllEventHandler();
     }
 
     /**
@@ -114,13 +123,14 @@ public class RegisterPhoneActivity extends Activity {
             }
         };
 
+        //注册回调handler
         SMSSDK.registerEventHandler(mSMSHandler);
     }
 
     /**
      * 初始化提交按钮
      */
-    private void initButton() {
+    private void initSubmitButton() {
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,7 +162,7 @@ public class RegisterPhoneActivity extends Activity {
     /**
      * 初始化重新发送功能
      */
-    private void initTimer() {
+    private void initRendButton() {
 
         //设置重发倒计时
         mTimer = new Timer();
@@ -169,7 +179,7 @@ public class RegisterPhoneActivity extends Activity {
                     if (matcher.matches()) {
                         //记录发送短信时的手机号
                         mPhoneStr = mPhoneText.getText().toString();
-                        RegisterPhoneActivity.this.doCheckOrSave(true);//判断是否注册过
+                        RegisterPhoneActivity.this.verifyOrSave(true);//判断是否注册过
                     } else {
                         Toast.makeText(RegisterPhoneActivity.this,
                                 "请填写正确的电话号码", Toast.LENGTH_SHORT).show();
@@ -227,18 +237,17 @@ public class RegisterPhoneActivity extends Activity {
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case MSG_REGISTER_SUCCESS:
-                        //存储信息成功
-                        Log.i(TAG, "regster success,starting mainActivity");
-                        Intent intent = new Intent(RegisterPhoneActivity.this, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        RegisterPhoneActivity.this.startActivity(intent);
+                        //注册成功
+                        startMainActivity();
                         break;
                     case MSG_REGISTER_FAILURE:
+                        //注册失败
                         Toast.makeText(RegisterPhoneActivity.this,
                                 "该用户名已被注册，请重新填写", Toast.LENGTH_SHORT).show();
-                        finish();
+                        finish();//回到注册页面
                         break;
                     case MSG_SMSSDK_RECALL:
+                        //接收SMSSDK的回调
                         int event = msg.arg1;
                         int result = msg.arg2;
                         if (result == SMSSDK.RESULT_COMPLETE) {
@@ -252,8 +261,9 @@ public class RegisterPhoneActivity extends Activity {
                                     //验证码正确
                                     isCaptchaOnSending = false;
                                     Log.i(TAG, "Valid Captcha");
+                                    Log.i(TAG, "storing user info to server");
                                     resetSendButton();
-                                    storeUserInfo();
+                                    verifyOrSave(false);
                                     break;
                                 default:
                                     break;
@@ -278,6 +288,26 @@ public class RegisterPhoneActivity extends Activity {
                 }
             }
         };
+    }
+
+    private void startMainActivity() {
+        Log.i(TAG, "Register successfully!");
+
+        //把数据存到本地
+        Log.i(TAG, "Storing data in SharedPreference");
+        SharedPreferences user = getSharedPreferences(PrefsUtil.PREFS_MAP_USER, MODE_PRIVATE);
+        SharedPreferences.Editor editor = user.edit();
+        editor.putString(PrefsUtil.PREFS_KEY_USER_NAME, mUser);
+        editor.putString(PrefsUtil.PREFS_KEY_USER_PASSWORD, mPassword);
+        editor.putString(PrefsUtil.PREFS_KEY_USER_PHONE, mPhoneStr);
+        editor.commit();
+
+        //进入MainActivity
+        Log.i(TAG, "Starting MainActivity");
+        Intent intent = new Intent(RegisterPhoneActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);//进入主界面后将之前的Activity栈清空
+        RegisterPhoneActivity.this.startActivity(intent);
     }
 
     /**
@@ -311,23 +341,12 @@ public class RegisterPhoneActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "onDestroy,unregister SMSSDK all event handler");
-        SMSSDK.unregisterAllEventHandler();
-    }
-
-
     /**
-     * 手机号验证成功之后，将用户信息存储在本地以及服务器
+     * 验证手机号是否已经被注册或将信息存到服务器
+     *
+     * @param isCheck 是否是验证手机号
      */
-    private void storeUserInfo() {
-        Log.i(TAG, "storing user info to server and local");
-        doCheckOrSave(false);
-    }
-
-    private void doCheckOrSave(final boolean isCheck) {
+    private void verifyOrSave(final boolean isCheck) {
         if (!HttpUtil.isNetAvailable(this)) {
             mHandler.sendEmptyMessage(MSG_NET_INACTIVE);
             return;
