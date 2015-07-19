@@ -8,4 +8,10 @@
 
     <string name="context_menu">Context menu</string>
     <string name="title_activity_notify">notify</string>
+    <string name="title_activity_main_single">MainSingle</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main_company">MainCompany</string>
+    <string name="title_activity_main_pk">MainPK</string>
 </resources>

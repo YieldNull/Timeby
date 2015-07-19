@@ -55,6 +55,18 @@
             android:name=".gui.NotifyActivity"
             android:label="@string/title_activity_notify"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar" />
+        <activity
+            android:name=".gui.MainSingle"
+            android:label="@string/title_activity_main_single" >
+        </activity>
+        <activity
+            android:name=".gui.MainCompany"
+            android:label="@string/title_activity_main_company" >
+        </activity>
+        <activity
+            android:name=".gui.MainPK"
+            android:label="@string/title_activity_main_pk" >
+        </activity>
     </application>
 
 </manifest>
