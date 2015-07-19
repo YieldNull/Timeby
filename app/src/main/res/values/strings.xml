@@ -22,4 +22,9 @@
     <string name="setting_page_change_password">更改密码</string>
     <string name="setting_page_notify_time">提示时间</string>
     <string name="setting_page_feedback">意见反馈</string>
+
+    <string-array name="wsw">
+        <item>sahngbiu</item>
+        <item>sdjlkasj</item>
+    </string-array>
 </resources>
