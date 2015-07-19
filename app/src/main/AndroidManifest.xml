@@ -20,28 +20,13 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".gui.MainActivity"
-            android:label="@string/app_name"
-            android:noHistory="true" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
-        <activity
-            android:name=".gui.LoginActivity"
-            android:label="@string/app_name" >
-
-        </activity>
-        <activity android:name=".gui.RegisterActivity" />
-        <activity android:name=".gui.RegisterPhoneActivity" />
 
         <service
             android:name=".service.NotifyService"
@@ -70,14 +55,6 @@
             android:name=".gui.NotifyActivity"
             android:label="@string/title_activity_notify"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar" />
-        <activity
-        android:name=".gui.NewTextActivity"
-        android:label="@string/title_activity_new_text" >
-        </activity>
-        <activity
-            android:name=".gui.SettingPageActivity"
-            android:label="@string/title_activity_setting_page" >
-        </activity>
     </application>
 
 </manifest>
