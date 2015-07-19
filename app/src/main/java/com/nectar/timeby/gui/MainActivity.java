@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case 3:
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, SettingPageActivity.class);
+                intent.setClass(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 break;

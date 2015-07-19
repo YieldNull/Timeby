@@ -21,7 +21,7 @@ import com.nectar.timeby.R;
 /**
  * Created by 上白泽丶稻叶 on 2015/7/18.
  */
-public class SettingPageActivity extends Activity {
+public class SettingActivity extends Activity {
     public static final int BG_NOTIFIC_SWTICH=0;
     public static final int MUSIC_EFFECT_SWTICH=1;
     private boolean currBgNotificState=false;
@@ -51,7 +51,7 @@ public class SettingPageActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.setting_layout);
+        setContentView(R.layout.activity_setting);
         switchBgBgNotific=(ImageView)findViewById(R.id.switch_bg_bg_noti);
         switchBgCoverBgNotific=(ImageView)findViewById(R.id.switch_bg_cover_bg_noti);
         switchButtonBgNotific=(ImageView)findViewById(R.id.switch_button_bg_noti);
@@ -83,8 +83,8 @@ public class SettingPageActivity extends Activity {
         initSwitchByState();
 
         returnView.setOnTouchListener(new ReturnLisener());
-        switchBgBgNotific.setOnTouchListener(new SwitchButtonListener(SettingPageActivity.BG_NOTIFIC_SWTICH));
-        switchBgMusicEffect.setOnTouchListener(new SwitchButtonListener(SettingPageActivity.MUSIC_EFFECT_SWTICH));
+        switchBgBgNotific.setOnTouchListener(new SwitchButtonListener(SettingActivity.BG_NOTIFIC_SWTICH));
+        switchBgMusicEffect.setOnTouchListener(new SwitchButtonListener(SettingActivity.MUSIC_EFFECT_SWTICH));
         chanPwdStrip.setOnTouchListener(new SettingStripLisener(chanPwdStrip,chanPwdStripArrow));
         timeNotiStrip.setOnTouchListener(new SettingStripLisener(timeNotiStrip,timeNotiStripArrow));
         feedbackStrip.setOnTouchListener(new SettingStripLisener(feedbackStrip,feedbackStripArrow));
@@ -144,12 +144,12 @@ public class SettingPageActivity extends Activity {
                 int pointY=(int)event.getY();
                 if(pointX>0&&pointX<stripWidth&&pointY>0&&pointY<stripHeight) {
                     Intent intent = new Intent();
-                    if(relativeLayout==chanPwdStrip)
-                        intent.setClass(SettingPageActivity.this, NewTextActivity.class);
-                    else if(relativeLayout==timeNotiStrip)
-                        intent.setClass(SettingPageActivity.this, NewTextActivity.class);
-                    else
-                        intent.setClass(SettingPageActivity.this, NewTextActivity.class);
+//                    if(relativeLayout==chanPwdStrip)
+//                        intent.setClass(SettingActivity.this, NewTextActivity.class);
+//                    else if(relativeLayout==timeNotiStrip)
+//                        intent.setClass(SettingActivity.this, NewTextActivity.class);
+//                    else
+//                        intent.setClass(SettingActivity.this, NewTextActivity.class);
                     startActivity(intent);
                     overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 }
@@ -175,7 +175,7 @@ public class SettingPageActivity extends Activity {
             if(eventAction==MotionEvent.ACTION_UP){
                 if(pointX<0||pointX>switchBgWidth||pointY<0||pointY>switchBgHeight)
                     return false;
-                if(switchID==SettingPageActivity.BG_NOTIFIC_SWTICH){
+                if(switchID== SettingActivity.BG_NOTIFIC_SWTICH){
                     if(currBgNotificState) {
                         Animation action1 = new TranslateAnimation(0, -slideDistance, 0, 0);
                         action1.setFillEnabled(true);
@@ -250,7 +250,7 @@ public class SettingPageActivity extends Activity {
                         });
                     }
                 }
-                if(switchID==SettingPageActivity.MUSIC_EFFECT_SWTICH){
+                if(switchID== SettingActivity.MUSIC_EFFECT_SWTICH){
                     if(currMusicEffectState) {
                         Animation action1 = new TranslateAnimation(0, -slideDistance, 0, 0);
                         action1.setFillEnabled(true);
