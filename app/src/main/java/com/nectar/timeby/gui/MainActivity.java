@@ -19,7 +19,6 @@ import com.nectar.timeby.gui.fragment.UserFragment;
 import com.nectar.timeby.gui.util.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.fragment.MainFragment;
 import com.nectar.timeby.gui.util.OnDrawerToggleClickListener;
-import com.nectar.timeby.gui.util.SettingPageActivity;
 import com.nectar.timeby.gui.util.TopNotification;
 import com.nectar.timeby.service.NotifyService;
 

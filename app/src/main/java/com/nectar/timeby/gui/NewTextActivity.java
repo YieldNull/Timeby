@@ -1,4 +1,4 @@
-package com.nectar.timeby.gui.util;
+package com.nectar.timeby.gui;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;

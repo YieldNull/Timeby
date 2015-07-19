@@ -71,11 +71,11 @@
             android:label="@string/title_activity_notify"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar" />
         <activity
-        android:name=".gui.util.NewTextActivity"
+        android:name=".gui.NewTextActivity"
         android:label="@string/title_activity_new_text" >
         </activity>
         <activity
-            android:name=".gui.util.SettingPageActivity"
+            android:name=".gui.SettingPageActivity"
             android:label="@string/title_activity_setting_page" >
         </activity>
     </application>
