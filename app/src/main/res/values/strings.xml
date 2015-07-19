@@ -6,4 +6,7 @@
     <string name="genymotion_base_url">http://10.0.3.2:5000/</string>
     <string name="context_menu">Context menu</string>
     <string name="title_activity_notify">notify</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
