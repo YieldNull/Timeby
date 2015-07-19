@@ -19,6 +19,7 @@ import com.nectar.timeby.gui.fragment.UserFragment;
 import com.nectar.timeby.gui.util.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.fragment.MainFragment;
 import com.nectar.timeby.gui.util.OnDrawerToggleClickListener;
+import com.nectar.timeby.gui.util.SettingPageActivity;
 import com.nectar.timeby.gui.util.TopNotification;
 import com.nectar.timeby.service.NotifyService;
 
@@ -189,6 +190,10 @@ public class MainActivity extends AppCompatActivity
             case 2:
                 break;
             case 3:
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, SettingPageActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 break;
             default:
                 addFragment(new MainFragment(), true);
