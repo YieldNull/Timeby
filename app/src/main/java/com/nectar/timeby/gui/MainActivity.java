@@ -189,6 +189,10 @@ public class MainActivity extends AppCompatActivity
             case 2:
                 break;
             case 3:
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, SettingActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 break;
             default:
                 addFragment(new MainFragment(), true);

@@ -40,7 +40,7 @@ public class TopNotification {
         notificLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 
         ImageView bgImage = new ImageView(activity);
-        bgImage.setImageResource(R.drawable.top_notific_bg);
+        bgImage.setImageResource(R.drawable.img_top_notific_bg);
         bgImage.setScaleType(ImageView.ScaleType.FIT_XY);
         RelativeLayout.LayoutParams bgImageParams = new RelativeLayout.LayoutParams((int) (windowWidth * 0.6), notificationHeight);
         bgImageParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
