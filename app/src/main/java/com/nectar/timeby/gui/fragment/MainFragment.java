@@ -3,6 +3,7 @@ package com.nectar.timeby.gui.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -18,7 +19,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.nectar.timeby.R;
+import com.nectar.timeby.gui.MainSingle;
 import com.nectar.timeby.gui.util.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.util.OnDrawerToggleClickListener;
 
@@ -46,6 +49,7 @@ public class MainFragment extends Fragment
     private static int TYPE_START = 0x0001;
     private static int TYPE_END = 0x0002;
 
+    int sumMin,startHour,startMin,endHour,endMin;
 
     public MainFragment() {
 
@@ -140,6 +144,22 @@ public class MainFragment extends Fragment
         mEndAPMText.setOnClickListener(new TimeWidgetOnClickListener(mEndAPMText, TYPE_END));
         mEndHourText.setOnClickListener(new TimeWidgetOnClickListener(null, TYPE_END));
         mEndMinText.setOnClickListener(new TimeWidgetOnClickListener(null, TYPE_END));
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("CountDownTime",sumMin);
+                bundle.putInt("startHour",startHour);
+                bundle.putInt("startMin",startMin);
+                bundle.putInt("endHour",endHour);
+                bundle.putInt("endMin",endMin);
+                bundle.putString("startAPM",mStartAPMText.getText().toString());
+                bundle.putString("endAPM",mEndAPMText.getText().toString());
+                Intent intToSingle = new Intent(getActivity(), MainSingle.class);
+                intToSingle.putExtras(bundle);
+                startActivity(intToSingle);
+            }
+        });
     }
 
 
@@ -191,13 +211,13 @@ public class MainFragment extends Fragment
         if (!isEndSet)
             return;
 
-        int startHour = Integer.parseInt(mStartHourText.getText().toString());
-        int startMin = Integer.parseInt(mStartMinText.getText().toString());
-        int endHour = Integer.parseInt(mEndHourText.getText().toString());
-        int endMin = Integer.parseInt(mEndMinText.getText().toString());
+        startHour = Integer.parseInt(mStartHourText.getText().toString());
+        startMin = Integer.parseInt(mStartMinText.getText().toString());
+        endHour = Integer.parseInt(mEndHourText.getText().toString());
+        endMin = Integer.parseInt(mEndMinText.getText().toString());
 
         //总时差的分钟形式
-        int sumMin = (endHour - startHour) * 60 + (endMin - startMin);
+        sumMin = (endHour - startHour) * 60 + (endMin - startMin);
 
         //上下AM PM不同则要加上12小时
         if (!mEndAPMText.getText().toString()
