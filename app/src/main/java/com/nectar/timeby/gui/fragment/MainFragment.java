@@ -190,6 +190,8 @@ public class MainFragment extends Fragment
             //更改时差
             setTimeText(currHour, currMinu);
         }
+
+
     }
 
     private void setTimeText(int hour, int min) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/userInfo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -20,11 +21,10 @@
             android:src="@drawable/btn_user_return" />
 
         <ImageButton
-            android:id="@+id/imageButton_user_edit"
+            android:id="@+id/imageButton_user_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:onClick="userInfoEdit"
             android:background="@color/user_top_bgd"
             android:src="@drawable/btn_user_edit" />
     </RelativeLayout>
@@ -51,12 +51,13 @@
             android:orientation="vertical"
             android:paddingLeft="20dp">
 
-            <TextView
+            <EditText
                 android:id="@+id/textView_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="何俊杰"
                 android:textColor="@color/user_text"
+                android:background="@drawable/tv_roundedframe_background"
                 android:textSize="30sp" />
 
             <LinearLayout
@@ -69,13 +70,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="0.1"
+                        android:text="年龄"
+                        android:textSize="20sp"/>
+
+                    <EditText
                         android:id="@+id/textView_user_year"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:layout_weight="0.5"
+                        android:layout_weight="0.4"
+                        android:background="@drawable/tv_roundedframe_background"
                         android:text="20"
                         android:textColor="@color/user_text"
                         android:textSize="20sp" />
@@ -84,8 +93,7 @@
                         android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.5">
-
+                        android:layout_weight="2">
                         <ImageView
                             android:id="@+id/imageView_user_gender"
                             android:layout_width="wrap_content"
