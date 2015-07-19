@@ -22,11 +22,6 @@
             android:name=".gui.MainActivity"
             android:label="@string/app_name"
             android:noHistory="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -38,7 +33,11 @@
         <activity
             android:name=".gui.LoginActivity"
             android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".gui.TestActivity">
 
@@ -73,6 +72,18 @@
             android:name=".gui.NotifyActivity"
             android:label="@string/title_activity_notify"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar" />
+        <activity
+            android:name=".gui.MainSingle"
+            android:label="@string/title_activity_main_single" >
+        </activity>
+        <activity
+            android:name=".gui.MainCompany"
+            android:label="@string/title_activity_main_company" >
+        </activity>
+        <activity
+            android:name=".gui.MainPK"
+            android:label="@string/title_activity_main_pk" >
+        </activity>
     </application>
 
 </manifest>

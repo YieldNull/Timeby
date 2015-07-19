@@ -19,8 +19,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.nectar.timeby.R;
-import com.nectar.timeby.gui.MainPK;
+import com.nectar.timeby.gui.MainSingle;
 import com.nectar.timeby.gui.util.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.util.OnDrawerToggleClickListener;
 
@@ -154,7 +155,7 @@ public class MainFragment extends Fragment
                 bundle.putInt("endMin",endMin);
                 bundle.putString("startAPM",mStartAPMText.getText().toString());
                 bundle.putString("endAPM",mEndAPMText.getText().toString());
-                Intent intToSingle = new Intent(getActivity(), MainPK.class);
+                Intent intToSingle = new Intent(getActivity(), MainSingle.class);
                 intToSingle.putExtras(bundle);
                 startActivity(intToSingle);
             }
@@ -234,9 +235,6 @@ public class MainFragment extends Fragment
         mTimeIntervalText.setText(intervalHour + "时" + intervalMin + "分");
 
     }
-
-
-
 
 
     //时钟 by 上白泽稻叶
