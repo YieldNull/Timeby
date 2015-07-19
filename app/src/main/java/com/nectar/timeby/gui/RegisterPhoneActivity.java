@@ -2,7 +2,6 @@ package com.nectar.timeby.gui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -57,8 +56,8 @@ public class RegisterPhoneActivity extends Activity {
 
     //记录发送短信时输入框内的手机号，防止申请验证码后改变手机号
     private String mPhoneStr = TAG;
-    private String mUser;
-    private String mPassword;
+    private String mUserStr;
+    private String mPasswordStr;
     private boolean isCaptchaOnSending;
 
     private ImageButton mSubmitButton;
@@ -78,8 +77,8 @@ public class RegisterPhoneActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_phone);
         Intent intent = getIntent();
-        mUser = intent.getStringExtra(RegisterActivity.INTENT_EXTRA_USER);
-        mPassword = intent.getStringExtra(RegisterActivity.INTENT_EXTRA_PASSWORD);
+        mUserStr = intent.getStringExtra(RegisterActivity.INTENT_EXTRA_USER);
+        mPasswordStr = intent.getStringExtra(RegisterActivity.INTENT_EXTRA_PASSWORD);
 
         mSubmitButton = (ImageButton) findViewById(R.id.button_register_phone_login);
         mSendButton = (TextView) findViewById(R.id.button_register_phone_send);
@@ -136,9 +135,14 @@ public class RegisterPhoneActivity extends Activity {
             public void onClick(View v) {
                 //先判断是否填写了验证码
                 if (mCaptchaText.getText().length() != 0) {
-                    //发送验证信息
-                    SMSSDK.submitVerificationCode("86", mPhoneStr,
-                            mCaptchaText.getText().toString());
+                    if (mPhoneStr.equals(TAG)) {
+                        Toast.makeText(RegisterPhoneActivity.this,
+                                "请先填发送验证短信", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //发送验证信息
+                        SMSSDK.submitVerificationCode("86", mPhoneStr,
+                                mCaptchaText.getText().toString());
+                    }
                 } else {
                     if (mPhoneStr.equals(TAG)) {
                         Toast.makeText(RegisterPhoneActivity.this,
@@ -212,38 +216,44 @@ public class RegisterPhoneActivity extends Activity {
                         break;
                     case MSG_PHONE_VALID:
                         //手机号没被注册，发送验证码,开启倒计时，输入框右侧打钩
+                        Log.i(TAG, "Valid phone number");
                         isCaptchaOnSending = true;
                         mTask = new MyTimerTask();
                         mTimer.scheduleAtFixedRate(mTask, 0, 1 * 1000);
                         Drawable rightImg = RegisterPhoneActivity.this.getResources()
                                 .getDrawable(R.drawable.icn_login_valid);
                         mPhoneText.setCompoundDrawablesWithIntrinsicBounds(null, null, rightImg, null);
-                        Log.i(TAG, "request captcha from server phone:" + mPhoneStr);
+                        Log.i(TAG, "Request captcha from server phone:" + mPhoneStr);
                         SMSSDK.getVerificationCode("86", mPhoneStr);
                         break;
                     case MSG_PHONE_INVALID:
                         //手机号已被注册，不发送验证码
+                        Log.i(TAG, "Same phone has been registered");
                         Toast.makeText(RegisterPhoneActivity.this, "手机号已经被注册",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case MSG_SERVER_ERROR:
                         //服务器错误
+                        Log.i(TAG, "Server error");
                         Toast.makeText(RegisterPhoneActivity.this, "服务器错误，请稍后再试",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case MSG_NET_INACTIVE:
                         //没有连接互联网
+                        Log.i(TAG, "Network inactive");
                         Toast.makeText(RegisterPhoneActivity.this, "无网络连接，请打开数据网络",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case MSG_REGISTER_SUCCESS:
                         //注册成功
+                        Log.i(TAG, "Register successfully!");
                         startMainActivity();
                         break;
                     case MSG_REGISTER_FAILURE:
                         //注册失败
+                        Log.i(TAG, "Same user has been registered");
                         Toast.makeText(RegisterPhoneActivity.this,
-                                "该用户名已被注册，请重新填写", Toast.LENGTH_SHORT).show();
+                                "该用户已被注册，请重新注册", Toast.LENGTH_SHORT).show();
                         finish();//回到注册页面
                         break;
                     case MSG_SMSSDK_RECALL:
@@ -290,31 +300,11 @@ public class RegisterPhoneActivity extends Activity {
         };
     }
 
-    private void startMainActivity() {
-        Log.i(TAG, "Register successfully!");
-
-        //把数据存到本地
-        Log.i(TAG, "Storing data in SharedPreference");
-        SharedPreferences user = getSharedPreferences(PrefsUtil.PREFS_MAP_USER, MODE_PRIVATE);
-        SharedPreferences.Editor editor = user.edit();
-        editor.putString(PrefsUtil.PREFS_KEY_USER_NAME, mUser);
-        editor.putString(PrefsUtil.PREFS_KEY_USER_PASSWORD, mPassword);
-        editor.putString(PrefsUtil.PREFS_KEY_USER_PHONE, mPhoneStr);
-        editor.commit();
-
-        //进入MainActivity
-        Log.i(TAG, "Starting MainActivity");
-        Intent intent = new Intent(RegisterPhoneActivity.this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK);//进入主界面后将之前的Activity栈清空
-        RegisterPhoneActivity.this.startActivity(intent);
-    }
-
     /**
      * 重新发送验证码，初始化参数
      */
     private void resetSendButton() {
-        Log.i(TAG, "send captcha button was reset");
+        Log.i(TAG, "Send captcha button was reset");
 
         mTask.cancel();
         mSendButton.setText(SEND_BUTTON_TEXT);
@@ -342,6 +332,22 @@ public class RegisterPhoneActivity extends Activity {
     }
 
     /**
+     * 把用户信息存到本地，进入主界面
+     */
+    private void startMainActivity() {
+        //把数据存到本地
+        Log.i(TAG, "Storing data in SharedPreference");
+        PrefsUtil.storeUser(this, mUserStr, mPasswordStr, mPhoneStr);
+
+        //进入MainActivity
+        Log.i(TAG, "Starting MainActivity");
+        Intent intent = new Intent(RegisterPhoneActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);//进入主界面后将之前的Activity栈清空
+        RegisterPhoneActivity.this.startActivity(intent);
+    }
+
+    /**
      * 验证手机号是否已经被注册或将信息存到服务器
      *
      * @param isCheck 是否是验证手机号
@@ -355,19 +361,19 @@ public class RegisterPhoneActivity extends Activity {
         final HashMap<String, String> params = new HashMap<>();
         if (isCheck) {
             params.put("phoneNum", mPhoneStr);
-            Log.i(TAG, "check " + mPhoneStr + " has been registered or not");
+            Log.i(TAG, "Checking " + mPhoneStr + " has been registered or not");
         } else {
             params.put("phoneNum", mPhoneStr);
-            params.put("userName", mUser);
-            params.put("password", mPassword);
+            params.put("userName", mUserStr);
+            params.put("password", mPasswordStr);
 
-            Log.i(TAG, "register " + mPhoneStr + mUser + mPassword);
+            Log.i(TAG, "Registering " + mPhoneStr + mUserStr + mPasswordStr);
         }
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.i(TAG, "data was sent to server");
+                Log.i(TAG, "Sending data to server");
 
                 //发送数据，获取结果
                 JSONObject jsonResult = null;

@@ -44,7 +44,7 @@ public class RegisterActivity extends Activity {
     private static final int MSG_SERVER_ERROR = 0x0003;
 
 
-    private boolean isUserValid;//用户名是否已经被注册
+    private boolean isSubmitClick = false;
     private EditText mUserText;
     private EditText mPasswordText;
     private EditText mPasswordText2;
@@ -68,6 +68,7 @@ public class RegisterActivity extends Activity {
             public void onClick(View v) {
                 if (!mPasswordText2.getText().toString().equals(
                         mPasswordText.getText().toString())) {
+                    Log.i(TAG, "Two password don't match");
                     Toast.makeText(RegisterActivity.this, "两次输入密码不匹配"
                             , Toast.LENGTH_SHORT).show();
                 } else if (mUserText.getText().length() == 0) {
@@ -77,11 +78,9 @@ public class RegisterActivity extends Activity {
                     Toast.makeText(RegisterActivity.this, "请填写密码"
                             , Toast.LENGTH_SHORT).show();
                 } else {
-                    if (isUserValid) {
-                        RegisterActivity.this.startVerifyPage();
-                    } else {
-                        Toast.makeText(RegisterActivity.this, "用户名已经被注册，请重新输入"
-                                , Toast.LENGTH_SHORT).show();
+                    if (verifyPasswordFormat()) {
+                        isSubmitClick = true;
+                        verifyUserName();
                     }
                 }
             }
@@ -93,25 +92,31 @@ public class RegisterActivity extends Activity {
                 super.handleMessage(msg);
                 switch (msg.what) {
                     case MSG_USERNAME_INVALID:
-                        isUserValid = false;
+                        Log.i(TAG, "InValid user");
                         Toast.makeText(RegisterActivity.this, "用户名已被注册",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case MSG_USERNAME_VALID:
-                        isUserValid = true;
+                        Log.i(TAG, "Valid user");
+                        if (isSubmitClick) {
+                            RegisterActivity.this.startVerifyPage();
+                        }
                         break;
                     case MSG_NET_INACTIVE:
+                        Log.i(TAG, "Net inactive");
                         Toast.makeText(RegisterActivity.this, "无网络连接，请打开数据网络",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case MSG_SERVER_ERROR:
                         //服务器错误
+                        Log.i(TAG, "Server error");
                         Toast.makeText(RegisterActivity.this, "服务器错误，请稍后再试",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         break;
                 }
+                isSubmitClick = false;
             }
         };
     }
@@ -146,7 +151,7 @@ public class RegisterActivity extends Activity {
                         Toast.makeText(RegisterActivity.this, "用户名不能为空",
                                 Toast.LENGTH_SHORT).show();
                     } else {
-                        RegisterActivity.this.checkUserName();
+                        verifyUserName();
                     }
                 }
             }
@@ -160,23 +165,35 @@ public class RegisterActivity extends Activity {
                                 "密码不能为空", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    Pattern pattern = Pattern.compile(mPasswordReg);
-                    Matcher matcher = pattern.matcher(mPasswordText.getText().toString());
-                    if (matcher.matches()) {
-                        Pattern pattern2 = Pattern.compile(mPasswordNoReg);
-                        Matcher matcher2 = pattern2.matcher(mPasswordText.getText().toString());
-                        if (matcher2.matches()) {
-                            Toast.makeText(RegisterActivity.this,
-                                    "不能为9位以下纯数字", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(RegisterActivity.this,
-                                "密码为6-16位字符、数字。不能为9位以下纯数字", Toast.LENGTH_SHORT).show();
-                    }
+                    verifyPasswordFormat();
                 }
             }
         });
 
+    }
+
+    /**
+     * 验证密码格式是否正确
+     *
+     * @return 正确则true
+     */
+    private boolean verifyPasswordFormat() {
+        Pattern pattern = Pattern.compile(mPasswordReg);
+        Matcher matcher = pattern.matcher(mPasswordText.getText().toString());
+        if (matcher.matches()) {
+            Pattern pattern2 = Pattern.compile(mPasswordNoReg);
+            Matcher matcher2 = pattern2.matcher(mPasswordText.getText().toString());
+            if (matcher2.matches()) {
+                Toast.makeText(RegisterActivity.this,
+                        "密码不能为9位以下纯数字", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        } else {
+            Toast.makeText(RegisterActivity.this,
+                    "密码为6-16位字符、数字。不能为9位以下纯数字", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -196,14 +213,14 @@ public class RegisterActivity extends Activity {
     /**
      * 用户名是否已经被注册
      */
-    private void checkUserName() {
+    private void verifyUserName() {
         if (!HttpUtil.isNetAvailable(this)) {
             mHandler.sendEmptyMessage(MSG_NET_INACTIVE);
             return;
         }
 
         String userName = mUserText.getText().toString();
-        Log.i(TAG, "check " + userName + " has been registered or not");
+        Log.i(TAG, "Checking " + userName + " has been registered or not");
 
         final HashMap<String, String> params = new HashMap<>();
         params.put("userName", userName);
@@ -211,7 +228,7 @@ public class RegisterActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.i(TAG, "data was sent to server");
+                Log.i(TAG, "Sending data to server");
 
                 //发送数据，获取结果
                 JSONObject jsonResult = null;
