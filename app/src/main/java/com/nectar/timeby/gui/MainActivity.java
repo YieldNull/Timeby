@@ -52,7 +52,9 @@ public class MainActivity extends AppCompatActivity
 //        theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        startService(theIntent);
 
-        new TopNotification(this, "Hello World!", 1000 * 1).show();
+
+//               new TopNotification(this, "Hello World!", 1000 * 1).show();
+
     }
 
     /**
