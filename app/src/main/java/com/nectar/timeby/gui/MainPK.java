@@ -46,8 +46,7 @@ public class MainPK extends Activity implements View.OnClickListener {
         bundle = getIntent().getExtras();
         getCountDown();
         Log.i("countDownTime",""+countDownTime);
-        long convertTime = countDownTime * 60 * 1000;
-        Log.i("convertTime",""+convertTime);
+
 
         Calendar cal=Calendar.getInstance();
         int year=cal.get(Calendar.YEAR);
@@ -55,9 +54,11 @@ public class MainPK extends Activity implements View.OnClickListener {
         int month=cal.get(Calendar.MONTH)+1;
         Log.i("month", "" + month);
         int day=cal.get(Calendar.DAY_OF_MONTH);
-        Log.i("day:",""+day);
+        Log.i("day:", "" + day);
         int hour=cal.get(Calendar.HOUR_OF_DAY);
-        Log.i("hour:",""+hour);
+        Log.i("hour:", "" + hour);
+        int min=cal.get(Calendar.MINUTE);
+        Log.i("min:",""+min);
         getStartHour();
         getStartMin();
         getStartAPM();
@@ -70,6 +71,15 @@ public class MainPK extends Activity implements View.OnClickListener {
 //                sHour += 24;
 //                eHour += 24;
                 day += 1;
+            }else {
+                if (hour <= startHour){
+                    if (min > startMin){
+                        day += 1;
+                    }
+                    ;
+                }else {
+                    day += 1;
+                }
             }
         }
         else if (startAPM.equals("AM")&&endAPM.equals("PM")){
@@ -79,16 +89,32 @@ public class MainPK extends Activity implements View.OnClickListener {
                 day += 1;
                 endHour += 12;
             }else {
-                endHour += 12;
+                if(hour <= startHour) {
+                    if (min > startMin){
+                        day += 1;
+                    }
+                    endHour += 12;
+                }else{
+                    day += 1;
+                    endHour += 12;
+                }
             }
         }else if(startAPM.equals("PM")&&endAPM.equals("AM")){
             if (hour >= 12) {
+                if ((hour-12)>startHour) {
 //                sHour += 36;
 //                eHour += 48;
-                day += 1;
-                startHour += 12;
-                endHour += 24;
-            } else {
+                    day += 1;
+                    startHour += 12;
+                    endHour += 24;
+                }else {
+                    if (min > startMin){
+                        day += 1;
+                    }
+                    startHour += 12;
+                    endHour += 24;
+                }
+            }else {
                 startHour += 12;
                 endHour += 24;
             }
@@ -99,6 +125,9 @@ public class MainPK extends Activity implements View.OnClickListener {
                     startHour += 12;
                     endHour += 12;
                 }else {
+                    if (min > startMin){
+                        day += 1;
+                    }
                     startHour += 12;
                     endHour += 12;
                 }
@@ -110,6 +139,17 @@ public class MainPK extends Activity implements View.OnClickListener {
 
         startTime = strToDateLong(""+year+"-"+month+"-"+day+" "+startHour+":"+startMin+":00");
         endTime = strToDateLong(""+year+"-"+month+"-"+day+" "+endHour+":"+endMin+":00");
+
+        Date date = new Date();
+        long convertTime = endTime.getTime() - date.getTime();
+        long temp = endTime.getTime() - startTime.getTime();
+        
+        if (convertTime > temp){
+            convertTime = temp;
+        }
+
+
+        Log.i("convertTime",""+convertTime);
 
         timeClock=(CustomDigitalClock) findViewById(R.id.time);
         timeClock.setStartTime(startTime);
@@ -204,11 +244,8 @@ public class MainPK extends Activity implements View.OnClickListener {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             exitDialog();
-
         }
-
-        return false;
-
+        return true;
     }
 
 
