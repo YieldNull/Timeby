@@ -28,4 +28,8 @@
         <item>sdjlkasj</item>
     </string-array>
     <string name="title_activity_user_info_edit">UserInfoEditActivity</string>
+    <string name="select_task_type">请选择任务模式：</string>
+    <string name="task_type_solo">单人</string>
+    <string name="task_type_coop">合作</string>
+    <string name="task_type_pk">PK</string>
 </resources>
