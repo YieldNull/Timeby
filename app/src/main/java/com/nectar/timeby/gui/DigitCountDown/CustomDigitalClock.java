@@ -91,6 +91,7 @@ public class CustomDigitalClock extends DigitalClock {
 //                if (currentTime / 1000 == endTime / 1000) {
 //                    mClockListener.remainFiveMinutes();
 //                }
+//                Log.i("startTime:",""+startTime);
 //                Log.i("endTime:",""+endTime);
                 long L_endTime = endTime.getTime();
                 long L_startTime = startTime.getTime();

@@ -1,10 +1,8 @@
 package com.nectar.timeby.gui;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -38,16 +36,7 @@ public class MainPKActivity extends Activity implements View.OnClickListener {
     private String startAPM;
     private String endAPM;
     private ImageButton PK_back;
-    private ArrayList<HashMap<String, Object>> list;
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
-        startActivity(intent);
-    }
-
+    private ArrayList<HashMap<String,Object>> list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,19 +44,19 @@ public class MainPKActivity extends Activity implements View.OnClickListener {
         btnBack();
         bundle = getIntent().getExtras();
         getCountDown();
-        Log.i("countDownTime", "" + countDownTime);
+        Log.i("countDownTime",""+countDownTime);
         long convertTime = countDownTime * 60 * 1000;
-        Log.i("convertTime", "" + convertTime);
+        Log.i("convertTime",""+convertTime);
 
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        Log.i("year", "" + year);
-        int month = cal.get(Calendar.MONTH) + 1;
+        Calendar cal=Calendar.getInstance();
+        int year=cal.get(Calendar.YEAR);
+        Log.i("year",""+year);
+        int month=cal.get(Calendar.MONTH)+1;
         Log.i("month", "" + month);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        Log.i("day:", "" + day);
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        Log.i("hour:", "" + hour);
+        int day=cal.get(Calendar.DAY_OF_MONTH);
+        Log.i("day:",""+day);
+        int hour=cal.get(Calendar.HOUR_OF_DAY);
+        Log.i("hour:",""+hour);
         getStartHour();
         getStartMin();
         getStartAPM();
@@ -75,22 +64,23 @@ public class MainPKActivity extends Activity implements View.OnClickListener {
         getEndMin();
         getEndAPM();
 
-        if (startAPM.equals("AM") && endAPM.equals("AM")) {
-            if (hour >= 12) {
+        if (startAPM.equals("AM")&&endAPM.equals("AM")){
+            if (hour >= 12){
 //                sHour += 24;
 //                eHour += 24;
                 day += 1;
             }
-        } else if (startAPM.equals("AM") && endAPM.equals("PM")) {
-            if (hour >= 12) {
+        }
+        else if (startAPM.equals("AM")&&endAPM.equals("PM")){
+            if (hour >= 12){
 //                sHour += 24;
 //                eHour += 36;
                 day += 1;
                 endHour += 12;
-            } else {
+            }else {
                 endHour += 12;
             }
-        } else if (startAPM.equals("PM") && endAPM.equals("AM")) {
+        }else if(startAPM.equals("PM")&&endAPM.equals("AM")){
             if (hour >= 12) {
 //                sHour += 36;
 //                eHour += 48;
@@ -101,26 +91,26 @@ public class MainPKActivity extends Activity implements View.OnClickListener {
                 startHour += 12;
                 endHour += 24;
             }
-        } else if (startAPM.equals("PM") && endAPM.equals("PM")) {
-            if (hour >= 12) {
-                if ((hour - 12) > startHour) {
+        }else if(startAPM.equals("PM")&&endAPM.equals("PM")){
+            if (hour >= 12){
+                if((hour-12)>startHour) {
                     day += 1;
                     startHour += 12;
                     endHour += 12;
-                } else {
+                }else {
                     startHour += 12;
                     endHour += 12;
                 }
-            } else {
+            }else {
                 startHour += 12;
                 endHour += 12;
             }
         }
 
-        startTime = strToDateLong("" + year + "-" + month + "-" + day + " " + startHour + ":" + startMin + ":00");
-        endTime = strToDateLong("" + year + "-" + month + "-" + day + " " + endHour + ":" + endMin + ":00");
+        startTime = strToDateLong(""+year+"-"+month+"-"+day+" "+startHour+":"+startMin+":00");
+        endTime = strToDateLong(""+year+"-"+month+"-"+day+" "+endHour+":"+endMin+":00");
 
-        timeClock = (CustomDigitalClock) findViewById(R.id.time);
+        timeClock=(CustomDigitalClock) findViewById(R.id.time);
         timeClock.setStartTime(startTime);
         timeClock.setEndTime(endTime);
         ListView lview = (ListView) findViewById(R.id.info_list_pk);
@@ -130,9 +120,9 @@ public class MainPKActivity extends Activity implements View.OnClickListener {
 
     }
 
-    @SuppressLint("SimpleDateFormat")
-    public Date strToDateLong(String strDate) {
-        if ("".equals(strDate) || null == strDate) {
+    public Date strToDateLong(String strDate)
+    {
+        if("".equals(strDate)||null==strDate){
             return null;
         }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -141,53 +131,47 @@ public class MainPKActivity extends Activity implements View.OnClickListener {
         return strtodate;
     }
 
-    public long getCountDown() {
+    public long getCountDown(){
         countDownTime = bundle.getInt("CountDownTime");
         return countDownTime;
     }
 
-    public int getStartHour() {
+    public int getStartHour(){
         startHour = bundle.getInt("startHour");
         return startHour;
     }
-
-    public int getStartMin() {
+    public int getStartMin(){
         startMin = bundle.getInt("startMin");
         return startMin;
     }
-
-    public int getEndHour() {
+    public int getEndHour(){
         endHour = bundle.getInt("endHour");
         return endHour;
     }
-
-    public int getEndMin() {
+    public int getEndMin(){
         endMin = bundle.getInt("endMin");
         return endMin;
     }
-
-    public String getStartAPM() {
+    public String getStartAPM(){
         startAPM = bundle.getString("startAPM");
         return startAPM;
     }
-
     public String getEndAPM() {
         endAPM = bundle.getString("endAPM");
         return endAPM;
     }
-
     private void populateList() {
 
-        list = new ArrayList<HashMap<String, Object>>();
+        list = new ArrayList<HashMap<String,Object>>();
 
-        HashMap<String, Object> temp = new HashMap<String, Object>();
+        HashMap<String,Object> temp = new HashMap<String,Object>();
         temp.put("FIRST_COLUMN", "萌萌哒贝壳");
         temp.put("SECOND_COLUMN", "100");
         temp.put("THIRD_COLUMN", R.drawable.mmdshell);
 
         list.add(temp);
 
-        HashMap<String, Object> temp1 = new HashMap<String, Object>();
+        HashMap<String,Object> temp1 = new HashMap<String,Object>();
         temp1.put("FIRST_COLUMN", "Diaries");
         temp1.put("SECOND_COLUMN", "200");
         temp1.put("THIRD_COLUMN", R.drawable.mmdshell);
@@ -195,13 +179,12 @@ public class MainPKActivity extends Activity implements View.OnClickListener {
         list.add(temp1);
 
     }
-
     public void btnBack() {
         PK_back = (ImageButton) findViewById(R.id.imageButton_user_return);
         PK_back.setOnClickListener(this);
     }
 
-    public void exitDialog() {
+    public void exitDialog(){
         AlertDialog isExit = new AlertDialog.Builder(this).create();
         // 设置对话框标题
         isExit.setTitle("任务未完成");
@@ -225,6 +208,7 @@ public class MainPKActivity extends Activity implements View.OnClickListener {
         return false;
 
     }
+
 
 
     /**
