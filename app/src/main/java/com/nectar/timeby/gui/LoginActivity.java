@@ -62,7 +62,15 @@ public class LoginActivity extends Activity {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                verifyUser();
+                if (mUserText.getText().length() == 0) {
+                    Toast.makeText(LoginActivity.this, "用户名不能为空",
+                            Toast.LENGTH_SHORT).show();
+                } else if (mPasswordText.getText().length() == 0) {
+                    Toast.makeText(LoginActivity.this, "密码不能为空",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    verifyUser();
+                }
             }
         });
 
@@ -78,7 +86,7 @@ public class LoginActivity extends Activity {
                         break;
                     case MSG_USER_INVALID:
                         Log.i(TAG, "InValid user");
-                        Toast.makeText(LoginActivity.this, "用户名\\密码错误，请重新登录",
+                        Toast.makeText(LoginActivity.this, "用户名或密码错误，请重新登录",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case MSG_NET_INACTIVE:

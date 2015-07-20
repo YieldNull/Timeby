@@ -8,9 +8,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -20,27 +17,50 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".gui.MainActivity"
-            android:label="@string/app_name"
+            android:label="@string/title_activity_main"
             android:noHistory="true">
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
         <activity
             android:name=".gui.LoginActivity"
-            android:label="@string/app_name">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            android:label="@string/title_activity_login" />
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
-        <activity android:name=".gui.RegisterActivity" />
-        <activity android:name=".gui.RegisterPhoneActivity" />
+        <activity
+            android:name=".gui.RegisterActivity"
+            android:label="@string/title_activity_register" />
+
+        <activity
+            android:name=".gui.RegisterPhoneActivity"
+            android:label="@string/title_activity_register_phone" />
+
+        <activity
+            android:name=".gui.NotifyActivity"
+            android:label="@string/title_activity_notify"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar" />
+
+        <activity
+            android:name=".gui.MainSingleActivity"
+            android:label="@string/title_activity_main_single" />
+
+        <activity
+            android:name=".gui.MainCooperActivity"
+            android:label="@string/title_activity_main_company" />
+
+        <activity
+            android:name=".gui.MainPKActivity"
+            android:label="@string/title_activity_main_pk" />
+
+        <activity
+            android:name=".gui.UserInfoEditActivity"
+            android:label="@string/title_activity_user_info_edit" />
+        <activity android:name=".gui.UserInfoActivity" />
+
 
         <service
             android:name=".service.NotifyService"
@@ -56,6 +76,7 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name=".service.ScreenOnReceiver"
             android:enabled="true"
@@ -65,24 +86,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".gui.NotifyActivity"
-            android:label="@string/title_activity_notify"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar" />
-        <activity
-            android:name=".gui.MainSingleActivity"
-            android:label="@string/title_activity_main_single"></activity>
-        <activity
-            android:name=".gui.MainCooperActivity"
-            android:label="@string/title_activity_main_company"></activity>
-        <activity
-            android:name=".gui.MainPKActivity"
-            android:label="@string/title_activity_main_pk"></activity>
-        <activity
-            android:name=".gui.UserInfoEditActivity"
-            android:label="@string/title_activity_user_info_edit"></activity>
-        <activity android:name=".gui.UserInfoActivity">
-        </activity>
     </application>
 
 </manifest>

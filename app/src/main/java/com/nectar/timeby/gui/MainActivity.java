@@ -48,10 +48,10 @@ public class MainActivity extends AppCompatActivity
         Log.i(TAG, "Main Activity Create");
         Log.i(TAG, "trying to start notify service");
 
-        //开启Service
-        Intent theIntent = new Intent(this, NotifyService.class);
-        theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startService(theIntent);
+//        //开启Service
+//        Intent theIntent = new Intent(this, NotifyService.class);
+//        theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startService(theIntent);
 
         initDrawer();
         new TopNotification(this, "Hello World!", 1000 * 1).show();
