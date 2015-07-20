@@ -2,6 +2,7 @@ package com.nectar.timeby.gui.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nectar.timeby.R;
+import com.nectar.timeby.gui.MainCooperActivity;
+import com.nectar.timeby.gui.MainPKActivity;
+import com.nectar.timeby.gui.MainSingleActivity;
 import com.nectar.timeby.gui.interfaces.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.interfaces.OnDrawerToggleClickListener;
 import com.nectar.timeby.gui.widget.ClockWidget;
@@ -131,18 +135,6 @@ public class MainFragment extends Fragment
             @Override
             public void onClick(View v) {
                 mTaskTypeSelectDialog.showDialog();
-
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("CountDownTime", sumMin);
-//                bundle.putInt("startHour", startHour);
-//                bundle.putInt("startMin", startMin);
-//                bundle.putInt("endHour", endHour);
-//                bundle.putInt("endMin", endMin);
-//                bundle.putString("startAPM", mStartAPMText.getText().toString());
-//                bundle.putString("endAPM", mEndAPMText.getText().toString());
-//                Intent intToSingle = new Intent(getActivity(), MainSingleActivity.class);
-//                intToSingle.putExtras(bundle);
-//                startActivity(intToSingle);
             }
         });
 
@@ -151,17 +143,23 @@ public class MainFragment extends Fragment
         mTaskTypeSelectDialog.setSelectDialogListener(new TaskTypeSelectDialog.DialogListener() {
             @Override
             public void onSelectSolo() {
-
+                Intent intToSingle = new Intent(getActivity(), MainSingleActivity.class);
+                intToSingle.putExtras(getDeliverBunlder());
+                startActivity(intToSingle);
             }
 
             @Override
             public void onSelectCooper() {
-
+                Intent intToSingle = new Intent(getActivity(), MainCooperActivity.class);
+                intToSingle.putExtras(getDeliverBunlder());
+                startActivity(intToSingle);
             }
 
             @Override
             public void onSelectPK() {
-
+                Intent intToSingle = new Intent(getActivity(), MainPKActivity.class);
+                intToSingle.putExtras(getDeliverBunlder());
+                startActivity(intToSingle);
             }
 
             @Override
@@ -297,5 +295,17 @@ public class MainFragment extends Fragment
         String intervalMin = sumMin % 60 > 9 ? "" + sumMin % 60 : "0" + sumMin % 60;
         mTimeIntervalText.setText(intervalHour + "时" + intervalMin + "分");
 
+    }
+
+    private Bundle getDeliverBunlder() {
+        Bundle bundle = new Bundle();
+        bundle.putInt("CountDownTime", sumMin);
+        bundle.putInt("startHour", startHour);
+        bundle.putInt("startMin", startMin);
+        bundle.putInt("endHour", endHour);
+        bundle.putInt("endMin", endMin);
+        bundle.putString("startAPM", mStartAPMText.getText().toString());
+        bundle.putString("endAPM", mEndAPMText.getText().toString());
+        return bundle;
     }
 }

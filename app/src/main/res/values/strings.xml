@@ -14,7 +14,10 @@
     <string name="title_activity_register_phone">RegisterPhoneActivity</string>
     <string name="title_activity_user_info">UserInfoActivity</string>
     <string name="title_activity_user_info_edit">UserInfoEditActivity</string>
-
+    <string name="title_activity_reset_password">ResetPasswordActivity</string>
+    <string name="title_activity_setting_notify">SettingNotifyActivity</string>
+    <string name="title_activity_setting_share">SettingShareActivity</string>
+    <string name="title_activity_setting_feedback">SettingFeedbackActivity</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -27,11 +30,12 @@
     <string name="setting_page_sound_effect">音效</string>
     <string name="setting_page_change_password">更改密码</string>
     <string name="setting_page_notify_time">提示时间</string>
+    <string name="setting_page_share">分享</string>
     <string name="setting_page_feedback">意见反馈</string>
 
     <string name="select_task_type">请选择任务模式：</string>
     <string name="task_type_solo">单人</string>
     <string name="task_type_coop">合作</string>
     <string name="task_type_pk">PK</string>
-    
+
 </resources>

@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                Log.i(TAG, "onDrawerStateChanged" + newState);
+//                Log.i(TAG, "onDrawerStateChanged" + newState);
                 if (isClosed & newState == DrawerLayout.STATE_SETTLING) {
                     if (mDrawerStatusChangedListener != null)
                         mDrawerStatusChangedListener.onDrawerOpening();
@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-
         //当MainActivity使用不同的fragment进行替换时使用
         //然而微姐把DrawerLayout当菜单用了。。。。
         //整个就特么只有MainFragment一个，那还换个毛啊

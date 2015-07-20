@@ -71,7 +71,8 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="4dp"
-                android:text="何俊杰"
+                android:hint="修改昵称"
+                android:singleLine="true"
                 android:textColor="@color/user_text"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp" />
@@ -101,6 +102,7 @@
                         android:layout_width="50dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="5dp"
+                        android:singleLine="true"
                         android:background="@drawable/edit_user_bgd"
                         android:textColor="@color/user_text"
                         android:textCursorDrawable="@null"
