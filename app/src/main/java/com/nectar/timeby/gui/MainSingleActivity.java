@@ -11,20 +11,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ListView;
 
 import com.nectar.timeby.R;
 import com.nectar.timeby.gui.DigitCountDown.CustomDigitalClock;
-import com.nectar.timeby.gui.bc_infoList.listviewAdapter;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
-public class MainPK extends Activity implements View.OnClickListener {
+public class MainSingleActivity extends Activity implements View.OnClickListener {
     private CustomDigitalClock timeClock;
     private Bundle bundle;
     private Date startTime;
@@ -36,12 +32,12 @@ public class MainPK extends Activity implements View.OnClickListener {
     private int endMin;
     private String startAPM;
     private String endAPM;
-    private ImageButton PK_back;
-    private ArrayList<HashMap<String,Object>> list;
+    private ImageButton Single_back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_pk);
+        setContentView(R.layout.activity_main_single);
         btnBack();
         bundle = getIntent().getExtras();
         getCountDown();
@@ -114,10 +110,7 @@ public class MainPK extends Activity implements View.OnClickListener {
         timeClock=(CustomDigitalClock) findViewById(R.id.time);
         timeClock.setStartTime(startTime);
         timeClock.setEndTime(endTime);
-        ListView lview = (ListView) findViewById(R.id.info_list_pk);
-        populateList();
-        listviewAdapter adapter = new listviewAdapter(this, list);
-        lview.setAdapter(adapter);
+
 
     }
 
@@ -162,28 +155,10 @@ public class MainPK extends Activity implements View.OnClickListener {
         endAPM = bundle.getString("endAPM");
         return endAPM;
     }
-    private void populateList() {
 
-        list = new ArrayList<HashMap<String,Object>>();
-
-        HashMap<String,Object> temp = new HashMap<String,Object>();
-        temp.put("FIRST_COLUMN", "萌萌哒贝壳");
-        temp.put("SECOND_COLUMN", "100");
-        temp.put("THIRD_COLUMN", R.drawable.mmdshell);
-
-        list.add(temp);
-
-        HashMap<String,Object> temp1 = new HashMap<String,Object>();
-        temp1.put("FIRST_COLUMN", "Diaries");
-        temp1.put("SECOND_COLUMN", "200");
-        temp1.put("THIRD_COLUMN", R.drawable.mmdshell);
-
-        list.add(temp1);
-
-    }
     public void btnBack() {
-        PK_back = (ImageButton) findViewById(R.id.imageButton_user_return);
-        PK_back.setOnClickListener(this);
+        Single_back = (ImageButton) findViewById(R.id.imageButton_user_return);
+        Single_back.setOnClickListener(this);
     }
 
     public void exitDialog(){

@@ -15,7 +15,6 @@ import android.view.View;
 
 import com.nectar.timeby.R;
 import com.nectar.timeby.gui.fragment.DrawerFragment;
-import com.nectar.timeby.gui.fragment.UserFragment;
 import com.nectar.timeby.gui.util.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.fragment.MainFragment;
 import com.nectar.timeby.gui.util.OnDrawerToggleClickListener;
@@ -43,6 +42,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.i(TAG,"onCreate");
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         Log.i(TAG, "Main Activity Create");
@@ -59,29 +59,31 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        //将Fragment栈弹栈，到栈底之后结束Activity
-        int count = mFragmentManager.getBackStackEntryCount();
-
-        if (count == 1) {
-            finish();
-            return;
-        } else {
-            mFragmentManager.popBackStack();
-        }
-
-        //获取当前栈顶的Fragment
-        String fragmentTag = mFragmentManager.getBackStackEntryAt(
-                count - 2).getName();
-        try {
-            mDrawerStatusChangedListener = (OnDrawerStatusChangedListener) mFragmentManager
-                    .findFragmentByTag(fragmentTag);
-        } catch (ClassCastException e) {
-            mDrawerStatusChangedListener = null;
-        }
-
-        //返回时要显示抽屉开关
-        if (mDrawerStatusChangedListener != null)
-            mDrawerStatusChangedListener.onDrawerClosed();
+        Log.i(TAG, "finish");
+        finish();
+//        //将Fragment栈弹栈，到栈底之后结束Activity
+//        int count = mFragmentManager.getBackStackEntryCount();
+//
+//        if (count == 1) {
+//            finish();
+//            return;
+//        } else {
+//            mFragmentManager.popBackStack();
+//        }
+//
+//        //获取当前栈顶的Fragment
+//        String fragmentTag = mFragmentManager.getBackStackEntryAt(
+//                count - 2).getName();
+//        try {
+//            mDrawerStatusChangedListener = (OnDrawerStatusChangedListener) mFragmentManager
+//                    .findFragmentByTag(fragmentTag);
+//        } catch (ClassCastException e) {
+//            mDrawerStatusChangedListener = null;
+//        }
+//
+//        //返回时要显示抽屉开关
+//        if (mDrawerStatusChangedListener != null)
+//            mDrawerStatusChangedListener.onDrawerClosed();
     }
 
     /**
@@ -180,17 +182,18 @@ public class MainActivity extends AppCompatActivity
         if (mDrawerLayout != null)
             mDrawerLayout.closeDrawer(Gravity.RIGHT);
 
+        Intent intent;
         switch (position) {
             case 0:
-                addFragment(new UserFragment(), true);
+                intent = new Intent(this, UserInfoActivity.class);
+                startActivity(intent);
                 break;
             case 1:
                 break;
             case 2:
                 break;
             case 3:
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, SettingActivity.class);
+                intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 break;
@@ -198,6 +201,12 @@ public class MainActivity extends AppCompatActivity
                 addFragment(new MainFragment(), true);
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG,"onDestroy");
     }
 
     /**

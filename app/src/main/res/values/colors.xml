@@ -2,15 +2,17 @@
 <resources>
 
     <color name="main_bgd">#ffffe3</color>
-    <color name="main_text_bgd">#adccad</color>
-    <color name="main_time">#cbcbcb</color>
-    <color name="main_time_hint">#7d827e</color>
     <color name="main_text">#ffffe3</color>
+    <color name="main_apm_text_bgd">#adccad</color>
     <color name="main_text_hint">#4c4c4b</color>
+    <color name="main_time_bgd">#cbcbcb</color>
+    <color name="main_time_hint">#7d827e</color>
 
-    <color name="user_top_bgd">#b4deb4</color>
-    <color name="user_bottom_bgd">#c7f1c7</color>
+    <color name="user_top_bgd">#bdefda</color>
+    <color name="user_bottom_bgd">#ffffe3</color>
     <color name="user_text">#676767</color>
+    <color name="user_edit_bgd">#ffffe3</color>
+
 
     <color name="login_bgd">#598A84</color>
     <color name="login_text">#87A696</color>

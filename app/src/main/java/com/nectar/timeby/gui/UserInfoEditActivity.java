@@ -1,44 +1,59 @@
 package com.nectar.timeby.gui;
 
 import android.app.Activity;
-import android.database.DataSetObserver;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 
 import com.nectar.timeby.R;
 
-/**
- * Created by finalize on 7/19/15.
- */
-public class TestActivity extends Activity {
+public class UserInfoEditActivity extends Activity {
 
     private Spinner mSpinner;
+    private ImageView mSpinnerToggle;
+    private ImageButton mReturnButton;
+    private ImageButton mSubmitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user_info_edit);
+        mReturnButton = (ImageButton) findViewById(R.id.imageButton_user_edit_return);
+        mSubmitButton = (ImageButton) findViewById(R.id.imageButton_user_edit_submit);
 
-        setContentView(R.layout.spinner_test);
-        mSpinner = (Spinner) findViewById(R.id.spinner);
-        mSpinner.setAdapter(new MySpinnerAdapter());
-
-        Button button= (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        mReturnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+              onBackPressed();
+            }
+        });
 
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserInfoEditActivity.this, UserInfoActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+        mSpinner = (Spinner) findViewById(R.id.spinner_user_gender);
+        mSpinner.setAdapter(new GenderSpinnerAdapter());
+        mSpinnerToggle = (ImageView) findViewById(R.id.imageView_user_spinner_tolgger);
+        mSpinnerToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 mSpinner.performClick();
             }
         });
     }
 
-    private class MySpinnerAdapter extends BaseAdapter {
+
+    private class GenderSpinnerAdapter extends BaseAdapter {
 
         private int[] resources = {R.drawable.icn_user_gender_male,
                 R.drawable.icn_user_gender_female};
@@ -54,7 +69,7 @@ public class TestActivity extends Activity {
             ViewHolder viewHolder;
 
             if (convertView == null) {
-                itemView = getLayoutInflater().inflate(R.layout.spinner, parent, false);
+                itemView = getLayoutInflater().inflate(R.layout.user_spinner_item, parent, false);
                 viewHolder = new ViewHolder();
                 viewHolder.mImageView = (ImageView) itemView.findViewById(R.id.imageView);
                 itemView.setTag(viewHolder);

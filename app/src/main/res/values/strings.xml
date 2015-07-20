@@ -27,4 +27,5 @@
         <item>sahngbiu</item>
         <item>sdjlkasj</item>
     </string-array>
+    <string name="title_activity_user_info_edit">UserInfoEditActivity</string>
 </resources>

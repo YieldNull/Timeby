@@ -21,12 +21,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nectar.timeby.R;
-import com.nectar.timeby.gui.MainSingle;
+import com.nectar.timeby.gui.MainSingleActivity;
 import com.nectar.timeby.gui.util.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.util.OnDrawerToggleClickListener;
 
 import java.util.Calendar;
 
+/**
+ * by finalize
+ * <p/>
+ * 时钟by上百泽稻叶
+ * <p/>
+ * 点击顶部TextView，获取时钟控制权
+ */
 public class MainFragment extends Fragment
         implements OnDrawerStatusChangedListener {
 
@@ -44,12 +51,13 @@ public class MainFragment extends Fragment
     private TextView mTimeIntervalText;
     private Button mSubmitButton;
 
-    private boolean isEndSet;
+    private boolean isEndSet;//用于切换起始时间的更改，当点击结束时间时为true
     private boolean isEndOnSetting;
     private static int TYPE_START = 0x0001;
     private static int TYPE_END = 0x0002;
 
-    int sumMin,startHour,startMin,endHour,endMin;
+    //by Dean
+    int sumMin, startHour, startMin, endHour, endMin;
 
     public MainFragment() {
 
@@ -85,6 +93,7 @@ public class MainFragment extends Fragment
         View rootView = inflater
                 .inflate(R.layout.fragment_main, container, false);
 
+        //获取一堆引用
         mStartAPMText = (TextView) rootView.findViewById(R.id.textView_main_start_apm);
         mStartHourText = (TextView) rootView.findViewById(R.id.textView_main_start_hour);
         mStartMinText = (TextView) rootView.findViewById(R.id.textView_main_start_min);
@@ -110,6 +119,26 @@ public class MainFragment extends Fragment
         mClockImg = (ImageView) rootView
                 .findViewById(R.id.imageView_main_dial);
         initClockWidget();
+
+        //提交按钮
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("CountDownTime", sumMin);
+                bundle.putInt("startHour", startHour);
+                bundle.putInt("startMin", startMin);
+                bundle.putInt("endHour", endHour);
+                bundle.putInt("endMin", endMin);
+                bundle.putString("startAPM", mStartAPMText.getText().toString());
+                bundle.putString("endAPM", mEndAPMText.getText().toString());
+                Intent intToSingle = new Intent(getActivity(), MainSingleActivity.class);
+                intToSingle.putExtras(bundle);
+                startActivity(intToSingle);
+            }
+        });
+
+
         return rootView;
     }
 
@@ -137,32 +166,20 @@ public class MainFragment extends Fragment
         mEndHourText.setText(hour > 9 ? "" + hour : "0" + hour);
         mEndMinText.setText(min > 9 ? "" + min : "0" + min);
 
-        //设置监听器
+        //设置监听器，用于获取时钟控制权
         mStartAPMText.setOnClickListener(new TimeWidgetOnClickListener(mStartAPMText, TYPE_START));
         mStartHourText.setOnClickListener(new TimeWidgetOnClickListener(null, TYPE_START));
         mStartMinText.setOnClickListener(new TimeWidgetOnClickListener(null, TYPE_START));
         mEndAPMText.setOnClickListener(new TimeWidgetOnClickListener(mEndAPMText, TYPE_END));
         mEndHourText.setOnClickListener(new TimeWidgetOnClickListener(null, TYPE_END));
         mEndMinText.setOnClickListener(new TimeWidgetOnClickListener(null, TYPE_END));
-        mSubmitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("CountDownTime",sumMin);
-                bundle.putInt("startHour",startHour);
-                bundle.putInt("startMin",startMin);
-                bundle.putInt("endHour",endHour);
-                bundle.putInt("endMin",endMin);
-                bundle.putString("startAPM",mStartAPMText.getText().toString());
-                bundle.putString("endAPM",mEndAPMText.getText().toString());
-                Intent intToSingle = new Intent(getActivity(), MainSingle.class);
-                intToSingle.putExtras(bundle);
-                startActivity(intToSingle);
-            }
-        });
+
     }
 
 
+    /**
+     * 顶部六个TextView的点击监听器，点击之后获取时钟控制权，或切换APM
+     */
     class TimeWidgetOnClickListener implements View.OnClickListener {
         private TextView mTextView;
         private int mType;
@@ -194,6 +211,13 @@ public class MainFragment extends Fragment
 
     }
 
+    /**
+     * 根据时钟指针变化，将时间反馈到顶部显示框以及底部时差框
+     * 在DialTouchListener中调用
+     *
+     * @param hour
+     * @param min
+     */
     private void setTimeText(int hour, int min) {
         String mHourStr = hour > 9 ? "" + hour : "0" + hour;
         String mMinStr = min > 9 ? "" + min : "0" + min;

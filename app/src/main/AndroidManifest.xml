@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nectar.timeby" >
+    package="com.nectar.timeby">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -17,30 +17,27 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".gui.MainActivity"
             android:label="@string/app_name"
-            android:noHistory="true" >
+            android:noHistory="true">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
 
 
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
         <activity
             android:name=".gui.LoginActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:label="@string/app_name">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".gui.TestActivity">
-
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".gui.RegisterActivity" />
         <activity android:name=".gui.RegisterPhoneActivity" />
@@ -53,7 +50,7 @@
         <receiver
             android:name=".service.BootReceiver"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
@@ -62,7 +59,7 @@
         <receiver
             android:name=".service.ScreenOnReceiver"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_ON" />
             </intent-filter>
@@ -73,16 +70,18 @@
             android:label="@string/title_activity_notify"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar" />
         <activity
-            android:name=".gui.MainSingle"
-            android:label="@string/title_activity_main_single" >
-        </activity>
+            android:name=".gui.MainSingleActivity"
+            android:label="@string/title_activity_main_single"></activity>
         <activity
-            android:name=".gui.MainCompany"
-            android:label="@string/title_activity_main_company" >
-        </activity>
+            android:name=".gui.MainCooperActivity"
+            android:label="@string/title_activity_main_company"></activity>
         <activity
-            android:name=".gui.MainPK"
-            android:label="@string/title_activity_main_pk" >
+            android:name=".gui.MainPKActivity"
+            android:label="@string/title_activity_main_pk"></activity>
+        <activity
+            android:name=".gui.UserInfoEditActivity"
+            android:label="@string/title_activity_user_info_edit"></activity>
+        <activity android:name=".gui.UserInfoActivity">
         </activity>
     </application>
 
