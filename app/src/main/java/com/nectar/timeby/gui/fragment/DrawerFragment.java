@@ -44,7 +44,6 @@ public class DrawerFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.i(TAG, "Attach");
         // 关联activity，用于以后回调
         // 卧槽，真叼，实现接口就能传递数据了。
         // 要是我自己写估计就给activity定义一个函数了
@@ -86,11 +85,6 @@ public class DrawerFragment extends Fragment {
         return drawerFragment;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG,"pause");
-    }
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;

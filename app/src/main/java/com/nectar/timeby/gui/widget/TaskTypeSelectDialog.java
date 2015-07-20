@@ -17,12 +17,10 @@ import android.widget.TextView;
 import com.nectar.timeby.R;
 
 /**
- * Created by finalize on 7/20/15.
+ * Created by 上白泽、稻叶 .
  */
-//时钟 by 上白泽稻叶
-//以下是时钟的控件与属性
 
-class TaskTypeSelectDialog {
+public class TaskTypeSelectDialog {
     public static final int SOLO = 0;
     public static final int COOP = 1;
     public static final int PK = 2;
@@ -37,26 +35,39 @@ class TaskTypeSelectDialog {
     private TextView coop;
     private TextView pk;
 
-    private void startSolo() {
-        //
-        //在此填上点击单人按钮后的动作
-        //
+
+    //使用者需要设置监听器才能完成跳转
+    private DialogListener mDialogListener;
+
+    public interface DialogListener {
+        void onSelectSolo();
+
+        void onSelectCooper();
+
+        void onSelectPK();
+
+        void onDialogOpen();
+
+        void onDialogClose();
     }
 
-    private void startCoop() {
-        //
-        //在此填上点击合作按钮后的动作
-        //
+    public void setSelectDialogListener(DialogListener listener) {
+        mDialogListener = listener;
     }
 
-    private void startPK() {
-        //
-        //在此填上点击PK按钮后的动作
-        //
+
+    public TaskTypeSelectDialog(Activity activity) {
+        this.activity = activity;
+
+        windowWidth = activity.getWindowManager().getDefaultDisplay().getWidth();
+        dialogHeight = (int) (0.18 * activity.getWindowManager()
+                .getDefaultDisplay().getHeight());
     }
 
     private void removeDialog() {
-        mSubmitButton.setEnabled(true);
+        if (mDialogListener != null)
+            mDialogListener.onDialogClose();
+
         Animation dialogDisappear = new TranslateAnimation(0, 0, 0, dialogHeight);
         dialogDisappear.setDuration(500);
         dialogDisappear.setFillEnabled(true);
@@ -81,15 +92,9 @@ class TaskTypeSelectDialog {
         dialogLayout.startAnimation(dialogDisappear);
     }
 
-    public TaskTypeSelectDialog(Activity activity) {
-        this.activity = activity;
-
-        windowWidth = activity.getWindowManager().getDefaultDisplay().getWidth();
-        dialogHeight = (int) (0.18 * activity.getWindowManager().getDefaultDisplay().getHeight());
-    }
-
     public void showDialog() {
-        mSubmitButton.setEnabled(false);
+        if (mDialogListener != null)
+            mDialogListener.onDialogOpen();
 
         windowLayout = new RelativeLayout(activity);
         RelativeLayout.LayoutParams windowLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -204,7 +209,8 @@ class TaskTypeSelectDialog {
                     int pointX = (int) event.getX();
                     int pointY = (int) event.getY();
                     if (pointX > 0 && pointX < windowWidth / 3 && pointY > 0 && pointY < (int) (dialogHeight * 0.67)) {
-                        startSolo();
+                        if (mDialogListener != null)
+                            mDialogListener.onSelectSolo();
                         removeDialog();
                     }
                     return false;
@@ -224,7 +230,8 @@ class TaskTypeSelectDialog {
                     int pointX = (int) event.getX();
                     int pointY = (int) event.getY();
                     if (pointX > 0 && pointX < windowWidth / 3 && pointY > 0 && pointY < (int) (dialogHeight * 0.67)) {
-                        startCoop();
+                        if (mDialogListener != null)
+                            mDialogListener.onSelectCooper();
                         removeDialog();
                     }
                     return false;
@@ -244,7 +251,8 @@ class TaskTypeSelectDialog {
                     int pointX = (int) event.getX();
                     int pointY = (int) event.getY();
                     if (pointX > 0 && pointX < windowWidth / 3 && pointY > 0 && pointY < (int) (dialogHeight * 0.67)) {
-                        startPK();
+                        if (mDialogListener != null)
+                            mDialogListener.onSelectPK();
                         removeDialog();
                     }
                     return false;

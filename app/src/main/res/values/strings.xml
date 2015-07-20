@@ -2,7 +2,6 @@
     <string name="app_name">Timeby</string>
     <string name="smssdk_app_key">8be7864566fc</string>
     <string name="smssdk_app_secret">8633b1b251d8a0ee021c20eef3d0534c</string>
-    <!--<string name="server_base_url">http://caelum.oicp.net:40018/TimebyServer/</string>-->
 
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_main_single">MainSingleActivity</string>

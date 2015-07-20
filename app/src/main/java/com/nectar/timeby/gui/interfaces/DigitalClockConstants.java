@@ -1,9 +1,9 @@
-package com.nectar.timeby.gui.DigitCountDown;
+package com.nectar.timeby.gui.interfaces;
 
 /**
  * Created by Dean on 15/7/14.
  */
-public interface Constans {
+public interface DigitalClockConstants {
     int[][] data0={
             {0,0,1,1,1,0,0},
             {0,1,1,0,1,1,0},

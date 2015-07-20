@@ -50,7 +50,7 @@
 
         <activity
             android:name=".gui.MainCooperActivity"
-            android:label="@string/title_activity_main_company" />
+            android:label="@string/title_activity_main_copper" />
 
         <activity
             android:name=".gui.MainPKActivity"

@@ -10,8 +10,8 @@
     tools:context=".MainCompany"
     android:background="@color/main_bgd"
     >
-    <include layout="@layout/btn_back" />
-    <com.nectar.timeby.gui.DigitCountDown.CustomDigitalClock
+    <include layout="@layout/countdown_actionbar" />
+    <com.nectar.timeby.gui.widget.CustomDigitalClock
 
         android:id="@+id/time"
         android:layout_width="match_parent"

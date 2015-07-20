@@ -7,13 +7,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.nectar.timeby.R;
-import com.nectar.timeby.gui.DigitCountDown.CustomDigitalClock;
+import com.nectar.timeby.gui.widget.CustomDigitalClock;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;

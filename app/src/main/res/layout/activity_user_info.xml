@@ -160,7 +160,7 @@
     </LinearLayout>
 
     <include
-        layout="@layout/user_bellow"
+        layout="@layout/user_info_bellow"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

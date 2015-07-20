@@ -1,4 +1,4 @@
-package com.nectar.timeby.gui.DigitCountDown;
+package com.nectar.timeby.gui.widget;
 
 /**
  * Created by Dean on 15/7/19.
