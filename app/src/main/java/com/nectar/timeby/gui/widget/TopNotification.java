@@ -1,4 +1,4 @@
-package com.nectar.timeby.gui.util;
+package com.nectar.timeby.gui.widget;
 
 
 import android.app.Activity;

@@ -1,4 +1,4 @@
-package com.nectar.timeby.gui.util;
+package com.nectar.timeby.gui.interfaces;
 
 /**
  * Created by finalize on 7/17/15.

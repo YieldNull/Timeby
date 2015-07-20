@@ -30,4 +30,9 @@
     <string name="setting_page_notify_time">提示时间</string>
     <string name="setting_page_feedback">意见反馈</string>
 
+    <string name="select_task_type">请选择任务模式：</string>
+    <string name="task_type_solo">单人</string>
+    <string name="task_type_coop">合作</string>
+    <string name="task_type_pk">PK</string>
+    
 </resources>
