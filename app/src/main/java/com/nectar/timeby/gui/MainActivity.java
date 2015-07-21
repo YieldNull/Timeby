@@ -197,10 +197,12 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case 1:
-//                intent = new Intent(this, FriendActivity.class);
-//                startActivity(intent);
+                intent = new Intent(this, MainConcludeActivity.class);
+                startActivity(intent);
                 break;
             case 2:
+                intent = new Intent(this, ReportActivity.class);
+                startActivity(intent);
                 break;
             case 3:
                 intent = new Intent(this, SettingActivity.class);

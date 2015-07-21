@@ -2,6 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--<item android:drawable="@drawable/anchor_up" android:state_pressed="true"/>-->
-    <item android:drawable="@drawable/anchor_down" android:state_pressed="false" />
+    <item android:drawable="@drawable/img_anchor_down" android:state_pressed="false" />
 
 </selector>

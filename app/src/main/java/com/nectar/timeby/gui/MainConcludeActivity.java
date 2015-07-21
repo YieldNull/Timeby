@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ConcludeActivity extends Activity {
+public class MainConcludeActivity extends Activity {
 
     private SeekBar mSeekBar1;
     private SeekBar mSeekBar2;
@@ -89,12 +89,12 @@ public class ConcludeActivity extends Activity {
                 int densityDPI = dm.densityDpi;
 
                 pw = new PopupWindow(view, 7 * densityDPI / 9, 2 * densityDPI / 3, true);
-                pw.setBackgroundDrawable(getResources().getDrawable(R.drawable.event_bkg));
+                pw.setBackgroundDrawable(getResources().getDrawable(R.drawable.img_conclude_spinner));
                 pw.setFocusable(true);
                 pw.showAsDropDown(btnEvent);
 
                 ListView lv = (ListView) view.findViewById(R.id.lv_pop);
-                lv.setAdapter(new ListViewAdapter2(ConcludeActivity.this, eventList));
+                lv.setAdapter(new ListViewAdapter2(MainConcludeActivity.this, eventList));
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

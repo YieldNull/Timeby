@@ -1,0 +1,141 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/report_form_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <TextView
+            android:id="@+id/center_point"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerInParent="true"
+            android:background="#ffffe3" />
+
+        <RelativeLayout
+            android:id="@+id/left_top_container"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@id/center_point"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/center_point"
+            android:background="#adccad">
+
+            <com.nectar.timeby.gui.widget.TouchHighlightImageButton
+                android:id="@+id/left_top_image_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="2dip"
+                android:layout_marginLeft="30dip"
+                android:layout_marginRight="2dip"
+                android:layout_marginTop="70dip"
+                android:scaleType="fitXY"
+                android:src="@drawable/img_report_thumb" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/right_top_container"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@id/center_point"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/center_point"
+            android:background="#adccad">
+
+            <com.nectar.timeby.gui.widget.TouchHighlightImageButton
+                android:id="@+id/right_top_image_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="2dip"
+                android:layout_marginLeft="2dip"
+                android:layout_marginRight="30dip"
+                android:layout_marginTop="70dip"
+                android:scaleType="fitXY"
+                android:src="@drawable/img_report_thumb" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/left_bottom_container"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@id/center_point"
+            android:layout_toLeftOf="@id/center_point"
+            android:background="#adccad">
+
+            <com.nectar.timeby.gui.widget.TouchHighlightImageButton
+                android:id="@+id/left_bottom_image_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="70dip"
+                android:layout_marginLeft="30dip"
+                android:layout_marginRight="2dip"
+                android:layout_marginTop="2dip"
+                android:scaleType="fitXY"
+                android:src="@drawable/img_report_thumb" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/right_bottom_container"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/center_point"
+            android:layout_toRightOf="@id/center_point"
+            android:background="#adccad">
+
+            <com.nectar.timeby.gui.widget.TouchHighlightImageButton
+                android:id="@+id/right_bottom_image_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="70dip"
+                android:layout_marginLeft="2dip"
+                android:layout_marginRight="30dip"
+                android:layout_marginTop="2dip"
+                android:scaleType="fitXY"
+                android:src="@drawable/img_report_thumb" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/report_form_center_logo_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ImageView
+            android:layout_width="65dip"
+            android:layout_height="65dip"
+            android:layout_centerInParent="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/icn_report_center" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/expanded_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
+</FrameLayout>

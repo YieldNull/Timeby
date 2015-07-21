@@ -66,7 +66,7 @@
                 android:id="@+id/editText_user_edit_nickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bgd_user_edit"
+                android:background="@drawable/shape_user_edit"
                 android:hint="修改昵称"
                 android:paddingBottom="4dp"
                 android:paddingLeft="10dp"
@@ -102,7 +102,7 @@
                         android:layout_width="50dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="5dp"
-                        android:background="@drawable/bgd_user_edit"
+                        android:background="@drawable/shape_user_edit"
                         android:singleLine="true"
                         android:textColor="@color/user_text"
                         android:textCursorDrawable="@null"
@@ -113,7 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/bgd_user_edit"
+                    android:background="@drawable/shape_user_edit"
                     android:gravity="center"
                     android:orientation="horizontal">
 
