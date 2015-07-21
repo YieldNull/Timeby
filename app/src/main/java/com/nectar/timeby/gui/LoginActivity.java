@@ -13,14 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.nectar.timeby.R;
 import com.nectar.timeby.util.HttpUtil;
 import com.nectar.timeby.util.PrefsUtil;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -62,7 +59,17 @@ public class LoginActivity extends Activity {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                verifyUser();
+                if (mUserText.getText().length() == 0) {
+                    Toast.makeText(LoginActivity.this, "用户名不能为空",
+                            Toast.LENGTH_SHORT).show();
+                } else if (mPasswordText.getText().length() == 0) {
+                    Toast.makeText(LoginActivity.this, "密码不能为空",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    mUserStr = mUserText.getText().toString();
+                    mPasswordStr = mPasswordText.getText().toString();
+                    verifyUser();
+                }
             }
         });
 
@@ -78,7 +85,7 @@ public class LoginActivity extends Activity {
                         break;
                     case MSG_USER_INVALID:
                         Log.i(TAG, "InValid user");
-                        Toast.makeText(LoginActivity.this, "用户名\\密码错误，请重新登录",
+                        Toast.makeText(LoginActivity.this, "用户名或密码错误，请重新登录",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case MSG_NET_INACTIVE:

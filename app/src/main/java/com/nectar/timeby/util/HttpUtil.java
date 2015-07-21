@@ -23,7 +23,9 @@ import java.util.Map;
  * Created by finalize on 7/14/15.
  */
 public class HttpUtil {
-    public static final String URL_SERVER_BASE = "http://10.0.3.2:5000/";
+
+    // Genymotion http://10.0.3.2:5000/
+    public static final String URL_SERVER_BASE = "http://nectar.sinaapp.com/";
     public static final String URL_LOGIN_LOGIN = URL_SERVER_BASE + "login/login";
     public static final String URL_LOGIN_REGISTER = URL_SERVER_BASE + "login/register";
     public static final String URL_LOGIN_RESET = URL_SERVER_BASE + "login/resetPassword";

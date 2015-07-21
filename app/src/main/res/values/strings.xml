@@ -2,17 +2,25 @@
     <string name="app_name">Timeby</string>
     <string name="smssdk_app_key">8be7864566fc</string>
     <string name="smssdk_app_secret">8633b1b251d8a0ee021c20eef3d0534c</string>
-    <!--<string name="server_base_url">http://caelum.oicp.net:40018/TimebyServer/</string>-->
 
-    <string name="server_base_url">http://192.168.150.116:8081/AndroidInterface/</string>
-
-    <string name="context_menu">Context menu</string>
-    <string name="title_activity_notify">notify</string>
-    <string name="title_activity_new_text">NewTextActivity</string>
-    <string name="title_activity_setting_page">SettingPageActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main_single">MainSingleActivity</string>
+    <string name="title_activity_main_pk">MainPKActivity</string>
+    <string name="title_activity_main_copper">MainCooperActivity</string>
+    <string name="title_activity_notify">NotifyActivity</string>
+    <string name="title_activity_friend">FriendActivity</string>
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_register_phone">RegisterPhoneActivity</string>
+    <string name="title_activity_user_info">UserInfoActivity</string>
+    <string name="title_activity_user_info_edit">UserInfoEditActivity</string>
+    <string name="title_activity_reset_password">ResetPasswordActivity</string>
+    <string name="title_activity_setting_notify">SettingNotifyActivity</string>
+    <string name="title_activity_setting_share">SettingShareActivity</string>
+    <string name="title_activity_setting_feedback">SettingFeedbackActivity</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
 
     <string name="setting_page_arrow_left">&#160;&#160;&#060;&#160;&#160;</string>
     <string name="setting_page_arrow_right">&#062;</string>
@@ -21,5 +29,22 @@
     <string name="setting_page_sound_effect">音效</string>
     <string name="setting_page_change_password">更改密码</string>
     <string name="setting_page_notify_time">提示时间</string>
+    <string name="setting_page_share">分享</string>
     <string name="setting_page_feedback">意见反馈</string>
+
+    <string name="select_task_type">请选择任务模式：</string>
+    <string name="task_type_solo">单人</string>
+    <string name="task_type_coop">合作</string>
+    <string name="task_type_pk">PK</string>
+    <string name="setting_page_logout">退出应用</string>
+
+    <string name="login_reset">忘记密码</string>
+    <string name="friends_top">好 友</string>
+    <string name="friends_tab_list">列 表</string>
+    <string name="friends_tab_honour">荣耀榜</string>
+    <string name="friends_tab_failed">机 奴</string>
+    <string name="friends_search_hint">搜 索</string>
+    <string name="friends_contact_hint">联系人</string>
+
+
 </resources>

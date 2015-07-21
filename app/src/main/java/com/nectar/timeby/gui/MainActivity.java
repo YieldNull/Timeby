@@ -15,73 +15,51 @@ import android.view.View;
 
 import com.nectar.timeby.R;
 import com.nectar.timeby.gui.fragment.DrawerFragment;
-import com.nectar.timeby.gui.fragment.UserFragment;
-import com.nectar.timeby.gui.util.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.fragment.MainFragment;
-import com.nectar.timeby.gui.util.OnDrawerToggleClickListener;
-import com.nectar.timeby.gui.util.TopNotification;
-import com.nectar.timeby.service.NotifyService;
+import com.nectar.timeby.gui.interfaces.OnDrawerStatusChangedListener;
+import com.nectar.timeby.gui.interfaces.OnDrawerToggleClickListener;
+import com.nectar.timeby.util.PrefsUtil;
 
 import java.lang.reflect.Field;
 
 /**
  * 2015.7.13 by finalize
  */
-//DrawerFragment.OnDrawerItemSelectedListener,
-//MainFragment.OnToggleClickListener
 public class MainActivity extends AppCompatActivity
         implements OnDrawerToggleClickListener,
         DrawerFragment.OnDrawerItemSelectedListener {
 
     private static final String TAG = "MainActivity";
-    private FragmentManager mFragmentManager;
     private DrawerLayout mDrawerLayout;
+
+    private FragmentManager mFragmentManager;
     private OnDrawerStatusChangedListener mDrawerStatusChangedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (!PrefsUtil.isLogin(this)) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.i(TAG, "onCreate");
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        Log.i(TAG, "Main Activity Create");
-        Log.i(TAG, "trying to start notify service");
-
-        //开启Service
-        Intent theIntent = new Intent(this, NotifyService.class);
-        theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startService(theIntent);
-
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_main);
         initDrawer();
-        new TopNotification(this, "Hello World!", 1000 * 1).show();
-    }
 
-    @Override
-    public void onBackPressed() {
-        //将Fragment栈弹栈，到栈底之后结束Activity
-        int count = mFragmentManager.getBackStackEntryCount();
+//        Log.i(TAG, "Main Activity Create");
+//        Log.i(TAG, "trying to start notify service");
+//
+//        //开启Service
+//        Intent theIntent = new Intent(this, NotifyService.class);
+//        theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startService(theIntent);
 
-        if (count == 1) {
-            finish();
-            return;
-        } else {
-            mFragmentManager.popBackStack();
-        }
 
-        //获取当前栈顶的Fragment
-        String fragmentTag = mFragmentManager.getBackStackEntryAt(
-                count - 2).getName();
-        try {
-            mDrawerStatusChangedListener = (OnDrawerStatusChangedListener) mFragmentManager
-                    .findFragmentByTag(fragmentTag);
-        } catch (ClassCastException e) {
-            mDrawerStatusChangedListener = null;
-        }
-
-        //返回时要显示抽屉开关
-        if (mDrawerStatusChangedListener != null)
-            mDrawerStatusChangedListener.onDrawerClosed();
+//               new TopNotification(this, "Hello World!", 1000 * 1).show();
     }
 
     /**
@@ -113,7 +91,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                Log.i(TAG, "onDrawerStateChanged" + newState);
+//                Log.i(TAG, "onDrawerStateChanged" + newState);
                 if (isClosed & newState == DrawerLayout.STATE_SETTLING) {
                     if (mDrawerStatusChangedListener != null)
                         mDrawerStatusChangedListener.onDrawerOpening();
@@ -140,6 +118,35 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        //当MainActivity使用不同的fragment进行替换时使用
+        //然而微姐把DrawerLayout当菜单用了。。。。
+        //整个就特么只有MainFragment一个，那还换个毛啊
+        //将Fragment栈弹栈，到栈底之后结束Activity
+        int count = mFragmentManager.getBackStackEntryCount();
+
+        if (count == 1) {
+            finish();
+            return;
+        } else {
+            mFragmentManager.popBackStack();
+        }
+
+        //获取当前栈顶的Fragment
+        String fragmentTag = mFragmentManager.getBackStackEntryAt(
+                count - 2).getName();
+        try {
+            mDrawerStatusChangedListener = (OnDrawerStatusChangedListener) mFragmentManager
+                    .findFragmentByTag(fragmentTag);
+        } catch (ClassCastException e) {
+            mDrawerStatusChangedListener = null;
+        }
+
+        //返回时要显示抽屉开关
+        if (mDrawerStatusChangedListener != null)
+            mDrawerStatusChangedListener.onDrawerClosed();
+    }
 
     /**
      * 在主container中添加fragment
@@ -180,17 +187,20 @@ public class MainActivity extends AppCompatActivity
         if (mDrawerLayout != null)
             mDrawerLayout.closeDrawer(Gravity.RIGHT);
 
+        Intent intent;
         switch (position) {
             case 0:
-                addFragment(new UserFragment(), true);
+                intent = new Intent(this, UserInfoActivity.class);
+                startActivity(intent);
                 break;
             case 1:
+//                intent = new Intent(this, FriendActivity.class);
+//                startActivity(intent);
                 break;
             case 2:
                 break;
             case 3:
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, SettingActivity.class);
+                intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 break;
@@ -198,6 +208,12 @@ public class MainActivity extends AppCompatActivity
                 addFragment(new MainFragment(), true);
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
     }
 
     /**

@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/btn_main_time"
+            android:background="@drawable/btn_main_time_bgd"
             android:text="03"
             android:textColor="@color/main_bgd"
             android:textSize="26sp" />
@@ -36,14 +36,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=":"
-            android:textColor="@color/main_text_bgd"
+            android:textColor="@color/main_apm_text_bgd"
             android:textSize="28sp" />
 
         <TextView
             android:id="@+id/textView_main_start_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_main_time"
+            android:background="@drawable/btn_main_time_bgd"
             android:text="24"
             android:textColor="@color/main_text"
             android:textSize="26sp" />
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/btn_main_apm"
+            android:background="@drawable/btn_main_apm_bgd"
             android:text="AM"
             android:textColor="@color/main_bgd"
             android:textSize="26sp" />
@@ -79,7 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/btn_main_time"
+            android:background="@drawable/btn_main_time_bgd"
             android:text="03"
             android:textColor="@color/main_text"
             android:textSize="26sp" />
@@ -89,14 +89,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=":"
-            android:textColor="@color/main_text_bgd"
+            android:textColor="@color/main_apm_text_bgd"
             android:textSize="28sp" />
 
         <TextView
             android:id="@+id/textView_main_end_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_main_time"
+            android:background="@drawable/btn_main_time_bgd"
             android:text="24"
             android:textColor="@color/main_text"
             android:textSize="26sp" />
@@ -106,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/btn_main_apm"
+            android:background="@drawable/btn_main_apm_bgd"
             android:text="AM"
             android:textColor="@color/main_text"
             android:textSize="26sp" />
@@ -181,7 +181,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@drawable/btn_main_submit"
+        android:background="@drawable/btn_main_submit_bgd"
         android:text="确  认"
         android:textColor="@color/main_text"
         android:textSize="24sp" />
