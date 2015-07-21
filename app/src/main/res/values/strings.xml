@@ -45,6 +45,8 @@
     <string name="friends_tab_failed">机 奴</string>
     <string name="friends_search_hint">搜 索</string>
     <string name="friends_contact_hint">联系人</string>
+    <string name="title_activity_add_friend">AddFriendActivity</string>
+    <string name="action_settings">Settings</string>
 
 
 </resources>
