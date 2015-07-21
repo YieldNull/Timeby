@@ -20,7 +20,7 @@ public class BootReceiver extends BroadcastReceiver {
         Log.i(TAG, "received boot complete broadcast");
         Log.i(TAG, "trying to start notify service");
 
-        Intent theIntent = new Intent(context, NotifyService.class);
+        Intent theIntent = new Intent(context, BackgroundService.class);
         theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startService(theIntent);
     }

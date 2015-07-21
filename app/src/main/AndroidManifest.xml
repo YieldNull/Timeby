@@ -48,7 +48,6 @@
         <activity
             android:name=".gui.MainPKActivity"
             android:label="@string/title_activity_main_pk" />
-
         <activity
             android:name=".gui.UserInfoActivity"
             android:label="@string/title_activity_user_info" />
@@ -60,7 +59,7 @@
             android:label="@string/title_activity_setting" />
 
         <service
-            android:name=".service.NotifyService"
+            android:name=".service.BackgroundService"
             android:enabled="true"
             android:exported="false" />
 
@@ -84,16 +83,25 @@
 
         <activity
             android:name=".gui.SettingPasswordActivity"
-            android:label="@string/title_activity_reset_password"></activity>
+            android:label="@string/title_activity_reset_password" />
         <activity
             android:name=".gui.SettingNotifyActivity"
-            android:label="@string/title_activity_setting_notify"></activity>
+            android:label="@string/title_activity_setting_notify" />
         <activity
             android:name=".gui.SettingShareActivity"
-            android:label="@string/title_activity_setting_share"></activity>
+            android:label="@string/title_activity_setting_share" />
         <activity
             android:name=".gui.SettingFeedbackActivity"
-            android:label="@string/title_activity_setting_feedback"></activity>
+            android:label="@string/title_activity_setting_feedback" />
+
+        <receiver
+            android:name=".service.IncomingCallReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

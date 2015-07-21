@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
 //        Log.i(TAG, "trying to start notify service");
 //
 //        //开启Service
-//        Intent theIntent = new Intent(this, NotifyService.class);
+//        Intent theIntent = new Intent(this, BackgroundService.class);
 //        theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        startService(theIntent);
 
