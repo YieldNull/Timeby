@@ -13,6 +13,10 @@
     <color name="user_text">#676767</color>
     <color name="user_edit_bgd">#ffffe3</color>
 
+    <color name="friends_bgd">#ecedc4</color>
+    <color name="friends_text">#598a84</color>
+    <color name="friends_list_one">#598a84</color>
+    <color name="friends_list_two">#dfe0b1</color>
 
     <color name="login_bgd">#598A84</color>
     <color name="login_text">#87A696</color>

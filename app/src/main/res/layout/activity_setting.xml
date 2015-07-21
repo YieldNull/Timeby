@@ -224,6 +224,33 @@
     </RelativeLayout>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/setting_page_logout"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="36dip"
+            android:text="@string/setting_page_logout"
+            android:textColor="#adccad"
+            android:textSize="23dip" />
+
+        <TextView
+            android:id="@+id/setting_page_logout_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="50dip"
+            android:text="@string/setting_page_arrow_right"
+            android:textColor="#adccad"
+            android:textSize="32dip" />
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="2">

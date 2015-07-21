@@ -13,14 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.nectar.timeby.R;
 import com.nectar.timeby.util.HttpUtil;
 import com.nectar.timeby.util.PrefsUtil;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -69,6 +66,8 @@ public class LoginActivity extends Activity {
                     Toast.makeText(LoginActivity.this, "密码不能为空",
                             Toast.LENGTH_SHORT).show();
                 } else {
+                    mUserStr = mUserText.getText().toString();
+                    mPasswordStr = mPasswordText.getText().toString();
                     verifyUser();
                 }
             }

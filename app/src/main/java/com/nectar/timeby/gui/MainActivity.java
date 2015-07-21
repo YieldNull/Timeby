@@ -18,7 +18,7 @@ import com.nectar.timeby.gui.fragment.DrawerFragment;
 import com.nectar.timeby.gui.fragment.MainFragment;
 import com.nectar.timeby.gui.interfaces.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.interfaces.OnDrawerToggleClickListener;
-import com.nectar.timeby.gui.widget.TopNotification;
+import com.nectar.timeby.util.PrefsUtil;
 
 import java.lang.reflect.Field;
 
@@ -37,11 +37,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (!PrefsUtil.isLogin(this)) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.i(TAG, "onCreate");
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_main);
         initDrawer();
 
 //        Log.i(TAG, "Main Activity Create");
@@ -54,7 +60,6 @@ public class MainActivity extends AppCompatActivity
 
 
 //               new TopNotification(this, "Hello World!", 1000 * 1).show();
-
     }
 
     /**
@@ -189,6 +194,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case 1:
+//                intent = new Intent(this, FriendActivity.class);
+//                startActivity(intent);
                 break;
             case 2:
                 break;

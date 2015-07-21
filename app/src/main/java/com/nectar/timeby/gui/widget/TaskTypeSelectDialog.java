@@ -60,7 +60,7 @@ public class TaskTypeSelectDialog {
         this.activity = activity;
 
         windowWidth = activity.getWindowManager().getDefaultDisplay().getWidth();
-        dialogHeight = (int) (0.18 * activity.getWindowManager()
+        dialogHeight = (int) (0.22 * activity.getWindowManager()
                 .getDefaultDisplay().getHeight());
     }
 
@@ -108,7 +108,7 @@ public class TaskTypeSelectDialog {
         selectTaskType.setText(R.string.select_task_type);
         selectTaskType.setTextColor(Color.rgb(255, 255, 255));
         selectTaskType.setGravity(Gravity.BOTTOM);
-        selectTaskType.setTextSize(dialogHeight / 10);
+        selectTaskType.setTextSize(20);
         RelativeLayout.LayoutParams selectTaskTypeParams = new RelativeLayout.LayoutParams((int) (windowWidth * 0.9), (int) (dialogHeight * 0.33));
         selectTaskTypeParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         selectTaskTypeParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -116,7 +116,7 @@ public class TaskTypeSelectDialog {
         solo = new TextView(activity);
         solo.setText(R.string.task_type_solo);
         solo.setTextColor(Color.rgb(255, 255, 227));
-        solo.setTextSize(dialogHeight / 6);
+        solo.setTextSize(40);
         solo.setGravity(Gravity.CENTER);
         RelativeLayout.LayoutParams soloParams = new RelativeLayout.LayoutParams(windowWidth / 3, (int) (dialogHeight * 0.67));
         soloParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -124,7 +124,7 @@ public class TaskTypeSelectDialog {
 
         coop = new TextView(activity);
         coop.setText(R.string.task_type_coop);
-        coop.setTextSize(dialogHeight / 6);
+        coop.setTextSize(40);
         coop.setTextColor(Color.rgb(255, 255, 227));
         coop.setGravity(Gravity.CENTER);
         RelativeLayout.LayoutParams coopParams = new RelativeLayout.LayoutParams(windowWidth / 3, (int) (dialogHeight * 0.67));
@@ -133,7 +133,7 @@ public class TaskTypeSelectDialog {
 
         pk = new TextView(activity);
         pk.setText(R.string.task_type_pk);
-        pk.setTextSize(dialogHeight / 6);
+        pk.setTextSize(40);
         pk.setTextColor(Color.rgb(255, 255, 227));
         pk.setGravity(Gravity.CENTER);
         RelativeLayout.LayoutParams pkParams = new RelativeLayout.LayoutParams(windowWidth / 3, (int) (dialogHeight * 0.67));

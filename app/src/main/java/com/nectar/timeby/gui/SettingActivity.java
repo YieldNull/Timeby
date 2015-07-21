@@ -17,6 +17,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nectar.timeby.R;
+import com.nectar.timeby.util.PrefsUtil;
+
+import static com.nectar.timeby.R.id.setting_page_logout_arrow;
 
 /**
  * Created by 上白泽丶稻叶 on 2015/7/18.
@@ -49,10 +52,13 @@ public class SettingActivity extends Activity {
     private TextView timeNotiStripArrow;
     private TextView feedbackStripArrow;
     private TextView shareStripArrorw;
+    private TextView logoutStripArrow;
+
     private RelativeLayout chanPwdStrip;
     private RelativeLayout timeNotiStrip;
     private RelativeLayout feedbackStrip;
     private RelativeLayout shareStrip;
+    private RelativeLayout logoutStrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +80,8 @@ public class SettingActivity extends Activity {
         feedbackStripArrow = (TextView) findViewById(R.id.setting_page_feedback_arrow);
         shareStrip = (RelativeLayout) findViewById(R.id.setting_page_share);
         shareStripArrorw = (TextView) findViewById(R.id.setting_page_share_arrow);
+        logoutStrip = (RelativeLayout) findViewById(R.id.setting_page_logout);
+        logoutStripArrow = (TextView) findViewById(setting_page_logout_arrow);
 
         ViewTreeObserver vto = chanPwdStrip.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -100,6 +108,7 @@ public class SettingActivity extends Activity {
         timeNotiStrip.setOnTouchListener(new SettingStripListener(timeNotiStrip, timeNotiStripArrow));
         feedbackStrip.setOnTouchListener(new SettingStripListener(feedbackStrip, feedbackStripArrow));
         shareStrip.setOnTouchListener(new SettingStripListener(shareStrip, shareStripArrorw));
+        logoutStrip.setOnTouchListener(new SettingStripListener(logoutStrip, logoutStripArrow));
     }
 
     @Override
@@ -166,8 +175,14 @@ public class SettingActivity extends Activity {
                         intent.setClass(SettingActivity.this, SettingNotifyActivity.class);
                     else if (relativeLayout == shareStrip)
                         intent.setClass(SettingActivity.this, SettingShareActivity.class);
-                    else
+                    else if (relativeLayout == feedbackStrip)
                         intent.setClass(SettingActivity.this, SettingFeedbackActivity.class);
+                    else {
+                        intent.setClass(SettingActivity.this, LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        PrefsUtil.logout(SettingActivity.this);
+                    }
 
                     startActivity(intent);
                     overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
