@@ -34,6 +34,6 @@
     </style>
 
     <style name="AppTheme.Widget.TextView" parent="android:Widget.Holo.Light.TextView">
-        <item name="fontPath">fonts/Roboto-ThinItalic.ttf</item>
+        <item name="fontPath">fonts/youyuan.ttf</item>
     </style>
 </resources>
