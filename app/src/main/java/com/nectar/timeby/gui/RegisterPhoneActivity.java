@@ -337,7 +337,7 @@ public class RegisterPhoneActivity extends Activity {
     private void startMainActivity() {
         //把数据存到本地
         Log.i(TAG, "Storing data in SharedPreference");
-        PrefsUtil.storeUser(this, mUserStr, mPasswordStr, mPhoneStr);
+        PrefsUtil.login(this, mUserStr, mPasswordStr, mPhoneStr);
 
         //进入MainActivity
         Log.i(TAG, "Starting MainActivity");

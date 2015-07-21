@@ -17,7 +17,6 @@ public class FriendShip {
     }
 
 
-
     public String getRemark() {
         return remark;
     }

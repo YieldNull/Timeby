@@ -3,18 +3,19 @@ package com.nectar.timeby.gui;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.nectar.timeby.R;
+import com.nectar.timeby.util.ImgUtil;
+import com.nectar.timeby.util.PrefsUtil;
 
-import java.io.File;
+import java.util.Map;
 
 /**
  * Created by finalize on 7/18/15.
@@ -36,7 +37,13 @@ public class UserInfoActivity extends Activity {
 
     private ImageButton mReturnButton;
     private ImageButton mEditButton;
-    private ImageView mUserImage;
+    private ImageView mHeadImage;
+
+    private TextView mNickNameText;
+    private TextView mYearText;
+    private TextView mShellText;
+    private TextView mHammerText;
+    private ImageView mGenderImage;
 
     public UserInfoActivity() {
     }
@@ -54,10 +61,17 @@ public class UserInfoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
 
-        mUserImage= (ImageView) findViewById(R.id.imageView_user_edit_photo);
-
         mReturnButton = (ImageButton) findViewById(R.id.imageButton_user_return);
         mEditButton = (ImageButton) findViewById(R.id.imageButton_user_edit);
+        mHeadImage = (ImageView) findViewById(R.id.imageView_user_photo);
+        mGenderImage = (ImageView) findViewById(R.id.imageView_user_gender);
+        mNickNameText = (TextView) findViewById(R.id.textView_user_nickname);
+        mYearText = (TextView) findViewById(R.id.textView_user_year);
+        mShellText = (TextView) findViewById(R.id.textView_user_shell);
+        mHammerText = (TextView) findViewById(R.id.textView_user_hammer);
+
+        initInfo();
+
         mReturnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,109 +88,24 @@ public class UserInfoActivity extends Activity {
         });
     }
 
-    // 从本地相册选取图片作为头像
-    private void choseHeadImageFromGallery() {
-        Intent intentFromGallery = new Intent();
-        // 设置文件类型
-        intentFromGallery.setType("image/*");
-        intentFromGallery.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intentFromGallery, CODE_GALLERY_REQUEST);
-    }
+    private void initInfo() {
+        Map<String, String> infoMap = PrefsUtil.readUserInfo(this);
+        mNickNameText.setText(infoMap.get(PrefsUtil.PREFS_KEY_USER_INFO_NICKNAME));
+        mYearText.setText(infoMap.get(PrefsUtil.PREFS_KEY_USER_INFO_YEAR));
+        mShellText.setText(infoMap.get(PrefsUtil.PREFS_KEY_USER_INFO_SHELL));
+        mHammerText.setText(infoMap.get(PrefsUtil.PREFS_KEY_USER_INFO_HAMMER));
 
-    // 启动手机相机拍摄照片作为头像
-    private void choseHeadImageFromCameraCapture() {
-        Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        // 判断存储卡是否可用，存储照片文件
-        if (hasSdcard()) {
-            intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri
-                    .fromFile(new File(Environment
-                            .getExternalStorageDirectory(), IMAGE_FILE_NAME)));
-        }
-
-        startActivityForResult(intentFromCapture, CODE_CAMERA_REQUEST);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent intent) {
-
-        // 用户没有进行有效的设置操作，返回
-        if (resultCode == RESULT_CANCELED) {
-            Toast.makeText(getApplication(), "取消操作", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        switch (requestCode) {
-            case CODE_GALLERY_REQUEST:
-                cropRawPhoto(intent.getData());
-                break;
-
-            case CODE_CAMERA_REQUEST:
-                if (hasSdcard()) {
-                    File tempFile = new File(
-                            Environment.getExternalStorageDirectory(),
-                            IMAGE_FILE_NAME);
-                    cropRawPhoto(Uri.fromFile(tempFile));
-                } else {
-                    Toast.makeText(getApplication(), "没有SDCard!", Toast.LENGTH_LONG)
-                            .show();
-                }
-                break;
-
-            case CODE_RESULT_REQUEST:
-                if (intent != null) {
-                    setImageToHeadView(intent);
-                }
-                break;
-        }
-    }
-
-    /**
-     * 裁剪原始的图片
-     */
-    public void cropRawPhoto(Uri uri) {
-
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-
-        // 设置裁剪
-        intent.putExtra("crop", "true");
-
-        // aspectX , aspectY :宽高的比例
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-
-        // outputX , outputY : 裁剪图片宽高
-        intent.putExtra("outputX", output_X);
-        intent.putExtra("outputY", output_Y);
-        intent.putExtra("return-data", true);
-
-        startActivityForResult(intent, CODE_RESULT_REQUEST);
-    }
-
-    /**
-     * 提取保存裁剪之后的图片数据，并设置头像部分的View
-     * 在这里可以将裁剪之后的Bitmap对象之类的进行上传。
-     */
-    private void setImageToHeadView(Intent intent) {
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            Bitmap photo = extras.getParcelable("data");
-            mUserImage.setImageBitmap(photo);
-        }
-    }
-
-    /**
-     * 检查设备是否存在SDCard的工具方法
-     */
-    public static boolean hasSdcard() {
-        String state = Environment.getExternalStorageState();
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            // 有存储的SDCard
-            return true;
+        String gender = infoMap.get(PrefsUtil.PREFS_KEY_USER_INFO_GENDER);
+        if (gender.equalsIgnoreCase("male")) {
+            mGenderImage.setImageDrawable(getResources().getDrawable(R.drawable.icn_user_gender_male));
         } else {
-            return false;
+            mGenderImage.setImageDrawable(getResources().getDrawable(R.drawable.icn_user_gender_female));
         }
+
+        String headImgName = infoMap.get(PrefsUtil.PREFS_KEY_USER_INFO_PHOTO);
+        Bitmap bitmap = ImgUtil.readBitmap(this, headImgName);
+        Drawable img = new BitmapDrawable(getResources(), bitmap);
+        if (bitmap != null)
+            mHeadImage.setImageDrawable(img);
     }
 }

@@ -146,7 +146,7 @@ public class LoginActivity extends Activity {
 
         //把数据存到本地
         Log.i(TAG, "Storing data in SharedPreference");
-        PrefsUtil.storeUser(this, mUserStr, mPasswordStr, mPhoneStr);
+        PrefsUtil.login(this, mUserStr, mPasswordStr, mPhoneStr);
 
         //进入MainActivity
         Log.i(TAG, "Starting MainActivity");
@@ -169,7 +169,6 @@ public class LoginActivity extends Activity {
         Log.i(TAG, "Checking " + mPhoneStr + mUserStr + mPasswordStr + "is a valid user or not");
 
         final HashMap<String, String> params = new HashMap<>();
-        params.put("phoneNum", mPhoneStr);
         params.put("userName", mUserStr);
         params.put("password", mPasswordStr);
 

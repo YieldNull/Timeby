@@ -1,6 +1,5 @@
 package com.nectar.timeby.db;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -8,11 +7,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by wsw on 2015/7/20.
  */
-public class ClientSQLiteOpenHelper extends SQLiteOpenHelper{
+public class ClientSQLiteOpenHelper extends SQLiteOpenHelper {
 
-    public ClientSQLiteOpenHelper(Context context){
-        super(context,"client.db",null,1);
+    public ClientSQLiteOpenHelper(Context context) {
+        super(context, "client.db", null, 1);
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS User(phoneNumber VARCHAR(20) PRIMARY KEY," +

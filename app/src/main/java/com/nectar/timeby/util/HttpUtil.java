@@ -25,8 +25,8 @@ import java.util.Map;
 public class HttpUtil {
 
     // Genymotion http://10.0.3.2:5000/
-    public static final String URL_SERVER_BASE = "http://nectar.sinaapp.com/";
-    public static final String URL_LOGIN_LOGIN = URL_SERVER_BASE + "login/login";
+    public static final String URL_SERVER_BASE = "http://1.timeby2015.sinaapp.com/";
+    public static final String URL_LOGIN_LOGIN = URL_SERVER_BASE + "LoginServlet";
     public static final String URL_LOGIN_REGISTER = URL_SERVER_BASE + "login/register";
     public static final String URL_LOGIN_RESET = URL_SERVER_BASE + "login/resetPassword";
     public static final String URL_LOGIN_CHECK = URL_SERVER_BASE + "login/checkValid";
@@ -56,11 +56,11 @@ public class HttpUtil {
      * 通过post方式连接服务器
      *
      * @param url
-     * @param datas 参数键值对
+     * @param dataMap 参数键值对
      * @return 得到的JSON数据，解析失败则返回null
      * @throws IOException
      */
-    public static JSONObject doPost(String url, Map<String, String> datas) throws IOException {
+    public static JSONObject doPost(String url, Map<String, String> dataMap) throws IOException {
 
         //设置连接参数
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -72,9 +72,9 @@ public class HttpUtil {
         connection.connect();
         OutputStream outputStream = connection.getOutputStream();
 
-        //用URL格式编码参数
+//        用URL格式编码参数
         StringBuilder param = new StringBuilder();
-        for (Map.Entry<String, String> entry : datas.entrySet()) {
+        for (Map.Entry<String, String> entry : dataMap.entrySet()) {
             param.append(entry.getKey()).append("=")
                     .append(URLEncoder.encode(entry.getValue(), "UTF-8"))
                     .append("&");
