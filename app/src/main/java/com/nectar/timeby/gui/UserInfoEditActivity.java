@@ -258,7 +258,7 @@ public class UserInfoEditActivity extends Activity {
             ViewHolder viewHolder;
 
             if (convertView == null) {
-                itemView = getLayoutInflater().inflate(R.layout.user_info_spinner_item, parent, false);
+                itemView = getLayoutInflater().inflate(R.layout.list_item_gender_spinner, parent, false);
                 viewHolder = new ViewHolder();
                 viewHolder.mImageView = (ImageView) itemView.findViewById(R.id.imageView);
                 itemView.setTag(viewHolder);

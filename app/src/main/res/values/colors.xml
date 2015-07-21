@@ -21,4 +21,6 @@
 
     <color name="login_bgd">#598A84</color>
     <color name="login_text">#87A696</color>
+
+    <color name="btn_bgd">#ffededed</color>
 </resources>

@@ -66,7 +66,7 @@ public class DrawerFragment extends Fragment {
         mDrawerListView = (ListView) drawerFragment
                 .findViewById(R.id.listView_drawer);
         mArrayAdapter = new DrawerListAdapter(getActivity(),
-                R.layout.drawer_list_item, initListView());
+                R.layout.list_item_drawer, initListView());
         mDrawerListView.setAdapter(mArrayAdapter);
         mDrawerListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

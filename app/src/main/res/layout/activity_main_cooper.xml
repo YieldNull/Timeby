@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <include
-        layout="@layout/countdown_top"
+        layout="@layout/layout_countdown_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
