@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.nectar.timeby"
+        applicationId "com.example.caelum.test"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
@@ -19,13 +19,7 @@ android {
     }
 }
 
-repositories {
-    maven {
-        url "https://repo.commonsware.com.s3.amazonaws.com"
-    }
-}
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'uk.co.chrisjenx:calligraphy:2.1.0'
 }
