@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainCooperActivity extends MainCountDownActivity {
+
     ListView mResultList;
 
     @Override
