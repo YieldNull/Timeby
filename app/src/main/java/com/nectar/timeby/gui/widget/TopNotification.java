@@ -68,9 +68,9 @@ public class TopNotification {
         action1.setAnimationListener(new AnimationJointListener(notificLayout, action2));
         action2.setAnimationListener(new AnimationJointListener(notificLayout, action3));
         action3.setAnimationListener(new AnimaRemoveNotificListener(notificLayout));
-        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        Ringtone ringer = RingtoneManager.getRingtone(activity.getApplicationContext(), notification);
-        ringer.play();
+//        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//        Ringtone ringer = RingtoneManager.getRingtone(activity.getApplicationContext(), notification);
+//        ringer.play();
         notificLayout.startAnimation(action1);
 
         //((ViewGroup)notificLayout.getParent()).removeView(notificLayout);

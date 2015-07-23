@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.nectar.timeby.gui.UserInfoEditActivity;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,13 +19,25 @@ public class PrefsUtil {
     public static final String PREFS_KEY_USER_PASSWORD = "password";
 
     public static final String PREFS_MAP_USER_INFO = "userInfo";
-    public static final String PREFS_KEY_USER_INFO_NICKNAME = "nickname";
-    public static final String PREFS_KEY_USER_INFO_YEAR = "year";
-    public static final String PREFS_KEY_USER_INFO_GENDER = "gender";
-    public static final String PREFS_KEY_USER_INFO_SHELL = "shell";
-    public static final String PREFS_KEY_USER_INFO_HAMMER = "hammer";
-    public static final String PREFS_KEY_USER_INFO_PHOTO = "photo";
+    public static final String PREFS_KEY_USER_INFO_NICKNAME = "userInfo_nickname";
+    public static final String PREFS_KEY_USER_INFO_YEAR = "userInfo_year";
+    public static final String PREFS_KEY_USER_INFO_GENDER = "userInfo_gender";
+    public static final String PREFS_KEY_USER_INFO_SHELL = "userInfo_shell";
+    public static final String PREFS_KEY_USER_INFO_HAMMER = "userInfo_hammer";
+    public static final String PREFS_KEY_USER_INFO_PHOTO = "userInfo_photo";
 
+    public static final String PREFS_MAP_TASK = "task";
+    public static final String PREFS_KEY_START_TIME_MILLIS = "task_start";
+    public static final String PREFS_KEY_END_TIME_MILLIS = "task_end";
+
+    /**
+     * 登录，存入手机号、用户名、密码。初始化用户信息
+     *
+     * @param context
+     * @param userName
+     * @param password
+     * @param phoneNum
+     */
     public static void login(Context context, String userName, String password, String phoneNum) {
 
         SharedPreferences user = context.getSharedPreferences(
@@ -45,6 +58,12 @@ public class PrefsUtil {
         storeUserInfo(context, infoMap);
     }
 
+    /**
+     * 判断是否有用户登入
+     *
+     * @param context
+     * @return
+     */
     public static boolean isLogin(Context context) {
         if (getUserName(context) == null)
             return false;
@@ -52,12 +71,23 @@ public class PrefsUtil {
             return true;
     }
 
+    /**
+     * 获取已登入的用户名
+     *
+     * @param context
+     * @return
+     */
     public static String getUserName(Context context) {
         SharedPreferences user = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_USER, Context.MODE_PRIVATE);
         return user.getString(PREFS_KEY_USER_NAME, null);
     }
 
+    /**
+     * 登出，清空用户信息
+     *
+     * @param context
+     */
     public static void logout(Context context) {
         SharedPreferences user = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_USER, Context.MODE_PRIVATE);
@@ -68,6 +98,12 @@ public class PrefsUtil {
         editor.commit();
     }
 
+    /**
+     * 存储用户信息，昵称、年龄、性别、贝壳数、锤子数，头像名称
+     *
+     * @param context
+     * @param infoMap
+     */
     public static void storeUserInfo(Context context, Map<String, String> infoMap) {
         SharedPreferences user = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_USER_INFO, Context.MODE_PRIVATE);
@@ -81,6 +117,12 @@ public class PrefsUtil {
         editor.commit();
     }
 
+    /**
+     * 读取用户信息，昵称、年龄、性别、贝壳数、锤子数，头像名称
+     *
+     * @param context
+     * @return
+     */
     public static Map<String, String> readUserInfo(Context context) {
         Map<String, String> infoMap = new HashMap<>();
 
@@ -97,6 +139,12 @@ public class PrefsUtil {
         return infoMap;
     }
 
+    /**
+     * 更新用户信息，昵称，年龄，性别
+     *
+     * @param context
+     * @param infoMap
+     */
     public static void updateInfo(Context context, HashMap<String, String> infoMap) {
         SharedPreferences user = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_USER_INFO, Context.MODE_PRIVATE);
@@ -105,5 +153,27 @@ public class PrefsUtil {
         editor.putString(PREFS_KEY_USER_INFO_YEAR, infoMap.get(PREFS_KEY_USER_INFO_YEAR));
         editor.putString(PREFS_KEY_USER_INFO_GENDER, infoMap.get(PREFS_KEY_USER_INFO_GENDER));
         editor.commit();
+    }
+
+    public static void storeTask(Context context, long startMillis, long endMillis) {
+        SharedPreferences user = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = user.edit();
+
+        editor.putLong(PREFS_KEY_START_TIME_MILLIS, startMillis);
+        editor.putLong(PREFS_KEY_END_TIME_MILLIS, endMillis);
+        editor.commit();
+    }
+
+    public static Map<String, Long> readTask(Context context) {
+        Map<String, Long> taskMap = new HashMap<>();
+
+        SharedPreferences task = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
+
+        taskMap.put(PREFS_KEY_START_TIME_MILLIS, task.getLong(PREFS_KEY_START_TIME_MILLIS, 0));
+        taskMap.put(PREFS_KEY_END_TIME_MILLIS, task.getLong(PREFS_KEY_END_TIME_MILLIS, 0));
+
+        return taskMap;
     }
 }

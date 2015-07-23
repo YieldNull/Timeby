@@ -1,12 +1,14 @@
 package com.nectar.timeby.gui.fragment;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Fragment;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,11 +18,13 @@ import android.widget.TextView;
 import com.nectar.timeby.R;
 import com.nectar.timeby.gui.MainCooperActivity;
 import com.nectar.timeby.gui.MainPKActivity;
-import com.nectar.timeby.gui.MainSingleActivity;
+import com.nectar.timeby.gui.MainSoloActivity;
 import com.nectar.timeby.gui.interfaces.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.interfaces.OnDrawerToggleClickListener;
 import com.nectar.timeby.gui.widget.ClockWidget;
 import com.nectar.timeby.gui.widget.TaskTypeSelectDialog;
+import com.nectar.timeby.gui.widget.TopNotification;
+import com.nectar.timeby.util.PrefsUtil;
 
 import java.util.Calendar;
 
@@ -60,8 +64,7 @@ public class MainFragment extends Fragment
     private static int TYPE_START = 0x0001;
     private static int TYPE_END = 0x0002;
 
-    //by Dean
-    int sumMin, startHour, startMin, endHour, endMin;
+    private int mSumMin, mStartHour, mStartMin, mEndHour, mEndMin;
 
     public MainFragment() {
 
@@ -126,7 +129,7 @@ public class MainFragment extends Fragment
             public void onPointerMove(int currentHour, int currentMin) {
                 mCurrHour = currentHour;
                 mCurrMinu = currentMin;
-                setTimeText();
+                refreshTimeText();
             }
         });
 
@@ -134,7 +137,11 @@ public class MainFragment extends Fragment
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTaskTypeSelectDialog.showDialog();
+                if (mSumMin == 0) {
+                    new TopNotification(getActivity(), "请先设置任务时间", 4 * 1000).show();
+                } else {
+                    mTaskTypeSelectDialog.showDialog();
+                }
             }
         });
 
@@ -143,23 +150,17 @@ public class MainFragment extends Fragment
         mTaskTypeSelectDialog.setSelectDialogListener(new TaskTypeSelectDialog.DialogListener() {
             @Override
             public void onSelectSolo() {
-                Intent intToSingle = new Intent(getActivity(), MainSingleActivity.class);
-                intToSingle.putExtras(getDeliverBunlder());
-                startActivity(intToSingle);
+                setAlarm(MainSoloActivity.class);
             }
 
             @Override
             public void onSelectCooper() {
-                Intent intToSingle = new Intent(getActivity(), MainCooperActivity.class);
-                intToSingle.putExtras(getDeliverBunlder());
-                startActivity(intToSingle);
+                setAlarm(MainCooperActivity.class);
             }
 
             @Override
             public void onSelectPK() {
-                Intent intToSingle = new Intent(getActivity(), MainPKActivity.class);
-                intToSingle.putExtras(getDeliverBunlder());
-                startActivity(intToSingle);
+                setAlarm(MainPKActivity.class);
             }
 
             @Override
@@ -176,6 +177,7 @@ public class MainFragment extends Fragment
         return rootView;
     }
 
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -186,9 +188,10 @@ public class MainFragment extends Fragment
      * 初始化时间，在界面上显示当前的时间，并设置点击监听器
      */
     private void initTimeWidget() {
-        //设置初始时间
+        //设置初始时间,把开始时间调成大于当前时间，便于之后的倒计时
+        //在ClockWidget中同样设置+2
         mCurrHour = Calendar.getInstance().get(Calendar.HOUR);
-        mCurrMinu = Calendar.getInstance().get(Calendar.MINUTE);
+        mCurrMinu = Calendar.getInstance().get(Calendar.MINUTE) + 2;
 
         int hourOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         boolean isAm = hourOfDay >= 0 && hourOfDay < 12;
@@ -244,7 +247,7 @@ public class MainFragment extends Fragment
                     mTextView.setText("AM");
             }
             //更改时差
-            setTimeText();
+            refreshTimeText();
         }
     }
 
@@ -252,7 +255,7 @@ public class MainFragment extends Fragment
      * 根据时钟指针变化，将时间反馈到顶部显示框以及底部时差框
      * 在DialTouchListener中调用
      */
-    private void setTimeText() {
+    private void refreshTimeText() {
         String mHourStr = mCurrHour > 9 ? "" + mCurrHour : "0" + mCurrHour;
         String mMinStr = mCurrMinu > 9 ? "" + mCurrMinu : "0" + mCurrMinu;
 
@@ -272,40 +275,92 @@ public class MainFragment extends Fragment
         if (!isEndSet)
             return;
 
-        startHour = Integer.parseInt(mStartHourText.getText().toString());
-        startMin = Integer.parseInt(mStartMinText.getText().toString());
-        endHour = Integer.parseInt(mEndHourText.getText().toString());
-        endMin = Integer.parseInt(mEndMinText.getText().toString());
+        mStartHour = Integer.parseInt(mStartHourText.getText().toString());
+        mStartMin = Integer.parseInt(mStartMinText.getText().toString());
+        mEndHour = Integer.parseInt(mEndHourText.getText().toString());
+        mEndMin = Integer.parseInt(mEndMinText.getText().toString());
 
         //总时差的分钟形式
-        sumMin = (endHour - startHour) * 60 + (endMin - startMin);
+        mSumMin = (mEndHour - mStartHour) * 60 + (mEndMin - mStartMin);
 
         //上下AM PM不同则要加上12小时
         if (!mEndAPMText.getText().toString()
                 .equals(mStartAPMText.getText().toString())) {
-            sumMin += 12 * 60;
+            mSumMin += 12 * 60;
         }
 
         //下面比上面小则归零
-        if (sumMin <= 0) {
+        if (mSumMin <= 0) {
             mTimeIntervalText.setText("00时00分");
             return;
         }
-        String intervalHour = sumMin / 60 > 9 ? "" + sumMin / 60 : "0" + sumMin / 60;
-        String intervalMin = sumMin % 60 > 9 ? "" + sumMin % 60 : "0" + sumMin % 60;
+        String intervalHour = mSumMin / 60 > 9 ? "" + mSumMin / 60 : "0" + mSumMin / 60;
+        String intervalMin = mSumMin % 60 > 9 ? "" + mSumMin % 60 : "0" + mSumMin % 60;
         mTimeIntervalText.setText(intervalHour + "时" + intervalMin + "分");
 
     }
 
-    private Bundle getDeliverBunlder() {
-        Bundle bundle = new Bundle();
-        bundle.putInt("CountDownTime", sumMin);
-        bundle.putInt("startHour", startHour);
-        bundle.putInt("startMin", startMin);
-        bundle.putInt("endHour", endHour);
-        bundle.putInt("endMin", endMin);
-        bundle.putString("startAPM", mStartAPMText.getText().toString());
-        bundle.putString("endAPM", mEndAPMText.getText().toString());
-        return bundle;
+    /**
+     * 利用AlarmManager设置Alarm用以启动倒计时页面
+     * <p/>
+     * 设置之前要将任务保存到SharedPreference
+     *
+     * @param cls
+     */
+    private void setAlarm(Class<?> cls) {
+        long triggerTime = calcAlertTriggerTime();
+        storeTask(triggerTime);
+
+        Log.i(TAG, (triggerTime - System.currentTimeMillis()) / 1000 + "");
+
+        //设置Alarm
+        AlarmManager manager = (AlarmManager) getActivity()
+                .getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(getActivity(), cls);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        manager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+    }
+
+    /**
+     * 计算Alarm触发时间的RTC值
+     * <p/>
+     * 先将启动时间转为二十四小时制，然后计算出与当前时间的差值(毫秒)
+     */
+    private long calcAlertTriggerTime() {
+        //当前时间
+        Calendar calendar = Calendar.getInstance();
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        int min = calendar.get(Calendar.MINUTE);
+        int sec = calendar.get(Calendar.SECOND);
+
+        //启动时间
+        int startHour = Integer.parseInt(mStartHourText.getText().toString());
+        int startMin = Integer.parseInt(mStartMinText.getText().toString());
+        if (mStartAPMText.getText().toString().equalsIgnoreCase("PM")) {
+            startHour += 12;
+        }
+
+        //计算差值,精确到分
+        int startSumSec = startHour * 3600 + startMin * 60 + sec;
+        int currSumSec = hourOfDay * 3600 + min * 60 + sec;
+        int dValue = startSumSec - currSumSec;
+        dValue = dValue > 0 ? dValue : dValue + 3600 * 24;
+
+        return dValue * 1000 + System.currentTimeMillis();
+    }
+
+    /**
+     * 将开始时间、结束时间存入SharedPreference
+     */
+    private void storeTask(long triggerTime) {
+        long startMillis = triggerTime;
+        long endMillis = triggerTime + mSumMin * 60 * 1000;
+
+        PrefsUtil.storeTask(getActivity(), startMillis, endMillis);
     }
 }

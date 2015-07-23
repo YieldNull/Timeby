@@ -39,7 +39,7 @@
             android:label="@string/title_activity_notify"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar" />
         <activity
-            android:name=".gui.MainSingleActivity"
+            android:name=".gui.MainSoloActivity"
             android:label="@string/title_activity_main_single" />
         <activity
             android:name=".gui.MainCooperActivity"
