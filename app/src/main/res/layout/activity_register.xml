@@ -2,55 +2,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    android:background="@color/login_bgd"
+    android:background="@color/register_bottom"
     android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="80dp"
-        android:src="@drawable/img_login_logo" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.6"
+        android:background="@color/register_top"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/editText_register_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:background="@android:color/white"
+                android:drawableRight="@drawable/icn_login_valid_none"
+                android:hint="@string/register_user_hint"
+                android:padding="12dp"
+                android:singleLine="true"
+                android:textColor="@color/login_text"
+                android:textColorHint="@color/login_text"
+                android:textCursorDrawable="@null"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/editText_register_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:background="@android:color/white"
+                android:drawableRight="@drawable/icn_login_valid_none"
+                android:ellipsize="start"
+                android:hint="@string/register_password_hint"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:singleLine="true"
+                android:textColor="@color/login_text"
+                android:textColorHint="@color/login_text"
+                android:textCursorDrawable="@null"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout_login"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="0.4"
+        android:background="@color/register_bottom"
         android:orientation="vertical"
-        android:padding="20dp">
-
-
-        <EditText
-            android:id="@+id/editText_register_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="1dp"
-            android:background="@android:color/white"
-            android:drawableRight="@drawable/icn_login_valid_none"
-            android:hint="输入用户名"
-            android:padding="12dp"
-            android:singleLine="true"
-            android:textColor="@color/login_text"
-            android:textColorHint="@color/login_text"
-            android:textCursorDrawable="@null"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/editText_register_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="1dp"
-            android:background="@android:color/white"
-            android:drawableRight="@drawable/icn_login_valid_none"
-            android:ellipsize="start"
-            android:hint="输入密码"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            android:singleLine="true"
-            android:textColor="@color/login_text"
-            android:textColorHint="@color/login_text"
-            android:textCursorDrawable="@null"
-            android:textSize="20sp" />
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
         <EditText
             android:id="@+id/editText_register_password2"
@@ -60,7 +70,7 @@
             android:background="@android:color/white"
             android:drawableRight="@drawable/icn_login_valid_none"
             android:ellipsize="start"
-            android:hint="再次输入密码"
+            android:hint="@string/register_password2_hint"
             android:inputType="textPassword"
             android:padding="12dp"
             android:singleLine="true"
@@ -69,16 +79,31 @@
             android:textCursorDrawable="@null"
             android:textSize="20sp" />
 
-        <ImageButton
-            android:id="@+id/button_register_next"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:background="@color/login_bgd"
-            android:src="@drawable/btn_login_next"
-            android:textColorHint="@color/login_text" />
-    </LinearLayout>
+            android:layout_marginTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
+            <TextView
+                android:id="@+id/textView_register_return"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@string/register_return"
+                android:textColor="@color/register_text_btn"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/textView_register_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/register_next"
+                android:textColor="@color/register_text_btn"
+                android:textSize="20sp" />
+        </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
