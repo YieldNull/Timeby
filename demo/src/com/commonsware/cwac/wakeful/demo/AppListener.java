@@ -25,8 +25,8 @@ public class AppListener implements WakefulIntentService.AlarmListener {
     public void scheduleAlarms(AlarmManager mgr, PendingIntent pi,
                                Context context) {
         mgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + 60000,
-                AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
+                SystemClock.elapsedRealtime() + 6000,
+                1000, pi);
     }
 
     public void sendWakefulWork(Context context) {

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nectar.timeby.R;
@@ -48,7 +49,9 @@ public class RegisterActivity extends Activity {
     private EditText mUserText;
     private EditText mPasswordText;
     private EditText mPasswordText2;
-    private ImageButton mNextButton;
+    private TextView mReturnText;
+    private TextView mNextText;
+
     private Handler mHandler;
 
 
@@ -60,10 +63,18 @@ public class RegisterActivity extends Activity {
         mUserText = (EditText) findViewById(R.id.editText_register_user);
         mPasswordText = (EditText) findViewById(R.id.editText_register_password);
         mPasswordText2 = (EditText) findViewById(R.id.editText_register_password2);
-        mNextButton = (ImageButton) findViewById(R.id.button_register_next);
+        mReturnText = (TextView) findViewById(R.id.textView_register_return);
+        mNextText = (TextView) findViewById(R.id.textView_register_next);
+
         initEditTextVerify();
 
-        mNextButton.setOnClickListener(new View.OnClickListener() {
+        mReturnText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        mNextText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!mPasswordText2.getText().toString().equals(

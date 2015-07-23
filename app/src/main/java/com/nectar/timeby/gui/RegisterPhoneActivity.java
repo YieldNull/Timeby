@@ -60,9 +60,9 @@ public class RegisterPhoneActivity extends Activity {
     private String mPasswordStr;
     private boolean isCaptchaOnSending;
 
-    private ImageButton mSubmitButton;
+    private TextView mSubmitText;
+    private TextView mBackText;
     private TextView mSendButton;
-    private ImageButton mBackButton;
 
     private EditText mPhoneText;
     private EditText mCaptchaText;
@@ -80,11 +80,11 @@ public class RegisterPhoneActivity extends Activity {
         mUserStr = intent.getStringExtra(RegisterActivity.INTENT_EXTRA_USER);
         mPasswordStr = intent.getStringExtra(RegisterActivity.INTENT_EXTRA_PASSWORD);
 
-        mSubmitButton = (ImageButton) findViewById(R.id.button_register_phone_login);
+        mSubmitText = (TextView) findViewById(R.id.textView_register_phone_next);
         mSendButton = (TextView) findViewById(R.id.button_register_phone_send);
         mPhoneText = (EditText) findViewById(R.id.editText_register_phone_phone);
         mCaptchaText = (EditText) findViewById(R.id.editText_register_phone_captcha);
-        mBackButton = (ImageButton) findViewById(R.id.button_register_phone_back);
+        mBackText = (TextView) findViewById(R.id.textView_register_phone_return);
 
         initSMSSDK();
         initHandler();
@@ -130,7 +130,7 @@ public class RegisterPhoneActivity extends Activity {
      * 初始化提交按钮
      */
     private void initSubmitButton() {
-        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+        mSubmitText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //先判断是否填写了验证码
@@ -155,7 +155,7 @@ public class RegisterPhoneActivity extends Activity {
             }
         });
 
-        mBackButton.setOnClickListener(new View.OnClickListener() {
+        mBackText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RegisterPhoneActivity.this.onBackPressed();

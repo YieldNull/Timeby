@@ -42,8 +42,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             if (intent.getAction() == null) {
                 SharedPreferences prefs = ctxt.getSharedPreferences(WakefulIntentService.NAME, 0);
 
-                prefs
-                        .edit()
+                prefs.edit()
                         .putLong(WakefulIntentService.LAST_ALARM, System.currentTimeMillis())
                         .commit();
 
