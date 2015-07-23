@@ -10,8 +10,8 @@
         android:layout_height="match_parent"
         android:layout_weight="0.6"
         android:background="@color/register_top"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,10 +24,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1dp"
-                android:background="@android:color/white"
+                android:background="@drawable/img_register_user_bgd"
                 android:drawableRight="@drawable/icn_login_valid_none"
                 android:hint="@string/register_user_hint"
-                android:padding="12dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="22dp"
+                android:paddingTop="10dp"
                 android:singleLine="true"
                 android:textColor="@color/login_text"
                 android:textColorHint="@color/login_text"
@@ -39,12 +41,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1dp"
-                android:background="@android:color/white"
+                android:background="@drawable/img_register_password_bgd"
                 android:drawableRight="@drawable/icn_login_valid_none"
                 android:ellipsize="start"
                 android:hint="@string/register_password_hint"
                 android:inputType="textPassword"
-                android:padding="12dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="22dp"
+                android:paddingTop="10dp"
                 android:singleLine="true"
                 android:textColor="@color/login_text"
                 android:textColorHint="@color/login_text"
@@ -59,20 +63,22 @@
         android:layout_weight="0.4"
         android:background="@color/register_bottom"
         android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <EditText
             android:id="@+id/editText_register_password2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
-            android:background="@android:color/white"
+            android:background="@drawable/img_register_password2_bgd"
             android:drawableRight="@drawable/icn_login_valid_none"
             android:ellipsize="start"
             android:hint="@string/register_password2_hint"
             android:inputType="textPassword"
-            android:padding="12dp"
+            android:paddingBottom="24dp"
+            android:paddingLeft="22dp"
+            android:paddingTop="12dp"
             android:singleLine="true"
             android:textColor="@color/login_text"
             android:textColorHint="@color/login_text"
@@ -83,8 +89,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
 
             <TextView
                 android:id="@+id/textView_register_return"
