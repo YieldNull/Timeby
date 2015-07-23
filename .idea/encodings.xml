@@ -3,7 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/nectar/timeby/db/ClientDao.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/nectar/timeby/db/ClientSQLiteOpenHelper.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/btn_addfriendbymaillist_add.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/server/src/main/java/com/example/caelum/test/HttpProcess.java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

@@ -1,0 +1,3 @@
+<WakefulIntentService
+  listener="com.commonsware.cwac.wakeful.demo.AppListener"
+/><!-- From: file:/home/finalize/Desktop/Time/Timeby/demo2/res/xml/wakeful.xml -->
