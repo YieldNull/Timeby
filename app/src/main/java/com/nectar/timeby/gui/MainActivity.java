@@ -47,6 +47,14 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
+        if (PrefsUtil.isOnTask(this)) {
+            Log.i(TAG, "on task, entering countdown page");
+            Intent intent = new Intent(this, CountDownActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
         Log.i(TAG, "onCreate");
 
@@ -57,7 +65,7 @@ public class MainActivity extends AppCompatActivity
 //        Log.i(TAG, "trying to start notify service");
 //
 //        //开启Service
-//        Intent theIntent = new Intent(this, BackgroundService.class);
+//        Intent theIntent = new Intent(this, TimeCountService.class);
 //        theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        startService(theIntent);
 

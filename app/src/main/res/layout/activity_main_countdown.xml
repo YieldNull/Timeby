@@ -1,8 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_bgd"
     android:orientation="vertical">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,4 +70,9 @@
             android:textColor="@color/main_countdown_clock"
             android:textSize="60sp" />
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/listView_main_countdown"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

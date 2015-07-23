@@ -16,9 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nectar.timeby.R;
-import com.nectar.timeby.gui.MainCooperActivity;
-import com.nectar.timeby.gui.MainPKActivity;
-import com.nectar.timeby.gui.MainSoloActivity;
+import com.nectar.timeby.gui.CountDownActivity;
 import com.nectar.timeby.gui.interfaces.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.interfaces.OnDrawerToggleClickListener;
 import com.nectar.timeby.gui.widget.ClockWidget;
@@ -39,7 +37,6 @@ public class MainFragment extends Fragment
         implements OnDrawerStatusChangedListener {
 
     private static final String TAG = "MainFragment";
-
 
     private ImageView mDrawerToggle;
     private TaskTypeSelectDialog mTaskTypeSelectDialog;
@@ -150,17 +147,17 @@ public class MainFragment extends Fragment
         mTaskTypeSelectDialog.setSelectDialogListener(new TaskTypeSelectDialog.DialogListener() {
             @Override
             public void onSelectSolo() {
-                setAlarm(MainSoloActivity.class);
+                setAlarm(CountDownActivity.TASK_TYPE_SOLO);
             }
 
             @Override
             public void onSelectCooper() {
-                setAlarm(MainCooperActivity.class);
+                setAlarm(CountDownActivity.TASK_TYPE_COOPER);
             }
 
             @Override
             public void onSelectPK() {
-                setAlarm(MainPKActivity.class);
+                setAlarm(CountDownActivity.TASK_TYPE_PK);
             }
 
             @Override
@@ -305,25 +302,32 @@ public class MainFragment extends Fragment
      * <p/>
      * 设置之前要将任务保存到SharedPreference
      *
-     * @param cls
+     * @param type 任务类型
      */
-    private void setAlarm(Class<?> cls) {
+    private void setAlarm(int type) {
         long triggerTime = calcAlertTriggerTime();
-        storeTask(triggerTime);
+
+        //将任务信息存到本地
+        long startMillis = triggerTime;
+        long endMillis = triggerTime + mSumMin * 60 * 1000;
+        PrefsUtil.storeTask(getActivity(), startMillis, endMillis, type);
 
         Log.i(TAG, (triggerTime - System.currentTimeMillis()) / 1000 + "");
 
-        //设置Alarm
+        //设置Alarm，定时当达到任务开启时间时打开倒计时页面
         AlarmManager manager = (AlarmManager) getActivity()
                 .getSystemService(Context.ALARM_SERVICE);
 
-        Intent intent = new Intent(getActivity(), cls);
+        Intent intent = new Intent(getActivity(), CountDownActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         manager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+
+        new TopNotification(getActivity(), mTimeIntervalText.getText().toString()
+                + "后进入倒计时页面", 3 * 1000).show();
     }
 
     /**
@@ -352,15 +356,5 @@ public class MainFragment extends Fragment
         dValue = dValue > 0 ? dValue : dValue + 3600 * 24;
 
         return dValue * 1000 + System.currentTimeMillis();
-    }
-
-    /**
-     * 将开始时间、结束时间存入SharedPreference
-     */
-    private void storeTask(long triggerTime) {
-        long startMillis = triggerTime;
-        long endMillis = triggerTime + mSumMin * 60 * 1000;
-
-        PrefsUtil.storeTask(getActivity(), startMillis, endMillis);
     }
 }

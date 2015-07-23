@@ -3,8 +3,6 @@ package com.nectar.timeby.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.nectar.timeby.gui.UserInfoEditActivity;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +25,17 @@ public class PrefsUtil {
     public static final String PREFS_KEY_USER_INFO_PHOTO = "userInfo_photo";
 
     public static final String PREFS_MAP_TASK = "task";
-    public static final String PREFS_KEY_START_TIME_MILLIS = "task_start";
-    public static final String PREFS_KEY_END_TIME_MILLIS = "task_end";
+    public static final String PREFS_KEY_TASK_START_TIME_MILLIS = "task_start";
+    public static final String PREFS_KEY_TASK_END_TIME_MILLIS = "task_end";
+    public static final String PREFS_KEY_TASK_TYPE = "task_type";
+
+
+    public static final String PREFS_MAP_SETTING = "setting";
+    public static final String PREFS_KEY_SETTING_NOTIFICATION_BGD = "setting_notification_bgd";
+    public static final String PREFS_KEY_SETTING_SOUND_EFFECT = "setting_sound_effect";
+    public static final String PREFS_KEY_SETTING_ESCAPE_TIME = "setting_escape_time";
+    public static final String PREFS_KEY_SETTING_SLEEP_TIME = "setting_sleep_time";
+
 
     /**
      * 登录，存入手机号、用户名、密码。初始化用户信息
@@ -40,6 +47,7 @@ public class PrefsUtil {
      */
     public static void login(Context context, String userName, String password, String phoneNum) {
 
+        //登录信息
         SharedPreferences user = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_USER, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = user.edit();
@@ -48,6 +56,7 @@ public class PrefsUtil {
         editor.putString(PrefsUtil.PREFS_KEY_USER_PHONE, phoneNum);
         editor.commit();
 
+        //存入默认用户信息
         HashMap<String, String> infoMap = new HashMap<>();
         infoMap.put(PREFS_KEY_USER_INFO_NICKNAME, userName);
         infoMap.put(PREFS_KEY_USER_INFO_YEAR, "年龄：0");
@@ -56,6 +65,9 @@ public class PrefsUtil {
         infoMap.put(PREFS_KEY_USER_INFO_HAMMER, "0");
         infoMap.put(PREFS_KEY_USER_INFO_PHOTO, ImgUtil.getHeadImgFileName(userName));
         storeUserInfo(context, infoMap);
+
+        //存入默认设置
+        storeSettings(context, true, true, 30, "10:00");
     }
 
     /**
@@ -155,25 +167,96 @@ public class PrefsUtil {
         editor.commit();
     }
 
-    public static void storeTask(Context context, long startMillis, long endMillis) {
+    /**
+     * 判断用户是否处于任务期间
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isOnTask(Context context) {
+
+        SharedPreferences task = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
+        long startTime = task.getLong(PREFS_KEY_TASK_START_TIME_MILLIS, 0);
+        long endTime = task.getLong(PREFS_KEY_TASK_END_TIME_MILLIS, 0);
+        long current = System.currentTimeMillis();
+
+        if (startTime < current && endTime > current) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 将任务信息存入本地
+     *
+     * @param context
+     * @param startMillis
+     * @param endMillis
+     * @param type
+     */
+    public static void storeTask(Context context, long startMillis, long endMillis, int type) {
         SharedPreferences user = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = user.edit();
 
-        editor.putLong(PREFS_KEY_START_TIME_MILLIS, startMillis);
-        editor.putLong(PREFS_KEY_END_TIME_MILLIS, endMillis);
+        editor.putLong(PREFS_KEY_TASK_START_TIME_MILLIS, startMillis);
+        editor.putLong(PREFS_KEY_TASK_END_TIME_MILLIS, endMillis);
+        editor.putLong(PREFS_KEY_TASK_TYPE, type);
         editor.commit();
     }
 
+    /**
+     * 读取任务信息
+     *
+     * @param context
+     * @return
+     */
     public static Map<String, Long> readTask(Context context) {
         Map<String, Long> taskMap = new HashMap<>();
 
         SharedPreferences task = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
 
-        taskMap.put(PREFS_KEY_START_TIME_MILLIS, task.getLong(PREFS_KEY_START_TIME_MILLIS, 0));
-        taskMap.put(PREFS_KEY_END_TIME_MILLIS, task.getLong(PREFS_KEY_END_TIME_MILLIS, 0));
+        taskMap.put(PREFS_KEY_TASK_START_TIME_MILLIS, task.getLong(PREFS_KEY_TASK_START_TIME_MILLIS, 0));
+        taskMap.put(PREFS_KEY_TASK_END_TIME_MILLIS, task.getLong(PREFS_KEY_TASK_END_TIME_MILLIS, 0));
 
         return taskMap;
+    }
+
+
+    public static long getTaskEndTime(Context context) {
+        return readTask(context).get(PREFS_KEY_TASK_END_TIME_MILLIS);
+    }
+
+    /**
+     * 存储设置信息
+     *
+     * @param context
+     * @param useSoundEffect
+     * @param allowNotification
+     * @param escapeTime
+     * @param sleepTime
+     */
+    public static void storeSettings(Context context, boolean useSoundEffect,
+                                     boolean allowNotification,
+                                     int escapeTime, String sleepTime) {
+        SharedPreferences setting = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_SETTING, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = setting.edit();
+        editor.putBoolean(PREFS_KEY_SETTING_SOUND_EFFECT, useSoundEffect);
+        editor.putBoolean(PREFS_KEY_SETTING_NOTIFICATION_BGD, allowNotification);
+        editor.putInt(PREFS_KEY_SETTING_ESCAPE_TIME, escapeTime);
+        editor.putString(PREFS_KEY_SETTING_SLEEP_TIME, sleepTime);
+
+        editor.commit();
+
+    }
+
+    public static int getSupposedEscapeTime(Context context) {
+        SharedPreferences setting = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_SETTING, Context.MODE_PRIVATE);
+        return setting.getInt(PREFS_KEY_SETTING_ESCAPE_TIME, 0);
     }
 }

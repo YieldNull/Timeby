@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nectar.timeby" >
+    package="com.nectar.timeby">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -14,11 +14,11 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".gui.MainActivity"
             android:label="@string/app_name"
-            android:noHistory="true" >
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,15 +38,6 @@
             android:name=".gui.NotifyActivity"
             android:label="@string/title_activity_notify"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar" />
-        <activity
-            android:name=".gui.MainSoloActivity"
-            android:label="@string/title_activity_main_single" />
-        <activity
-            android:name=".gui.MainCooperActivity"
-            android:label="@string/title_activity_main_copper" />
-        <activity
-            android:name=".gui.MainPKActivity"
-            android:label="@string/title_activity_main_pk" />
         <activity
             android:name=".gui.UserInfoActivity"
             android:label="@string/title_activity_user_info" />
@@ -78,23 +69,23 @@
         <activity android:name=".gui.MainConcludeActivity" />
 
         <service
-            android:name=".service.BackgroundService"
+            android:name=".service.TimeCountService"
             android:enabled="true"
             android:exported="false" />
 
         <receiver
             android:name=".service.BootReceiver"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".service.ScreenOnReceiver"
+            android:name=".service.ScreenStateReceiver"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_ON" />
             </intent-filter>
@@ -102,7 +93,7 @@
         <receiver
             android:name=".service.IncomingCallReceiver"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
@@ -110,8 +101,23 @@
 
         <activity
             android:name=".gui.FriendsActivity"
-            android:label="@string/title_activity_friends" >
-        </activity>
+            android:label="@string/title_activity_friends" />
+        <activity android:name=".gui.CountDownActivity" />
+
+        <receiver
+            android:name=".service.APPStateReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.nectar.timeby.service.QUIT_APP" />
+                <action android:name="com.nectar.timeby.service.ENTER_APP" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".service.PollingService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>

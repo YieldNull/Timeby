@@ -1,34 +1,39 @@
 package com.nectar.timeby.gui;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nectar.timeby.R;
+import com.nectar.timeby.service.APPStateReceiver;
 import com.nectar.timeby.util.PrefsUtil;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by finalize on 7/23/15.
  */
-public class MainCountDownActivity extends Activity {
+public class CountDownActivity extends Activity {
 
-    private static final String TAG = "MainCountDownActivity";
+    private static final String TAG = "CountDownActivity";
+    public static final int TASK_TYPE_SOLO = 0x0001;
+    public static final int TASK_TYPE_COOPER = 0x0002;
+    public static final int TASK_TYPE_PK = 0x0003;
 
-    private static final int MSG_CLOCK_TICK = 0x0001;
-    private static final int MSG_CLOCK_STOP = 0x0002;
+    private static final int MSG_CLOCK_TICK = 0x0004;
+    private static final int MSG_CLOCK_STOP = 0x0005;
 
     private int mCurrHour;
     private int mCurrMin;
@@ -43,39 +48,29 @@ public class MainCountDownActivity extends Activity {
     private Runnable mTickRunnable;
 
 
+    private ListView mResultList;
+
+    /**
+     * 直接退出程序，便于计算在非倒计时界面停留的时间
+     */
     @Override
     public void onBackPressed() {
         finish();
     }
 
-    /**
-     * 初始化计时器，在ContentView之后再调用
-     */
-    protected void init() {
-        ImageButton returnButton = (ImageButton) findViewById(R.id.imageButton_countdown_return);
-        returnButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_countdown);
 
-        Map<String, Long> task = PrefsUtil.readTask(this);
-        int DSeconds = (int) ((task.get(PrefsUtil.PREFS_KEY_END_TIME_MILLIS)
-                - System.currentTimeMillis()) / 1000);
-
-
-        mCurrHour = DSeconds / 3600;
-        mCurrMin = DSeconds / 60;
-        mCurrSec = DSeconds % 60;
-
-        mSumSec = mCurrHour * 3600 + mCurrMin * 60 + mCurrSec;
-
+        ImageButton returnButton = (ImageButton) findViewById(
+                R.id.imageButton_countdown_return);
 
         mHourText = (TextView) findViewById(R.id.textView_main_countdown_hour);
         mMinText = (TextView) findViewById(R.id.textView_main_countdown_min);
         mSecText = (TextView) findViewById(R.id.textView_main_countdown_sec);
+        mResultList = (ListView) findViewById(R.id.listView_main_countdown);
 
         mTickRunnable = new Runnable() {
             @Override
@@ -90,6 +85,8 @@ public class MainCountDownActivity extends Activity {
                 } else {
                     mHandler.sendEmptyMessage(MSG_CLOCK_TICK);
                 }
+
+                //1秒之后再次发送消息，更新界面
                 mHandler.postDelayed(this, 1000);
             }
         };
@@ -109,17 +106,88 @@ public class MainCountDownActivity extends Activity {
             }
         };
 
+        returnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        initAdapter();
+    }
+
+    /**
+     * 从SharedReference中读取结束时间，与当前时间比较，算出倒计时
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        sendBroadcast(new Intent(APPStateReceiver.ACTION_NAME_ENTER));
+
+        Map<String, Long> task = PrefsUtil.readTask(this);
+        int DSeconds = (int) ((task.get(PrefsUtil.PREFS_KEY_TASK_END_TIME_MILLIS)
+                - System.currentTimeMillis()) / 1000);
+
+        mCurrHour = DSeconds / 3600;
+        mCurrMin = DSeconds / 60;
+        mCurrSec = DSeconds % 60;
+        mSumSec = mCurrHour * 3600 + mCurrMin * 60 + mCurrSec;
+
         mHandler.post(mTickRunnable);
     }
 
+    /**
+     * 停止界面的倒计时,发送Broadcast，开始计算离开倒计时界面的时间
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        mHandler.removeCallbacks(mTickRunnable);
+        if (PrefsUtil.isOnTask(this)) {
+            sendBroadcast(new Intent(APPStateReceiver.ACTION_NAME_QUIT));
+        }
+    }
+
+
+    /**
+     * 更新界面显示的倒计时
+     */
     private void refreshTimeText() {
         mHourText.setText(getTimeStr(mCurrHour));
         mMinText.setText(getTimeStr(mCurrMin));
         mSecText.setText(getTimeStr(mCurrSec));
     }
 
+    /**
+     * 根据时间int值格式化出其字符串形式如“00”，“09”
+     *
+     * @param time
+     * @return
+     */
     private CharSequence getTimeStr(int time) {
         return time > 9 ? "" + time : "0" + time;
+    }
+
+
+    private void initAdapter() {
+        ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+
+        HashMap<String, Object> temp = new HashMap<String, Object>();
+        temp.put("FIRST_COLUMN", "萌萌哒贝壳");
+        temp.put("SECOND_COLUMN", "100");
+        temp.put("THIRD_COLUMN", R.drawable.icn_user_shell);
+
+        list.add(temp);
+
+        HashMap<String, Object> temp1 = new HashMap<String, Object>();
+        temp1.put("FIRST_COLUMN", "Diaries");
+        temp1.put("SECOND_COLUMN", "200");
+        temp1.put("THIRD_COLUMN", R.drawable.icn_user_shell);
+
+        list.add(temp1);
+        mResultList.setAdapter(new CountdownListViewAdapter(this, list));
     }
 
     /**
