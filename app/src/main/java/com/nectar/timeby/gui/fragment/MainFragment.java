@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mob.tools.MobUIShell;
 import com.nectar.timeby.R;
 import com.nectar.timeby.gui.CountDownActivity;
 import com.nectar.timeby.gui.interfaces.OnDrawerStatusChangedListener;
@@ -325,8 +326,21 @@ public class MainFragment extends Fragment
         manager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
 
 
-        new TopNotification(getActivity(), mTimeIntervalText.getText().toString()
-                + "后进入倒计时页面", 3 * 1000).show();
+        new TopNotification(getActivity(), getStartTimeHint(triggerTime), 3 * 1000).show();
+
+        mSubmitButton.setEnabled(false);
+    }
+
+    private String getStartTimeHint(long triggerTime) {
+        int DValue = (int) ((triggerTime - System.currentTimeMillis()) / 1000);
+        int hour = DValue / 3600;
+        int min = DValue % 60;
+
+        return getTimeStr(hour) + "时" + getTimeStr(min) + "分进入倒计时页面";
+    }
+
+    private CharSequence getTimeStr(int time) {
+        return time > 9 ? "" + time : "0" + time;
     }
 
     /**
