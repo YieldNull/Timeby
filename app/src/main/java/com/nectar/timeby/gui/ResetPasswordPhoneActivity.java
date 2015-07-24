@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.nectar.timeby.R;
 import com.nectar.timeby.util.HttpProcess;
 import com.nectar.timeby.util.HttpUtil;
-import com.nectar.timeby.util.PrefsUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,11 +28,8 @@ import java.util.regex.Pattern;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
-/**
- * Created by finalize on 7/18/15.
- */
-public class RegisterPhoneActivity extends Activity {
-    private static final String TAG = "RegisterPhoneActivity";
+public class ResetPasswordPhoneActivity extends Activity {
+    private static final String TAG = "ResetPasswordPhone";
     private static final String SEND_BUTTON_TEXT = "点击获取验证码";
 
     //有强迫症的小子发这么多消息干嘛啊啊啊啊啊啊啊
@@ -42,8 +38,8 @@ public class RegisterPhoneActivity extends Activity {
     private static final int MSG_SMSSDK_RECALL = 0x0003;
     private static final int MSG_PHONE_VALID = 0x0004;
     private static final int MSG_PHONE_INVALID = 0x0005;
-    private static final int MSG_REGISTER_SUCCESS = 0x0006;
-    private static final int MSG_REGISTER_FAILURE = 0x0007;
+    private static final int MSG_VERIFY_SUCCESS = 0x0006;
+    private static final int MSG_VERIFY_FAILURE = 0x0007;
     private static final int MSG_SERVER_ERROR = 0x0008;
     private static final int MSG_NET_INACTIVE = 0x0009;
 
@@ -135,7 +131,7 @@ public class RegisterPhoneActivity extends Activity {
                 //先判断是否填写了验证码
                 if (mCaptchaText.getText().length() != 0) {
                     if (mPhoneStr.equals(TAG)) {
-                        Toast.makeText(RegisterPhoneActivity.this,
+                        Toast.makeText(ResetPasswordPhoneActivity.this,
                                 "请先填发送验证短信", Toast.LENGTH_SHORT).show();
                     } else {
                         //发送验证信息
@@ -144,10 +140,10 @@ public class RegisterPhoneActivity extends Activity {
                     }
                 } else {
                     if (mPhoneStr.equals(TAG)) {
-                        Toast.makeText(RegisterPhoneActivity.this,
+                        Toast.makeText(ResetPasswordPhoneActivity.this,
                                 "请先填发送验证短信", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(RegisterPhoneActivity.this,
+                        Toast.makeText(ResetPasswordPhoneActivity.this,
                                 "请先填写短信验证码", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -157,7 +153,7 @@ public class RegisterPhoneActivity extends Activity {
         mBackText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RegisterPhoneActivity.this.onBackPressed();
+                ResetPasswordPhoneActivity.this.onBackPressed();
             }
         });
     }
@@ -182,9 +178,9 @@ public class RegisterPhoneActivity extends Activity {
                     if (matcher.matches()) {
                         //记录发送短信时的手机号
                         mPhoneStr = mPhoneText.getText().toString();
-                        RegisterPhoneActivity.this.verifyOrSave(true);//判断是否注册过
+                        ResetPasswordPhoneActivity.this.verifyOrSave(true);//判断是否注册过
                     } else {
-                        Toast.makeText(RegisterPhoneActivity.this,
+                        Toast.makeText(ResetPasswordPhoneActivity.this,
                                 "请填写正确的电话号码", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -219,7 +215,7 @@ public class RegisterPhoneActivity extends Activity {
                         isCaptchaOnSending = true;
                         mTask = new MyTimerTask();
                         mTimer.scheduleAtFixedRate(mTask, 0, 1 * 1000);
-                        Drawable rightImg = RegisterPhoneActivity.this.getResources()
+                        Drawable rightImg = ResetPasswordPhoneActivity.this.getResources()
                                 .getDrawable(R.drawable.icn_login_valid);
                         mPhoneText.setCompoundDrawablesWithIntrinsicBounds(null, null, rightImg, null);
                         Log.i(TAG, "Request captcha from server phone:" + mPhoneStr);
@@ -228,30 +224,30 @@ public class RegisterPhoneActivity extends Activity {
                     case MSG_PHONE_INVALID:
                         //手机号已被注册，不发送验证码
                         Log.i(TAG, "Same phone has been registered");
-                        Toast.makeText(RegisterPhoneActivity.this, "手机号已经被注册",
+                        Toast.makeText(ResetPasswordPhoneActivity.this, "手机号并未绑定，请重新输入",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case MSG_SERVER_ERROR:
                         //服务器错误
                         Log.i(TAG, "Server error");
-                        Toast.makeText(RegisterPhoneActivity.this, "服务器错误，请稍后再试",
+                        Toast.makeText(ResetPasswordPhoneActivity.this, "服务器错误，请稍后再试",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case MSG_NET_INACTIVE:
                         //没有连接互联网
                         Log.i(TAG, "Network inactive");
-                        Toast.makeText(RegisterPhoneActivity.this, "无网络连接，请打开数据网络",
+                        Toast.makeText(ResetPasswordPhoneActivity.this, "无网络连接，请打开数据网络",
                                 Toast.LENGTH_SHORT).show();
                         break;
-                    case MSG_REGISTER_SUCCESS:
+                    case MSG_VERIFY_SUCCESS:
                         //注册成功
                         Log.i(TAG, "Register successfully!");
-                        startMainActivity();
+                        startResetPasswdActivity();
                         break;
-                    case MSG_REGISTER_FAILURE:
+                    case MSG_VERIFY_FAILURE:
                         //注册失败
                         Log.i(TAG, "Same user has been registered");
-                        Toast.makeText(RegisterPhoneActivity.this,
+                        Toast.makeText(ResetPasswordPhoneActivity.this,
                                 "该用户已被注册，请重新注册", Toast.LENGTH_SHORT).show();
                         finish();//回到注册页面
                         break;
@@ -280,12 +276,12 @@ public class RegisterPhoneActivity extends Activity {
                         } else {
                             if (isCaptchaOnSending) {
                                 Log.i(TAG, "Captcha server error");
-                                Toast.makeText(RegisterPhoneActivity.this,
+                                Toast.makeText(ResetPasswordPhoneActivity.this,
                                         "短信服务器异常，请重新申请验证码", Toast.LENGTH_SHORT).show();
                                 resetSendButton();
                             } else {
                                 Log.i(TAG, "Invalid Captcha");
-                                Toast.makeText(RegisterPhoneActivity.this,
+                                Toast.makeText(ResetPasswordPhoneActivity.this,
                                         "验证码错误，请重新申请验证码", Toast.LENGTH_SHORT).show();
                                 resetSendButton();
                             }
@@ -333,17 +329,11 @@ public class RegisterPhoneActivity extends Activity {
     /**
      * 把用户信息存到本地，进入主界面
      */
-    private void startMainActivity() {
-        //把数据存到本地
-        Log.i(TAG, "Storing data in SharedPreference");
-        PrefsUtil.login(this, mUserStr, mPasswordStr, mPhoneStr);
-
-        //进入MainActivity
-        Log.i(TAG, "Starting DemoActivity");
-        Intent intent = new Intent(RegisterPhoneActivity.this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK);//进入主界面后将之前的Activity栈清空
-        RegisterPhoneActivity.this.startActivity(intent);
+    private void startResetPasswdActivity() {
+        Intent intent = new Intent(ResetPasswordPhoneActivity.this,
+                ResetPasswordActivity.class);
+        intent.putExtra(ResetPasswordActivity.INTENT_PHONENUM, mPhoneStr);
+        ResetPasswordPhoneActivity.this.startActivity(intent);
     }
 
     /**
@@ -369,9 +359,9 @@ public class RegisterPhoneActivity extends Activity {
                             mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
                         } else if (data.get("status").equals(1)) {
                             if (data.getString("result").equals("true")) {
-                                mHandler.sendEmptyMessage(MSG_PHONE_VALID);
-                            } else if (data.getString("result").equals("false")) {
                                 mHandler.sendEmptyMessage(MSG_PHONE_INVALID);
+                            } else if (data.getString("result").equals("false")) {
+                                mHandler.sendEmptyMessage(MSG_PHONE_VALID);
                             }
                         }
                     } catch (JSONException e) {
@@ -391,9 +381,9 @@ public class RegisterPhoneActivity extends Activity {
                             mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
                         } else if (data.get("status").equals(1)) {
                             if (data.getString("result").equals("true")) {
-                                mHandler.sendEmptyMessage(MSG_REGISTER_SUCCESS);
+                                mHandler.sendEmptyMessage(MSG_VERIFY_SUCCESS);
                             } else if (data.getString("result").equals("false")) {
-                                mHandler.sendEmptyMessage(MSG_REGISTER_FAILURE);
+                                mHandler.sendEmptyMessage(MSG_VERIFY_FAILURE);
                             }
                         }
                     } catch (JSONException e) {

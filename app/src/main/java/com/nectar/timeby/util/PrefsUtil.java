@@ -3,6 +3,8 @@ package com.nectar.timeby.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.nectar.timeby.gui.ResetPasswordActivity;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -258,5 +260,13 @@ public class PrefsUtil {
         SharedPreferences setting = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_SETTING, Context.MODE_PRIVATE);
         return setting.getInt(PREFS_KEY_SETTING_ESCAPE_TIME, 0);
+    }
+
+    public static void updatePassword(Context context, String mPasswordStr) {
+        SharedPreferences setting = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_USER, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = setting.edit();
+        editor.putString(PREFS_KEY_USER_PASSWORD, mPasswordStr);
+        editor.commit();
     }
 }

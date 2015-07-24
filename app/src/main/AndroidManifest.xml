@@ -69,6 +69,9 @@
         <activity android:name=".gui.MainConcludeActivity" />
         <activity android:name=".gui.MessageActivity" />
 
+        <activity android:name=".gui.ResetPasswordPhoneActivity" />
+        <activity android:name=".gui.ResetPasswordActivity" />
+
         <service
             android:name=".service.PollingService"
             android:enabled="true"
@@ -123,7 +126,7 @@
         <activity android:name=".gui.CountDownActivity" />
 
         <activity
-            android:name="cn.sharesdk.framework.ShareSDKUIShell"
+            android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
@@ -136,7 +139,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <!--微信分享回调 -->
         <activity
             android:name=".wxapi.WXEntryActivity"

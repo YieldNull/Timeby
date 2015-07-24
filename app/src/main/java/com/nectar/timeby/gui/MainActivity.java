@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity
         implements OnDrawerToggleClickListener,
         DrawerFragment.OnDrawerItemSelectedListener {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "DemoActivity";
     private DrawerLayout mDrawerLayout;
 
     private FragmentManager mFragmentManager;

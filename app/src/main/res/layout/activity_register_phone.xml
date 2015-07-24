@@ -16,7 +16,7 @@
         android:paddingRight="20dp">
 
         <EditText
-            android:id="@+id/editText_register_phone_phone"
+            android:id="@+id/editText_verify_phone_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -52,7 +52,7 @@
             android:weightSum="1">
 
             <EditText
-                android:id="@+id/editText_register_phone_captcha"
+                android:id="@+id/editText_verify_phone_captcha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
@@ -70,7 +70,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/button_register_phone_send"
+                android:id="@+id/button_verify_phone_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/img_register_phone_send_bgd"
@@ -88,7 +88,7 @@
             android:paddingRight="30dp">
 
             <TextView
-                android:id="@+id/textView_register_phone_return"
+                android:id="@+id/textView_verify_phone_return"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -97,7 +97,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/textView_register_phone_next"
+                android:id="@+id/textView_verify_phone_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

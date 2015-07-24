@@ -28,4 +28,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'uk.co.chrisjenx:calligraphy:2.1.0'
+    compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
+    compile 'com.commonsware.cwac:wakeful:1.0.+'
 }

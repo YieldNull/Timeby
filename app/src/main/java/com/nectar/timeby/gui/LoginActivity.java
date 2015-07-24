@@ -13,13 +13,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.nectar.timeby.R;
+import com.nectar.timeby.util.HttpProcess;
 import com.nectar.timeby.util.HttpUtil;
 import com.nectar.timeby.util.PrefsUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * Created by finalize on 7/18/15.
@@ -119,6 +120,13 @@ public class LoginActivity extends Activity {
             }
         });
 
+        mResetTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, ResetPasswordPhoneActivity.class));
+            }
+        });
+
         mUserText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -149,7 +157,7 @@ public class LoginActivity extends Activity {
         PrefsUtil.login(this, mUserStr, mPasswordStr, mPhoneStr);
 
         //进入MainActivity
-        Log.i(TAG, "Starting MainActivity");
+        Log.i(TAG, "Starting DemoActivity");
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);//进入主界面后将之前的Activity栈清空
@@ -165,63 +173,27 @@ public class LoginActivity extends Activity {
             return;
         }
 
-        String userName = mUserText.getText().toString();
+        final String userName = mUserText.getText().toString();
         Log.i(TAG, "Checking " + mPhoneStr + mUserStr + mPasswordStr + "is a valid user or not");
-
-        final HashMap<String, String> params = new HashMap<>();
-        params.put("userName", mUserStr);
-        params.put("password", mPasswordStr);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.i(TAG, "Sending data to server");
-
-                //发送数据，获取结果
-                JSONObject jsonResult = null;
+                JSONObject data = HttpProcess.login(userName, mPasswordStr);
                 try {
-                    jsonResult = HttpUtil.doPost(HttpUtil.URL_LOGIN_LOGIN, params);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                //连接服务器失败
-                if (jsonResult == null) {
-                    mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
-                    return;
-                }
-
-                //获取返回状态码
-                int status = 0;
-                try {
-                    status = jsonResult.getInt("status");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
-                    return;
-                }
-
-                //状态码=-1则表示服务器错误
-                if (status == -1) {
-                    mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
-                } else {
-                    //获取返回的数据
-                    String result = null;
-                    try {
-                        result = jsonResult.getString("result");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (result == null) {
+                    if (data.get("status").equals(-1)) {
                         mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
-                    } else {
-                        if (result.equalsIgnoreCase("true")) {
+                    } else if (data.get("status").equals(0)) {
+                        mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
+                    } else if (data.get("status").equals(1)) {
+                        if (data.getString("result").equals("true")) {
                             mHandler.sendEmptyMessage(MSG_USER_VALID);
-                        } else {
+                        } else if (data.getString("result").equals("false")) {
                             mHandler.sendEmptyMessage(MSG_USER_INVALID);
                         }
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         }).start();

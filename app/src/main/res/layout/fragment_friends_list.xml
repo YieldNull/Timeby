@@ -2,60 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/friends_bgd"
+    android:background="@color/friends_select"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:background="@color/friends_select">
-
-            <ListView
-                android:id="@+id/listView_friends_contacts"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="1dip"
-                android:layout_marginRight="1dip"
-                android:layout_weight="1.0"
-                android:divider="#ffffe3"
-                android:scrollbars="none"
-                android:scrollingCache="true"></ListView>
-
-            <com.nectar.timeby.gui.widget.QuickAlphabeticBar
-                android:id="@+id/alphabetic_friends"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@id/listView_friends_contacts"
-                android:layout_gravity="top|right|center"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@null"
-                android:scaleType="centerInside"
-                android:src="@drawable/selector_friends_contacts_alpha" />
-
-            <TextView
-                android:id="@+id/textView_friends_alpha_nav"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center_horizontal|top"
-                android:layout_margin="34dp"
-                android:background="@drawable/img_friends_contacts_nav_bgd"
-                android:gravity="center"
-                android:padding="2dp"
-                android:textColor="#404040"
-                android:textSize="48sp"
-                android:visibility="invisible" />
-        </RelativeLayout>
-
-    </RelativeLayout>
+    <ListView
+        android:id="@+id/listView_friends_contacts"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="1dip"
+        android:layout_marginRight="1dip"
+        android:layout_weight="1.0"
+        android:divider="#ffffe3"
+        android:scrollbars="none"
+        android:scrollingCache="true"></ListView>
 
 </LinearLayout>
 

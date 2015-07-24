@@ -7,10 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-
-
+import android.widget.ImageView;
+import android.widget.TextView;
 import com.nectar.timeby.R;
-import com.nectar.timeby.gui.widget.FriendsRank;
 
 import java.util.List;
 
@@ -35,43 +34,75 @@ public class FriendsRankFragment extends Fragment {
             resourceId = resource;
         }
 
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            F_FailedTaskRank rank = getItem(position);
-//            int color = position % colors.length;
-//
-//            View view;
-//            ViewHolder viewHolder;
-//            if (convertView == null) {
-//                viewHolder = new ViewHolder();
-//                view = LayoutInflater.from(getContext()).inflate(resourceId, null);
-//                viewHolder.failRank = (TextView) view.findViewById(R.id.failRank);
-//                viewHolder.friendName = (TextView) view.findViewById(R.id.friendName);
-//                viewHolder.failCount = (TextView) view.findViewById(R.id.failCount);
-//                viewHolder.hammerImage = (ImageView) view.findViewById(R.id.hammerImage);
-//                view.setTag(viewHolder);
-//
-//            } else {
-//                view = convertView;
-//                viewHolder = (ViewHolder) view.getTag();
-//            }
-//
-//            viewHolder.friendName.setText(rank.getFriendName());
-//
-//            viewHolder.failRank.setText(rank.getRank() + "");
-//            viewHolder.hammerImage.setImageResource(rank.getImageId());
-//            viewHolder.failCount.setText(rank.getHammerNum() + "");
-//            view.setBackgroundColor(colors[color]);
-//
-//            return view;
-//
-//        }
-//
-//        class ViewHolder {
-//            TextView failRank;
-//            TextView friendName;
-//            TextView failCount;
-//            ImageView hammerImage;
-//        }
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            FriendsRank rank = getItem(position);
+            int color = position % colors.length;
+
+            View view;
+            ViewHolder viewHolder;
+            if (convertView == null) {
+                viewHolder = new ViewHolder();
+                view = LayoutInflater.from(getContext()).inflate(resourceId, null);
+                viewHolder.rank = (TextView) view.findViewById(R.id.rank);
+                viewHolder.friendName = (TextView) view.findViewById(R.id.friend_name);
+                viewHolder.shellNum = (TextView) view.findViewById(R.id.achievement_num);
+                viewHolder.shellImage = (ImageView) view.findViewById(R.id.imageView_friends_rank_img);
+                view.setTag(viewHolder);
+
+            } else {
+                view = convertView;
+                viewHolder = (ViewHolder) view.getTag();
+            }
+
+            viewHolder.friendName.setText(rank.getFriendName());
+
+            viewHolder.shellNum.setText(rank.getShellNum() + "");
+            viewHolder.shellImage.setImageResource(rank.getImageId());
+            viewHolder.rank.setText(rank.getRank() + "");
+            view.setBackgroundColor(colors[color]);
+
+            return view;
+
+        }
+
+        class ViewHolder {
+            TextView rank;
+            TextView friendName;
+            TextView shellNum;
+            ImageView shellImage;
+        }
     }
+
+    public class FriendsRank {
+        private int rank;
+        private String friend_name;
+        private int shell_num;
+        private int imageId;
+
+        public FriendsRank(int rank, String friend_name, int shell_num, int imageId) {
+            this.rank = rank;
+            this.friend_name = friend_name;
+            this.shell_num = shell_num;
+            this.imageId = imageId;
+        }
+
+        public int getRank() {
+            return rank;
+        }
+
+        public String getFriendName() {
+            return friend_name;
+        }
+
+        public int getShellNum() {
+            return shell_num;
+        }
+
+        public int getImageId() {
+            return imageId;
+        }
+
+    }
+
 }

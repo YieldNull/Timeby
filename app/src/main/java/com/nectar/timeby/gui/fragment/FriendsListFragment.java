@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nectar.timeby.R;
-import com.nectar.timeby.gui.widget.QuickAlphabeticBar;
 
 import java.util.ArrayList;
 import java.util.Collections;

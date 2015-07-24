@@ -10,18 +10,16 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nectar.timeby.R;
+import com.nectar.timeby.util.HttpProcess;
 import com.nectar.timeby.util.HttpUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -230,62 +228,27 @@ public class RegisterActivity extends Activity {
             return;
         }
 
-        String userName = mUserText.getText().toString();
+        final String userName = mUserText.getText().toString();
         Log.i(TAG, "Checking " + userName + " has been registered or not");
-
-        final HashMap<String, String> params = new HashMap<>();
-        params.put("userName", userName);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.i(TAG, "Sending data to server");
-
-                //发送数据，获取结果
-                JSONObject jsonResult = null;
+                JSONObject data = HttpProcess.checkUserAccount(userName);
                 try {
-                    jsonResult = HttpUtil.doPost(HttpUtil.URL_LOGIN_CHECK, params);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                //连接服务器失败
-                if (jsonResult == null) {
-                    mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
-                    return;
-                }
-
-                //获取返回状态码
-                int status = 0;
-                try {
-                    status = jsonResult.getInt("status");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
-                    return;
-                }
-
-                //状态码=-1则表示服务器错误
-                if (status == -1) {
-                    mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
-                } else {
-                    //获取返回的数据，是否已经被注册
-                    String result = null;
-                    try {
-                        result = jsonResult.getString("result");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (result == null) {
+                    if (data.get("status").equals(-1)) {
                         mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
-                    } else {
-                        if (result.equalsIgnoreCase("true")) {
+                    } else if (data.get("status").equals(0)) {
+                        mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
+                    } else if (data.get("status").equals(1)) {
+                        if (data.getString("result").equals("true")) {
                             mHandler.sendEmptyMessage(MSG_USERNAME_VALID);
-                        } else {
+                        } else if (data.getString("result").equals("false")) {
                             mHandler.sendEmptyMessage(MSG_USERNAME_INVALID);
                         }
                     }
+                } catch (JSONException e) {
+                    Log.w(TAG, e.getMessage());
                 }
             }
         }).start();
