@@ -29,7 +29,7 @@ public class UserMsgFragment extends Fragment{
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_user_msg,container,false);
         initUserMsgs();
-        adapter = new MsgAdapter(getActivity(),R.layout.user_msg_item,userMsgList);
+        adapter = new MsgAdapter(getActivity(),R.layout.list_item_msg_user,userMsgList);
         userMsgListView = (ListView)view.findViewById(R.id.user_msg_list);
         userMsgListView.setAdapter(adapter);
 

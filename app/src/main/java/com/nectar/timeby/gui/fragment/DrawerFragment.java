@@ -13,7 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.nectar.timeby.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,12 +99,14 @@ public class DrawerFragment extends Fragment {
         List<DrawerListItem> itemList = new ArrayList<DrawerListItem>();
         DrawerListItem item1 = new DrawerListItem(R.drawable.icn_drawer_user, "");
         DrawerListItem item2 = new DrawerListItem(R.drawable.icn_drawer_freinds, "");
-        DrawerListItem item3 = new DrawerListItem(R.drawable.icn_drawer_report, "");
-        DrawerListItem item4 = new DrawerListItem(R.drawable.icn_drawer_setting, "");
+        DrawerListItem item3 = new DrawerListItem(R.drawable.icn_drawer_message, "");
+        DrawerListItem item4 = new DrawerListItem(R.drawable.icn_drawer_report, "");
+        DrawerListItem item5 = new DrawerListItem(R.drawable.icn_drawer_setting, "");
         itemList.add(item1);
         itemList.add(item2);
         itemList.add(item3);
         itemList.add(item4);
+        itemList.add(item5);
         return itemList;
     }
 

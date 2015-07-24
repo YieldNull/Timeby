@@ -60,7 +60,7 @@ public class ClockWidget {
      */
     private void initClockWidget() {
         currHour = Calendar.getInstance().get(Calendar.HOUR);
-        currMinu = Calendar.getInstance().get(Calendar.MINUTE) + 2;
+        currMinu = Calendar.getInstance().get(Calendar.MINUTE);
         currHourHandDegr = currHour * 30 + currMinu * 0.5;
         currMinuHandDegr = currMinu * 6;
 

@@ -29,7 +29,7 @@ public class SysMsgFragment extends Fragment{
                                 Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_sys_msg,container,false);
         initSysMsgs();
-        adapter = new MsgAdapter(getActivity(),R.layout.sys_msg_item,sysMsgList);
+        adapter = new MsgAdapter(getActivity(),R.layout.list_item_msg_sys,sysMsgList);
         sysMsgListView = (ListView) view.findViewById(R.id.sys_msg_list);
         sysMsgListView.setAdapter(adapter);
         return view;

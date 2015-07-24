@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="45dp" >
+    <!-- 联系人信息 -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/img_friends_icn" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="5.0dip"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/imageView"
+        android:singleLine="true"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+</RelativeLayout>

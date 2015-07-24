@@ -203,14 +203,18 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case 1:
-                intent = new Intent(this, MainConcludeActivity.class);
+                intent = new Intent(this, FriendsActivity.class);
                 startActivity(intent);
                 break;
             case 2:
-                intent = new Intent(this, ReportActivity.class);
+                intent = new Intent(this, MessageActivity.class);
                 startActivity(intent);
                 break;
             case 3:
+                intent = new Intent(this, ReportActivity.class);
+                startActivity(intent);
+                break;
+            case 4:
                 intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);

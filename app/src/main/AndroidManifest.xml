@@ -35,10 +35,6 @@
             android:name=".gui.RegisterPhoneActivity"
             android:label="@string/title_activity_register_phone" />
         <activity
-            android:name=".gui.NotifyActivity"
-            android:label="@string/title_activity_notify"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar" />
-        <activity
             android:name=".gui.UserInfoActivity"
             android:label="@string/title_activity_user_info" />
         <activity
@@ -63,11 +59,11 @@
             android:name=".gui.AddFriendActivity"
             android:label="@string/title_activity_add_friend" />
         <activity
-            android:name=".gui.AddFriendsByMaillistActivity"
+            android:name=".gui.AddFriendsFromContact"
             android:label="@string/title_activity_add_friends_by_maillist" />
         <activity android:name=".gui.ReportActivity" />
         <activity android:name=".gui.MainConcludeActivity" />
-
+        <activity android:name=".gui.MessageActivity" />
 
         <service
             android:name=".service.PollingService"

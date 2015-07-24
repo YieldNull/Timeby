@@ -1,5 +1,6 @@
 package com.nectar.timeby.gui;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ public class SettingFeedbackActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_feedback);
-    }
 
+    }
 
 }

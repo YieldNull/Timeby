@@ -1,7 +1,10 @@
 package com.nectar.timeby.gui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextPaint;
@@ -19,6 +22,13 @@ import android.widget.TextView;
 import com.nectar.timeby.R;
 import com.nectar.timeby.util.PrefsUtil;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+
 import static com.nectar.timeby.R.id.setting_page_logout_arrow;
 
 /**
@@ -27,6 +37,8 @@ import static com.nectar.timeby.R.id.setting_page_logout_arrow;
 public class SettingActivity extends Activity {
     public static final int BG_NOTIFIC_SWTICH = 0;
     public static final int MUSIC_EFFECT_SWTICH = 1;
+    private static final String SHARE_ICON_NAME = "com.nectar.timeby.gui.SettingActivity.img.png";
+    private static final String SHARE_URL = "http://finalize.sinaapp.com";
 
     private boolean currBgNotificState = false;
     private boolean currMusicEffectState = false;
@@ -174,7 +186,7 @@ public class SettingActivity extends Activity {
                     else if (relativeLayout == timeNotiStrip)
                         intent.setClass(SettingActivity.this, SettingNotifyActivity.class);
                     else if (relativeLayout == shareStrip)
-                        intent.setClass(SettingActivity.this, SettingShareActivity.class);
+                        showShare();
                     else if (relativeLayout == feedbackStrip)
                         intent.setClass(SettingActivity.this, SettingFeedbackActivity.class);
                     else {
@@ -379,5 +391,50 @@ public class SettingActivity extends Activity {
             rlp.addRule(RelativeLayout.ALIGN_RIGHT, R.id.switch_bg_music_effect);
             switchButtonMusicEffect.setLayoutParams(rlp);
         }
+    }
+
+    private void showShare() {
+        ShareSDK.initSDK(this);
+        OnekeyShare oks = new OnekeyShare();
+        //关闭sso授权
+        oks.disableSSOWhenAuthorize();
+
+        // 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
+        //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
+        // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
+        oks.setTitle(getString(R.string.share));
+        // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+        oks.setTitleUrl(SHARE_URL);
+        // text是分享文本，所有平台都需要这个字段
+        oks.setText("我是Timeby分享测试文本");
+
+        // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img_user_photo);
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileOutputStream = this.openFileOutput(SHARE_ICON_NAME, Context.MODE_PRIVATE);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+        try {
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        oks.setImagePath(getFilesDir() + "/" + SHARE_ICON_NAME);//确保SDcard下面存在此张图片
+        // url仅在微信（包括好友和朋友圈）中使用
+        oks.setUrl(SHARE_URL);
+        // comment是我对这条分享的评论，仅在人人网和QQ空间使用
+        oks.setComment("我是测试评论文本");
+        // site是分享此内容的网站名称，仅在QQ空间使用
+        oks.setSite(getString(R.string.app_name));
+        // siteUrl是分享此内容的网站地址，仅在QQ空间使用
+        oks.setSiteUrl(SHARE_URL);
+
+        // 启动分享GUI
+        oks.show(this);
     }
 }

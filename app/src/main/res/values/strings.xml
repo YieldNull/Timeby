@@ -29,7 +29,7 @@
     <string name="setting_page_sound_effect">音效</string>
     <string name="setting_page_change_password">更改密码</string>
     <string name="setting_page_notify_time">提示时间</string>
-    <string name="setting_page_share">分享</string>
+    <string name="setting_page_share">分享应用</string>
     <string name="setting_page_feedback">意见反馈</string>
 
     <string name="select_task_type">请选择任务模式：</string>
@@ -39,12 +39,13 @@
     <string name="setting_page_logout">退出应用</string>
 
     <string name="login_reset">忘记密码?</string>
-    <string name="friends_top">好 友</string>
-    <string name="friends_tab_list">列 表</string>
-    <string name="friends_tab_honour">荣耀榜</string>
-    <string name="friends_tab_failed">机 奴</string>
-    <string name="friends_search_hint">搜 索</string>
-    <string name="friends_contact_hint">联系人</string>
+
+    <string name="friends_list">列 表</string>
+    <string name="friends_winner">荣耀榜</string>
+    <string name="friends_failure">机 奴</string>
+    <string name="friends_actionbar_title">好 友</string>
+    <string name="friends_search">添加联系人</string>
+
     <string name="title_activity_add_friend">AddFriendActivity</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_add_friends_by_maillist">AddFriendsByMaillistActivity</string>
@@ -65,5 +66,7 @@
     <string name="register_phone_hint">输入手机号</string>
     <string name="register_phone_captcha_hint">验证码</string>
     <string name="register_phone_resent">重新发送(50秒)</string>
+    <string name="message_sys">消  息</string>
+    <string name="add_friend_from_contact">通讯录</string>
 
 </resources>

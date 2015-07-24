@@ -185,10 +185,8 @@ public class MainFragment extends Fragment
      * 初始化时间，在界面上显示当前的时间，并设置点击监听器
      */
     private void initTimeWidget() {
-        //设置初始时间,把开始时间调成大于当前时间，便于之后的倒计时
-        //在ClockWidget中同样设置+2
         mCurrHour = Calendar.getInstance().get(Calendar.HOUR);
-        mCurrMinu = Calendar.getInstance().get(Calendar.MINUTE) + 2;
+        mCurrMinu = Calendar.getInstance().get(Calendar.MINUTE);
 
         int hourOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         boolean isAm = hourOfDay >= 0 && hourOfDay < 12;

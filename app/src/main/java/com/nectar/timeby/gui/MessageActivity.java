@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +22,6 @@ public class MessageActivity extends Activity {
     private Button btnSysMsg;
     private Button btnUserMsg;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +33,8 @@ public class MessageActivity extends Activity {
         setContentView(R.layout.activity_message);
 
         setDefaultFragment();
-        btnSysMsg = (Button)findViewById(R.id.btn_sys_msg);
-        btnUserMsg = (Button)findViewById(R.id.btn_user_msg);
+        btnSysMsg = (Button) findViewById(R.id.btn_sys_msg);
+        btnUserMsg = (Button) findViewById(R.id.btn_user_msg);
         btnSysMsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,7 +43,7 @@ public class MessageActivity extends Activity {
                 SysMsgFragment fragment = new SysMsgFragment();
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.msg_layout,fragment);
+                transaction.replace(R.id.msg_layout, fragment);
                 transaction.commit();
 
             }
@@ -56,14 +56,13 @@ public class MessageActivity extends Activity {
                 UserMsgFragment fragment = new UserMsgFragment();
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.msg_layout,fragment);
+                transaction.replace(R.id.msg_layout, fragment);
                 transaction.commit();
             }
         });
     }
 
-    private void setDefaultFragment()
-    {
+    private void setDefaultFragment() {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         SysMsgFragment fragment = new SysMsgFragment();
@@ -72,30 +71,15 @@ public class MessageActivity extends Activity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+        startActivity(intent);
+    }
+
+    @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_message, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -1,12 +1,93 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.nectar.timeby.gui.FriendsActivity">
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/friends_bgd"
+        android:paddingBottom="20dp"
+        android:paddingTop="15dp">
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/imageView_friends_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/btn_friends_return" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="1dp"
+            android:text="@string/friends_actionbar_title"
+            android:textColor="@color/friends_nav_text"
+            android:textSize="22.0dip" />
+
+        <ImageView
+            android:id="@+id/imageView_friends_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/btn_friends_add" />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/friends_bgd">
+
+        <Button
+            android:id="@+id/button_friends_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1"
+            android:background="@color/friends_select"
+            android:gravity="center"
+            android:text="@string/friends_list"
+            android:textColor="@color/friends_nav_text"
+            android:textSize="22sp" />
+
+        <Button
+            android:id="@+id/button_friends_winner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:background="@color/friends_bgd"
+            android:gravity="center"
+            android:text="@string/friends_winner"
+            android:textColor="@color/friends_nav_text"
+            android:textSize="22sp" />
+
+        <Button
+            android:id="@+id/button_friends_failure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:background="@color/friends_bgd"
+            android:gravity="center"
+            android:text="@string/friends_failure"
+            android:textColor="@color/friends_nav_text"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_friends_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/friendsListFragment"
+            android:name="com.nectar.timeby.gui.fragment.FriendsListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+</LinearLayout>
