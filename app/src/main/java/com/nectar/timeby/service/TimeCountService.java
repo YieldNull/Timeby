@@ -13,12 +13,12 @@ import com.nectar.timeby.util.PrefsUtil;
 /**
  * 监听退出APP，计算退出时间，若退出时间达到预定值，则任务失败
  * 屏幕关闭后停止计时，屏幕开启且未进入APP时计时，打进电话时停止计时
- * <p>
+ * <p/>
  * 时钟自开启后一直走
  * 有以下情况可以导致时钟停止
  * 1.时钟走完
  * 2.用户离开倒计时页面超过预设时间，只有打入电话不算离开时间
- * <p>
+ * <p/>
  * 开始时间、结束时间不会改变
  */
 public class TimeCountService extends Service {
@@ -45,7 +45,7 @@ public class TimeCountService extends Service {
 
 
     public TimeCountService() {
-        Log.i(TAG, "Time Count Service start");
+
     }
 
     public class ClockTickBinder extends Binder {
@@ -91,7 +91,7 @@ public class TimeCountService extends Service {
 
             case TYPE_ENTER_APP:
                 if (mCountDownTimer != null) {
-                    Log.i(TAG, "cancel CountDown");
+                    Log.i(TAG, "Cancel CountDown");
                     mCountDownTimer.cancel();
                 }
                 break;
@@ -102,14 +102,14 @@ public class TimeCountService extends Service {
 
             case TYPE_SCREEN_OFF:
                 if (mCountDownTimer != null) {
-                    Log.i(TAG, "cancel CountDown");
+                    Log.i(TAG, "Cancel CountDown");
                     mCountDownTimer.cancel();
                 }
                 break;
 
             case TYPE_RING_COME:
                 if (mCountDownTimer != null) {
-                    Log.i(TAG, "cancel CountDown");
+                    Log.i(TAG, "Cancel CountDown");
                     mCountDownTimer.cancel();
                 }
                 break;
@@ -137,7 +137,7 @@ public class TimeCountService extends Service {
      * @param intent
      */
     private void initCountDown(Intent intent) {
-        Log.i(TAG, "initCountDown");
+        Log.i(TAG, "InitCountDown");
 
         mCurrMillis = System.currentTimeMillis();
         mStopMillis = intent.getLongExtra(INTENT_END_MILLIS, 0);
@@ -148,6 +148,7 @@ public class TimeCountService extends Service {
             public void onTick(long millisUntilFinished) {
                 mCurrMillis += 1000 * 1;
 
+                Log.d(TAG, "tick");
                 if (mCurrMillis > mStopMillis) {
                     Log.i(TAG, "Arrived end time,counter quit!");
                     mCountDownTimer.cancel();

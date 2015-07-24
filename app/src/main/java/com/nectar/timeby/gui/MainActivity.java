@@ -18,6 +18,7 @@ import com.nectar.timeby.gui.fragment.DrawerFragment;
 import com.nectar.timeby.gui.fragment.MainFragment;
 import com.nectar.timeby.gui.interfaces.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.interfaces.OnDrawerToggleClickListener;
+import com.nectar.timeby.service.PollingService;
 import com.nectar.timeby.util.PrefsUtil;
 
 import java.lang.reflect.Field;
@@ -38,9 +39,23 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Log.i(TAG, "Starting polling service");
+        Intent theIntent = new Intent(this, PollingService.class);
+        theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startService(theIntent);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_main);
+        initDrawer();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         if (!PrefsUtil.isLogin(this)) {
-            Log.i(TAG, "not login");
+            Log.i(TAG, "Not login, entering login activity");
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
@@ -48,29 +63,12 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (PrefsUtil.isOnTask(this)) {
-            Log.i(TAG, "on task, entering countdown page");
+            Log.i(TAG, "On task, entering countdown page");
             Intent intent = new Intent(this, CountDownActivity.class);
             startActivity(intent);
             finish();
             return;
         }
-
-        setContentView(R.layout.activity_main);
-        Log.i(TAG, "onCreate");
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_main);
-        initDrawer();
-
-//        Log.i(TAG, "Main Activity Create");
-//        Log.i(TAG, "trying to start notify service");
-//
-//        //开启Service
-//        Intent theIntent = new Intent(this, TimeCountService.class);
-//        theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startService(theIntent);
-
-
-//               new TopNotification(this, "Hello World!", 1000 * 1).show();
     }
 
     /**

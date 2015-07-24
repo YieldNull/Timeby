@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.nectar.timeby.R;
 import com.nectar.timeby.service.APPStateReceiver;
+import com.nectar.timeby.service.ScreenStateReceiver;
 import com.nectar.timeby.util.PrefsUtil;
 
 import java.util.ArrayList;
@@ -123,18 +125,21 @@ public class CountDownActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        sendBroadcast(new Intent(APPStateReceiver.ACTION_NAME_ENTER));
+        if (PrefsUtil.isOnTask(this)) {
+            Log.i(TAG, "Enter CountDownActivity,Send APP Enter broadcast");
+            sendBroadcast(new Intent(APPStateReceiver.ACTION_NAME_ENTER));
 
-        Map<String, Long> task = PrefsUtil.readTask(this);
-        int DSeconds = (int) ((task.get(PrefsUtil.PREFS_KEY_TASK_END_TIME_MILLIS)
-                - System.currentTimeMillis()) / 1000);
+            Map<String, Long> task = PrefsUtil.readTask(this);
+            int DSeconds = (int) ((task.get(PrefsUtil.PREFS_KEY_TASK_END_TIME_MILLIS)
+                    - System.currentTimeMillis()) / 1000);
 
-        mCurrHour = DSeconds / 3600;
-        mCurrMin = DSeconds / 60;
-        mCurrSec = DSeconds % 60;
-        mSumSec = mCurrHour * 3600 + mCurrMin * 60 + mCurrSec;
+            mCurrHour = DSeconds / 3600;
+            mCurrMin = DSeconds / 60;
+            mCurrSec = DSeconds % 60;
+            mSumSec = mCurrHour * 3600 + mCurrMin * 60 + mCurrSec;
 
-        mHandler.post(mTickRunnable);
+            mHandler.post(mTickRunnable);
+        }
     }
 
     /**
@@ -145,7 +150,9 @@ public class CountDownActivity extends Activity {
         super.onPause();
 
         mHandler.removeCallbacks(mTickRunnable);
-        if (PrefsUtil.isOnTask(this)) {
+        if (PrefsUtil.isOnTask(this)
+                && (!ScreenStateReceiver.isScreenOff(this))) {
+            Log.i(TAG, "Leave CountDownActivity, Send APP QUIT broadcast");
             sendBroadcast(new Intent(APPStateReceiver.ACTION_NAME_QUIT));
         }
     }

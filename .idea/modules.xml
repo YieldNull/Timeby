@@ -4,11 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Timeby.iml" filepath="$PROJECT_DIR$/Timeby.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/demo2/demo2.iml" filepath="$PROJECT_DIR$/demo2/demo2.iml" />
-      <module fileurl="file://$PROJECT_DIR$/orderedBroadcast/orderedBroadcast.iml" filepath="$PROJECT_DIR$/orderedBroadcast/orderedBroadcast.iml" />
-      <module fileurl="file://$PROJECT_DIR$/server/server.iml" filepath="$PROJECT_DIR$/server/server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/wakeful/wakeful.iml" filepath="$PROJECT_DIR$/wakeful/wakeful.iml" />
     </modules>
   </component>
 </project>

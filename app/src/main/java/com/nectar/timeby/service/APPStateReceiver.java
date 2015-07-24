@@ -22,13 +22,17 @@ public class APPStateReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         //TODO show Notification
 
-        Log.i(TAG, "Received app quit broadcast");
-        Log.i(TAG, "Starting TimeCountService");
 
         if (intent.getAction().equals(ACTION_NAME_ENTER)) {
+            Log.i(TAG, "Received app Enter broadcast");
+            Log.i(TAG, "Stopping TimeCountService");
+
             context.startService(TimeCountService.genIntent(
                     context, TimeCountService.TYPE_ENTER_APP));
         } else {
+            Log.i(TAG, "Received app Quit broadcast");
+            Log.i(TAG, "Starting TimeCountService");
+
             context.startService(TimeCountService.genIntent(
                     context, TimeCountService.TYPE_LEAVE_APP));
         }

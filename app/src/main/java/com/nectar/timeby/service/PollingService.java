@@ -35,7 +35,7 @@ public class PollingService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Polling service create");
-        Log.i(TAG, "Trying to register screenOn broadcast receiver");
+        Log.i(TAG, "Registering ScreenStateBroadcast receiver");
 
         mScreenStateReceiver = new ScreenStateReceiver();
         registerReceiver(mScreenStateReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));

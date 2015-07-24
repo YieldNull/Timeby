@@ -68,6 +68,11 @@
         <activity android:name=".gui.ReportActivity" />
         <activity android:name=".gui.MainConcludeActivity" />
 
+
+        <service
+            android:name=".service.PollingService"
+            android:enabled="true"
+            android:exported="false" />
         <service
             android:name=".service.TimeCountService"
             android:enabled="true"
@@ -82,14 +87,27 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".service.APPStateReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.nectar.timeby.service.QUIT_APP" />
+                <action android:name="com.nectar.timeby.service.ENTER_APP" />
+            </intent-filter>
+        </receiver>
+
         <receiver
             android:name=".service.ScreenStateReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.intent.action.SCREEN_OFF" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name=".service.IncomingCallReceiver"
             android:enabled="true"
@@ -104,20 +122,5 @@
             android:label="@string/title_activity_friends" />
         <activity android:name=".gui.CountDownActivity" />
 
-        <receiver
-            android:name=".service.APPStateReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.nectar.timeby.service.QUIT_APP" />
-                <action android:name="com.nectar.timeby.service.ENTER_APP" />
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name=".service.PollingService"
-            android:enabled="true"
-            android:exported="false"></service>
     </application>
-
 </manifest>

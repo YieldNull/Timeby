@@ -1,2 +1,1 @@
-include ':server', ':demo2', ':wakeful', ':demo', ':app'
-include ':orderedBroadcast'
+include ':app'

@@ -326,6 +326,7 @@ public class MainFragment extends Fragment
 
         manager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
 
+
         new TopNotification(getActivity(), mTimeIntervalText.getText().toString()
                 + "后进入倒计时页面", 3 * 1000).show();
     }
