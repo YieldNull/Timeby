@@ -37,5 +37,7 @@
     <color name="btn_bgd">#ffededed</color>
     <color name="message_top">#ffbdeedb</color>
     <color name="message_bottom">#ffffe3</color>
+
+    <color name="layout_divider">#598a84</color>
     <color name="add_friends_from_contact_added">#a7a6a6</color>
 </resources>
