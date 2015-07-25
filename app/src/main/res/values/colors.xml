@@ -37,4 +37,6 @@
     <color name="btn_bgd">#ffededed</color>
     <color name="message_top">#ffbdeedb</color>
     <color name="message_bottom">#ffffe3</color>
+
+    <color name="layout_divider">#598a84</color>
 </resources>

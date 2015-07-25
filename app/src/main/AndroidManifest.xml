@@ -68,6 +68,7 @@
         <activity android:name=".gui.ReportActivity" />
         <activity android:name=".gui.MainConcludeActivity" />
         <activity android:name=".gui.MessageActivity" />
+        <activity android:name=".gui.MainReminderActivity" />
 
         <activity android:name=".gui.ResetPasswordPhoneActivity" />
         <activity android:name=".gui.ResetPasswordActivity" />

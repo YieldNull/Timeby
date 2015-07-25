@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bgd"
+    android:orientation="vertical"
+
+    >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="90dp"
+        android:background="@color/main_bgd"
+        android:paddingTop="25dp"
+        android:paddingBottom="20dp"
+        >
+        <ImageButton
+            android:id="@+id/btn_return"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:background="@drawable/btn_main_return"
+            android:layout_marginLeft="10dp"
+             />
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_marginTop="5dp"
+            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="消息提醒"
+            android:textColor="@color/main_apm_text_bgd"
+            android:textSize="24sp"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dip">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/layout_divider"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/main_text"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/main_text"
+            android:paddingTop="15dp"
+            android:paddingBottom="20dp"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="20sp"
+                android:text="睡前模式"
+                />
+            <TextView
+                android:id="@+id/tv_model"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="match_parent"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/selector_sinner"
+                android:text=" 10 : 00 "
+                android:textColor="@color/login_text"
+                android:textSize="20sp"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/main_text"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_gravity="top"
+            android:background="@color/main_text"
+            android:paddingTop="15dp"
+            android:paddingBottom="20dp"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="20sp"
+                android:text="后台提醒时间"
+                />
+            <TextView
+                android:id="@+id/time_reminder"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="match_parent"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/selector_sinner"
+                android:text=" 10 秒  "
+                android:textColor="@color/login_text"
+                android:textSize="20sp"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+
