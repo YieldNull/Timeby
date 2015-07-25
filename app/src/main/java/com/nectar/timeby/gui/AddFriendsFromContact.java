@@ -185,7 +185,7 @@ public class AddFriendsFromContact extends Activity {
                 }
 
                 //使用本地的信息获取已经加了的联系人
-                ArrayList<FriendShip> friends = mDBManager.findFriendInfo();
+                ArrayList<FriendShip> friends = mDBManager.findFriendInfo(mPhone);
                 if (friends.size() != 0) {
                     Log.i(TAG, "Read contacts from local database");
 

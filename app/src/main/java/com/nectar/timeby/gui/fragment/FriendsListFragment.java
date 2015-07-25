@@ -73,7 +73,7 @@ public class FriendsListFragment extends Fragment {
 
     private void getFriends() {
         //如果本地已经有好友信息，则使用本地的信息
-        ArrayList<FriendShip> friends = mDBManager.findFriendInfo();
+        ArrayList<FriendShip> friends = mDBManager.findFriendInfo(mPhone);
         if (friends.size() != 0) {
             Log.i(TAG, "Read contacts from local database");
 
