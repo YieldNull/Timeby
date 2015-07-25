@@ -364,7 +364,7 @@ public class RegisterPhoneActivity extends Activity {
                     JSONObject data = HttpProcess.checkPhoneNum(mPhoneStr);
                     try {
                         if (data.get("status").equals(-1)) {
-                            //str = data.getString("errorStr");
+                            mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
                         } else if (data.get("status").equals(0)) {
                             mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
                         } else if (data.get("status").equals(1)) {

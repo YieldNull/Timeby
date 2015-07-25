@@ -97,6 +97,12 @@ public class PrefsUtil {
         return user.getString(PREFS_KEY_USER_NAME, null);
     }
 
+    public static String getUserPhone(Context context) {
+        SharedPreferences user = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_USER, Context.MODE_PRIVATE);
+        return user.getString(PREFS_KEY_USER_PHONE, null);
+    }
+
     /**
      * 登出，清空用户信息
      *

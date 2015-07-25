@@ -14,18 +14,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mob.tools.MobUIShell;
 import com.nectar.timeby.R;
+import com.nectar.timeby.gui.AddFriendsFromContact;
 import com.nectar.timeby.gui.CountDownActivity;
 import com.nectar.timeby.gui.interfaces.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.interfaces.OnDrawerToggleClickListener;
 import com.nectar.timeby.gui.widget.ClockWidget;
 import com.nectar.timeby.gui.widget.TaskTypeSelectDialog;
 import com.nectar.timeby.gui.widget.TopNotification;
+import com.nectar.timeby.util.HttpProcess;
 import com.nectar.timeby.util.PrefsUtil;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * by finalize

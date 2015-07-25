@@ -150,4 +150,5 @@ public class ClientDao {
         db.close();
         return friendShips;
     }
+
 }

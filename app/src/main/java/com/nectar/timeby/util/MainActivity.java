@@ -1,21 +1,26 @@
 package com.nectar.timeby.util;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
-public class DemoActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity {
 
     private TextView myTextView;
     private Map<String, Object> map = new HashMap<String, Object>();
@@ -24,9 +29,6 @@ public class DemoActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//        myTextView = (TextView) findViewById(R.id.myTextView);
 
 //        Map<String, Object> map = new HashMap<>();
 //        map.put("aaa", "aaaa");
@@ -57,13 +59,17 @@ public class DemoActivity extends ActionBarActivity {
 //        }
 
 
-        new Thread(new MyThread()).start();
+
+         new Thread(new MyThread()).start();
     }
 
 
-    private Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            if (msg.what == IS_FINISH) {
+    private Handler handler = new Handler()
+    {
+        public void handleMessage(Message msg)
+        {
+            if (msg.what == IS_FINISH)
+            {
                 //status == 1 ->正确返回结果  result == true->有结果  result == false->无结果
                 //status == 0 ->服务器错误（数据库异常）
                 //status == 1 ->网络异常
@@ -71,8 +77,121 @@ public class DemoActivity extends ActionBarActivity {
                 //无附带数据返回类型为JSONObject, 附带数据返回类型为JSONArray
 
 
-                JSONObject data = (JSONObject) msg.obj;
+                //JSONObject data = (JSONObject) msg.obj;
                 //JSONArray data = (JSONArray) msg.obj;
+                //Map<String, Object> map = (Map<String, Object>) msg.obj;
+                List<Map<String, Object>> list = (List<Map<String, Object>>) msg.obj;
+
+                /***********************************************
+                 * 检测手机号是否已被注册
+                 */
+//                try {
+//                    if (data.get("status").equals(-1)) {
+//                        str = data.getString("errorStr");
+//                    } else if (data.get("status").equals(0)) {
+//                        str = "服务器错误";
+//                    } else if (data.get("status").equals(1)) {
+//                        if (data.getString("result").equals("true"))
+//                        {
+//                            str = "该手机号未被注册";
+//                        } else if (data.getString("result").equals("false")) {
+//                            str = "该手机号已被注册";
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
+
+                /************************************************************
+                 * 批量检测手机号是否被注册
+                 */
+//                try {
+//                    JSONObject statusJson = data.getJSONObject(0);
+//                    if (statusJson.get("status").equals(-1)) {
+//                        str = statusJson.getString("errorStr");
+//                    } else if (statusJson.get("status").equals(0)) {
+//                        str = "服务器错误";
+//                    } else if (statusJson.get("status").equals(1)) {
+//                        if (statusJson.getString("result").equals("true"))  //正确返回数据
+//                        {
+//                            str = "全部未被注册";
+//                        } else if (statusJson.getString("result").equals("false")) {
+//                            str = "以下手机号被注册：";
+//                            JSONArray phoneNumJson = data.getJSONArray(1);
+//                            for (int i = 0; i < phoneNumJson.length(); ++i)
+//                            {
+//                                str = str + phoneNumJson.getString(i) + " ";
+//                            }
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
+
+                /************************************************************
+                 * 检查用户名是否被注册
+                 */
+//                try {
+//                    if (data.get("status").equals(-1)) {
+//                        str = data.getString("errorStr");
+//                    } else if (data.get("status").equals(0)) {
+//                        str = "服务器错误";
+//                    } else if (data.get("status").equals(1)) {
+//                        if (data.getString("result").equals("true"))
+//                        {
+//                            str = "该用户名未被注册";
+//                        } else if (data.getString("result").equals("false")) {
+//                            str = "该用户名已被注册";
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
+
+                /*******************************************
+                 * 注册结果
+                 */
+//                try {
+//                    if (data.get("status").equals(-1)) {
+//                        str = data.getString("errorStr");
+//                    } else if (data.get("status").equals(0)) {
+//                        str = "服务器错误";
+//                    } else if (data.get("status").equals(1)) {
+//                        if (data.getString("result").equals("true"))
+//                        {
+//                            str = "注册成功";
+//                        } else if (data.getString("result").equals("false")) {
+//                            str = "注册失败";
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
+
+                /*******************************************
+                 * 登录结果
+                 */
+//                try {
+//                    if (data.get("status").equals(-1)) {
+//                        str = data.getString("errorStr");
+//                    } else if (data.get("status").equals(0)) {
+//                        str = "服务器错误";
+//                    } else if (data.get("status").equals(1)) {
+//                        if (data.getString("result").equals("true"))
+//                        {
+//                            str = "登录成功" + ",该用户手机号：" + data.getString("phonenum");
+//                        } else if (data.getString("result").equals("false")) {
+//                            str = "登录失败";
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
 
                 /*******************************************
                  * 更新密码结果
@@ -450,6 +569,86 @@ public class DemoActivity extends ActionBarActivity {
 //                }
 
 
+                /***************************************************
+                 * 上传图片
+                 */
+//                try {
+//                    if (data.get("status").equals(-1)) {
+//                        str = data.getString("errorStr");
+//                    } else if (data.get("status").equals(0)) {
+//                        str = "服务器错误";
+//                    } else if (data.get("status").equals(1)) {
+//                        if (data.getString("result").equals("true"))
+//                        {
+//                            str = "上传成功";
+//                        } else if (data.getString("result").equals("false")) {
+//                            str = "上传失败";
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
+
+                /************************************************************
+                 * 判断用户及是否设置，更新头像
+                 * imagestatus: -1 默认头像		0 更改过头像	1最近更新头像（未存在本地）
+                 */
+//                try {
+//                    JSONObject statusJson = data.getJSONObject(0);
+//                    if (statusJson.get("status").equals(-1)) {
+//                        str = statusJson.getString("errorStr");
+//                    } else if (statusJson.get("status").equals(0)) {
+//                        str = "服务器错误";
+//                    } else if (statusJson.get("status").equals(1)) {
+//                        if (statusJson.getString("result").equals("true"))  //正确返回数据
+//                        {
+//                            for (int i = 1; i < data.length(); ++i) {
+//                                JSONObject dataJson = data.getJSONObject(i);
+//                                //注意大小写
+//                                str = str + "手机号：" + dataJson.getString("phonenumA")
+//                                        + ", 头像状态：" + dataJson.getString("imagestatus");
+//                            }
+//                        } else if (statusJson.getString("result").equals("false")) {
+//                            str = "当前无联系好友";
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
+
+                /*************************************************
+                 * 下载一张图片
+                 */
+//              if (map.get("status").equals(-1))	//下载失败
+//        		{
+//        			str = map.get("errorStr");
+//        		} else if (map.get("status").equals(1)) {
+//        			str = "下载成功";
+//        			//map.get("phoneNum").toString   获取手机号
+//        			//map.get("file")   获取文件
+//        		}
+
+
+                /***************************************************
+                 * 下载多张图片
+                 */
+//                for (int i = 0; i < list.size(); ++i)
+//                {
+//                    Map<String, Object> map = list.get(i);
+//                    if (map.get("status").equals(-1))	//下载失败
+//                    {
+//                        str = map.get("errorStr").toString();
+//                    } else if (map.get("status").equals(1)) {
+//                        str = "下载成功";
+//                        //map.get("phoneNum")   获取手机号
+//                        //map.get("file")   获取文件
+//                    }
+//
+//                }
+
+
                 /********************************************
                  * 实时消息通知结果
                  */
@@ -524,8 +723,41 @@ public class DemoActivity extends ActionBarActivity {
     };
 
     public class MyThread implements Runnable {
-        public void run() {
+        public void run()
+        {
+            /***********************************************
+             * 检测手机号是否已被注册(phoneNum)
+             */
+            //JSONObject json = HttpProcess.checkPhoneNum("123");
 
+            /***********************************************
+             * 批量检测手机号是否已被注册
+             */
+//            JSONArray phoneNums = new JSONArray();
+//            phoneNums.put("123");
+//	        phoneNums.put("1234");
+//            phoneNums.put("1234567");
+//            JSONArray json = HttpProcess.checkMultiplePhoneNum(phoneNums);
+
+            /************************************************************
+             * 检查用户名是否被注册(userAccount)
+             */
+            //JSONObject json = HttpProcess.checkUserAccount("abc");
+
+            /***************************************************
+             * 注册调用(phoneNum, userAccount, password)
+             */
+            //JSONObject json = HttpProcess.register("123456", "abcdef", "123456");
+
+            /***************************************************
+             * 登录调用(phoneNum, userAccount, password) phoneNum, userAccount只能传一个参数，另一个为空
+             */
+            //JSONObject json = HttpProcess.login("abc", "123");
+
+            /***************************************************
+             * 更新密码调用(phoneNum, password)
+             */
+            //JSONObject json = HttpProcess.updatePassword("123", "123");
 
             /***************************************************
              * 获取用户基本信息调用(phoneNum)
@@ -550,7 +782,7 @@ public class DemoActivity extends ActionBarActivity {
             /************************************************
              * 好友申请处理结果(成功后务必不能再让用户有选择的可能） （用户phoneNum 申请者phoneNum result:true or false）
              */
-            // JSONObject json = HttpProcess.friendApplicationResult("12345", "1234", "true");
+           // JSONObject json = HttpProcess.friendApplicationResult("12345", "1234", "true");
 
             /***************************************************
              * 获取好友列表(phoneNum)
@@ -607,16 +839,41 @@ public class DemoActivity extends ActionBarActivity {
              */
             //JSONArray json = HttpProcess.getRecentContact("123", 0, 10);
 
+            /************************************************
+             *上传图片 (phoneNum, 图片)
+             */
+//             File file = new File("/storage/emulated/0/0/0/wallpaper/wallpaper_a78692.jpg");
+//             JSONObject json = HttpProcess.uploadImage("12345", file);
+
+            /************************************************************
+             * 判断用户及是否设置，更新头像 (phoneNum)
+             */
+            //JSONArray json = HttpProcess.headImageInfo("123");
+
+            /*************************************************
+             * 下载一张图片 (phoneNum, 存放目录) 文件名为phoneNum.jpg
+             */
+            //Map<String, Object> image = HttpProcess.getOneImage("12345", "/storage/emulated/0/0/0/wallpaper/");
+
+            /***************************************************
+             * 下载多张图片
+             */
+//            List<String> phoneNumList = new ArrayList<String>();
+//            phoneNumList.add("123");
+//            phoneNumList.add("12345");
+//            List<Map<String, Object>> image = HttpProcess.getMultipleImage(phoneNumList, "/storage/emulated/0/");
+
 
             /****************************************************
              * 实时消息通知调用(phoneNum)
              */
-            //JSONArray json = HttpProcess.messageInform("123");
+           //JSONArray json = HttpProcess.messageInform("123");
 
-//            Message msg = Message.obtain();
-//            msg.obj = json;
-//            msg.what = IS_FINISH;
-//            handler.sendMessage(msg);
+            Message msg = Message.obtain();
+            //msg.obj = json;
+            //msg.obj = image;
+            msg.what = IS_FINISH;
+            handler.sendMessage(msg);
         }
     }
 

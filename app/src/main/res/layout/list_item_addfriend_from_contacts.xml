@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="#ffffffe3"
+    android:gravity="center"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp">
+
+    <TextView
+        android:id="@+id/textView_add_friends_from_contact_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:text="黄小狗"
+        android:textColor="#696967"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/textView_btn_add_friends_from_contact_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="17dp"
+        android:gravity="center"
+        android:text="已添加"
+        android:textColor="#a7a6a6"
+        android:textSize="22sp" />
+</RelativeLayout>

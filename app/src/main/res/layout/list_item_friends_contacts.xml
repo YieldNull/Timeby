@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="45dp" >
-    <!-- 联系人信息 -->
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentLeft="true"
-        android:src="@drawable/img_friends_icn" />
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <com.github.siyamed.shapeimageview.RoundedImageView
+        android:id="@+id/imageView_friends_headimg"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/img_friends_headimg_default"
+        app:siRadius="40dp"
+        app:siSquare="true" />
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/textView_friends_name"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginLeft="15dip"
-        android:layout_marginRight="5.0dip"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@id/imageView"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
         android:singleLine="true"
-        android:textAppearance="?android:textAppearanceMedium" />
+        android:text="喝酒还"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textSize="20dp" />
 
-</RelativeLayout>
+</LinearLayout>

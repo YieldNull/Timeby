@@ -179,6 +179,7 @@ public class LoginActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+
                 JSONObject data = HttpProcess.login(userName, mPasswordStr);
                 try {
                     if (data.get("status").equals(-1)) {
@@ -187,6 +188,7 @@ public class LoginActivity extends Activity {
                         mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
                     } else if (data.get("status").equals(1)) {
                         if (data.getString("result").equals("true")) {
+                            mPhoneStr = data.getString("phonenum");
                             mHandler.sendEmptyMessage(MSG_USER_VALID);
                         } else if (data.getString("result").equals("false")) {
                             mHandler.sendEmptyMessage(MSG_USER_INVALID);

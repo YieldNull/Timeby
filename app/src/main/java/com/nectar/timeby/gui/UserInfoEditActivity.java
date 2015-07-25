@@ -235,7 +235,7 @@ public class UserInfoEditActivity extends Activity {
         Bundle extras = intent.getExtras();
         if (extras != null) {
             Bitmap photo = extras.getParcelable("data");
-            String fileName = ImgUtil.getHeadImgFileName(PrefsUtil.getUserName(this));
+            String fileName = ImgUtil.getHeadImgFileName(PrefsUtil.getUserPhone(this));
             ImgUtil.saveHeadBitmap(this, fileName, photo);
             mHeadImage.setImageBitmap(photo);
         }

@@ -182,7 +182,7 @@ public class SettingActivity extends Activity {
                 if (pointX > 0 && pointX < stripWidth && pointY > 0 && pointY < stripHeight) {
                     Intent intent = new Intent();
                     if (relativeLayout == chanPwdStrip)
-                        intent.setClass(SettingActivity.this, SettingPasswordActivity.class);
+                        intent.setClass(SettingActivity.this, ResetPasswordPhoneActivity.class);
                     else if (relativeLayout == timeNotiStrip)
                         intent.setClass(SettingActivity.this, SettingNotifyActivity.class);
                     else if (relativeLayout == shareStrip)

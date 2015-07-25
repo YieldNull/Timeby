@@ -38,8 +38,6 @@ public class ResetPasswordPhoneActivity extends Activity {
     private static final int MSG_SMSSDK_RECALL = 0x0003;
     private static final int MSG_PHONE_VALID = 0x0004;
     private static final int MSG_PHONE_INVALID = 0x0005;
-    private static final int MSG_VERIFY_SUCCESS = 0x0006;
-    private static final int MSG_VERIFY_FAILURE = 0x0007;
     private static final int MSG_SERVER_ERROR = 0x0008;
     private static final int MSG_NET_INACTIVE = 0x0009;
 
@@ -83,7 +81,7 @@ public class ResetPasswordPhoneActivity extends Activity {
 
         initSMSSDK();
         initHandler();
-        initRendButton();
+        initSendButton();
         initSubmitButton();
 
     }
@@ -135,6 +133,7 @@ public class ResetPasswordPhoneActivity extends Activity {
                                 "请先填发送验证短信", Toast.LENGTH_SHORT).show();
                     } else {
                         //发送验证信息
+                        Log.i(TAG, mPhoneStr);
                         SMSSDK.submitVerificationCode("86", mPhoneStr,
                                 mCaptchaText.getText().toString());
                     }
@@ -161,7 +160,7 @@ public class ResetPasswordPhoneActivity extends Activity {
     /**
      * 初始化重新发送功能
      */
-    private void initRendButton() {
+    private void initSendButton() {
 
         //设置重发倒计时
         mTimer = new Timer();
@@ -239,18 +238,6 @@ public class ResetPasswordPhoneActivity extends Activity {
                         Toast.makeText(ResetPasswordPhoneActivity.this, "无网络连接，请打开数据网络",
                                 Toast.LENGTH_SHORT).show();
                         break;
-                    case MSG_VERIFY_SUCCESS:
-                        //注册成功
-                        Log.i(TAG, "Register successfully!");
-                        startResetPasswdActivity();
-                        break;
-                    case MSG_VERIFY_FAILURE:
-                        //注册失败
-                        Log.i(TAG, "Same user has been registered");
-                        Toast.makeText(ResetPasswordPhoneActivity.this,
-                                "该用户已被注册，请重新注册", Toast.LENGTH_SHORT).show();
-                        finish();//回到注册页面
-                        break;
                     case MSG_SMSSDK_RECALL:
                         //接收SMSSDK的回调
                         int event = msg.arg1;
@@ -268,7 +255,8 @@ public class ResetPasswordPhoneActivity extends Activity {
                                     Log.i(TAG, "Valid Captcha");
                                     Log.i(TAG, "storing user info to server");
                                     resetSendButton();
-                                    verifyOrSave(false);
+//                                    verifyOrSave(false);
+                                    startResetPasswdActivity();
                                     break;
                                 default:
                                     break;
@@ -366,28 +354,6 @@ public class ResetPasswordPhoneActivity extends Activity {
                         }
                     } catch (JSONException e) {
                         Log.i(TAG, e.getMessage());
-                    }
-                }
-            }).start();
-        } else {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = HttpProcess.register(mPhoneStr, mUserStr, mPasswordStr);
-                    try {
-                        if (data.get("status").equals(-1)) {
-                            mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
-                        } else if (data.get("status").equals(0)) {
-                            mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
-                        } else if (data.get("status").equals(1)) {
-                            if (data.getString("result").equals("true")) {
-                                mHandler.sendEmptyMessage(MSG_VERIFY_SUCCESS);
-                            } else if (data.getString("result").equals("false")) {
-                                mHandler.sendEmptyMessage(MSG_VERIFY_FAILURE);
-                            }
-                        }
-                    } catch (JSONException e) {
-                        Log.w(TAG, e.getMessage());
                     }
                 }
             }).start();

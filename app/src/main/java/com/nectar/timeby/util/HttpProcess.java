@@ -4,32 +4,57 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 
 public class HttpProcess {
 
     //status == 1 ->
-    // 正确返回结果  true->有结果 false->无结果
-    //status == 0 ->服务器错误（数据库异常）
-    //status == 1 ->网络异常
-    //status为int  其余类型均为String 视情况转换
+    // ��ȷ���ؽ��  true->�н�� false->�޽��
+    //status == 0 ->�������������ݿ��쳣��
+    //status == 1 ->�����쳣
+    //statusΪint  �������;�ΪString �����ת��
 
     /************************************************************
-     * 检查手机号是否被注册
+     * ����ֻ����Ƿ�ע��
      */
     public static JSONObject checkPhoneNum(String phoneNum)
     {
-        JSONObject json = new JSONObject();
+        JSONArray phoneNums = new JSONArray();
+        phoneNums.put(phoneNum);
         try {
-            json.put("phoneNum", phoneNum);
+            return checkMultiplePhoneNum(phoneNums).getJSONObject(0);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return resultHelper(json, "CheckPhoneNumServlet");
+        return null;
     }
 
 
     /***********************************************
-     * 检测用户名是否已被注册
+     * ��������ֻ����Ƿ��ѱ�ע��
+     */
+    public static JSONArray checkMultiplePhoneNum(JSONArray phoneNums)
+    {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("phoneNums", phoneNums);
+            String jsonStr = json.toString();
+            String resultStr = HttpUtil.doPost(HttpUtil.BASEURL + "CheckPhoneNumServlet", jsonStr);
+            JSONArray resultJson = new JSONArray(resultStr);
+            return resultJson;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /***********************************************
+     * ����û����Ƿ��ѱ�ע��
      */
     public static JSONObject checkUserAccount(String userAccount)
     {
@@ -44,7 +69,7 @@ public class HttpProcess {
 
 
     /***********************************************
-     * 注册
+     * ע��
      */
     public static JSONObject register(String phoneNum, String userAccount, String password)
     {
@@ -61,7 +86,7 @@ public class HttpProcess {
 
 
     /************************************************
-     *登录
+     *��¼
      */
     public static JSONObject login(String phonenumOrUseraccount, String password)
     {
@@ -77,7 +102,7 @@ public class HttpProcess {
 
 
     /*************************************************
-     *更新密码
+     *��������
      */
     public static JSONObject updatePassword(String phoneNum, String newPassword)
     {
@@ -93,7 +118,7 @@ public class HttpProcess {
 
 
     /**************************************************************
-     *获取用户基本信息
+     *��ȡ�û�������Ϣ
      */
     public static JSONArray getUserMainInfo(String phoneNum)
     {
@@ -102,7 +127,7 @@ public class HttpProcess {
 
 
     /**************************************************************
-     * 设置用户基本信息
+     * �����û�������Ϣ
      */
     public static JSONObject setUserMainInfo(String phoneNum, String nickname, String sex, String birthday)
     {
@@ -120,7 +145,7 @@ public class HttpProcess {
 
 
     /*************************************************************
-     * 搜索好友
+     * ��������
      */
     public static JSONArray findFriend(String phonenumOrUseraccount)
     {
@@ -139,7 +164,7 @@ public class HttpProcess {
 
 
     /*************************************************************
-     * 申请好友
+     * �������
      */
     public static JSONObject friendApplication(String phoneNum, String friendPhoneNum)
     {
@@ -155,7 +180,7 @@ public class HttpProcess {
 
 
     /*************************************************************
-     * 实时消息通知
+     * ʵʱ��Ϣ֪ͨ
      */
     public static JSONArray messageInform(String phoneNum)
     {
@@ -164,7 +189,7 @@ public class HttpProcess {
 
 
     /**************************************************************
-     * 好友申请处理结果
+     * �������봦����
      */
     public static JSONObject friendApplicationResult(String phoneNum, String friendPhoneNum, String result)
     {
@@ -181,7 +206,7 @@ public class HttpProcess {
 
 
     /**************************************************************
-     * 获得好友列表信息
+     * ��ú����б���Ϣ
      */
     public static JSONArray getFriendList(String phoneNum)
     {
@@ -190,7 +215,7 @@ public class HttpProcess {
 
 
     /***********************************************************
-     * 更改好友备注
+     * ���ĺ��ѱ�ע
      */
     public static JSONObject updateRemark(String phoneNum, String friendPhoneNum, String remark)
     {
@@ -207,7 +232,7 @@ public class HttpProcess {
 
 
     /************************************************************
-     * 申请任务   合作模式：1   竞争模式：2 (确保不能申请多次同时间任务） 时间格式(2000-10-10 10:10:10)
+     * ��������   ����ģʽ��1   ����ģʽ��2 (ȷ������������ͬʱ������ ʱ���ʽ(2000-10-10 10:10:10)
      */
     public static JSONObject taskApplication(String phoneNum, JSONArray friendPhoneNum, String startTime, String endTime, int type)
     {
@@ -226,7 +251,7 @@ public class HttpProcess {
 
 
     /************************************************************
-     * 任务申请反馈结果  phoneNum:用户  friendPhoneNum:申请者  startTime:申请任务开始时间 result: true or false
+     * �������뷴�����  phoneNum:�û�  friendPhoneNum:������  startTime:��������ʼʱ�� result: true or false
      */
     public static JSONObject taskApplicationResult(String phoneNum, String friendPhoneNum, String startTime, String result)
     {
@@ -244,7 +269,7 @@ public class HttpProcess {
 
 
     /***********************************************************
-     * 任务开始前向服务器获取任务相关信息
+     * ����ʼǰ���������ȡ���������Ϣ
      */
     public static JSONArray getTaskInfo(String phoneNum, String applicantPhoneNum, String startTime)
     {
@@ -265,7 +290,7 @@ public class HttpProcess {
 
 
     /********************************************************
-     * 任务失败
+     * ����ʧ��
      */
     public static JSONObject taskFail(String phoneNum, String applicantPhoneNum, String startTime, String failTime, int type)
     {
@@ -284,7 +309,7 @@ public class HttpProcess {
 
 
     /**********************************************************
-     * 如果给锤子 则发送消息
+     * ��������� ������Ϣ
      */
     public static JSONObject giveHarmmer(String phoneNum, String failPhoneNum)
     {
@@ -300,7 +325,7 @@ public class HttpProcess {
 
 
     /************************************************************
-     * 提交任务总结表单(成功才能提交）
+     * �ύ�����ܽ��(�ɹ������ύ��
      */
     public static JSONObject submitTaskSummary(String phoneNum, String startTime, String endTime, String taskContent, float foucusDegree, float efficiency)
     {
@@ -320,7 +345,7 @@ public class HttpProcess {
 
 
     /************************************************************
-     * 获取任务总结
+     * ��ȡ�����ܽ�
      */
     public static JSONArray getTaskSummary(String phoneNum, String applicantPhoneNum, String startTime)
     {
@@ -341,7 +366,7 @@ public class HttpProcess {
 
 
     /*********************************************************
-     * 获取最近联系人
+     * ��ȡ�����ϵ��
      */
     public static JSONArray getRecentContact(String phoneNum, int start, int count)
     {
@@ -361,8 +386,89 @@ public class HttpProcess {
     }
 
 
+    /************************************************
+     *�ϴ�ͼƬ
+     *resultJson.getInt("status")
+     *status = 1 -> resultJson.getString("result")
+     *status = 0 -> ����������
+     *status = -1 ->resultJson.getString("errorStr")
+     *status = -2 ->resultJson.getString("errorStr")	//ͼƬ��ʽ����
+     */
+    public static JSONObject uploadImage(String phoneNum, File file)
+    {
+        //final String[] allowedExt = new String[] { "jpg", "jpeg", "gif", "png"};
+        //File file = new File(filePath);
+        //String ext = filePath.substring(filePath.lastIndexOf(".") + 1);
+        final String[] allowedExt = new String[] { "jpg" };
+        String ext = "jpg";
+        int allowFlag = 0;
+        int allowedExtCount = allowedExt.length;
+        for (; allowFlag < allowedExtCount; ++allowFlag)
+        {
+            if (allowedExt[allowFlag].equals(ext))
+            {
+                break;
+            }
+        }
+        if (allowFlag == allowedExtCount)
+        {
+            JSONObject errorJson = new JSONObject();
+            try {
+                errorJson.put("status", -2);
+                errorJson.put("errorStr", "error image��");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return errorJson;
+        }
+        String fileName = phoneNum + "." + ext;
+        String resultStr = HttpUtil.uploadByPost(HttpUtil.BASEURL + "ReceiveImageServlet", file, fileName);
+        JSONObject jsonObject = null;
+        try {
+            JSONArray resultJson = new JSONArray(resultStr);
+            jsonObject = resultJson.getJSONObject(0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+
+    /************************************************************
+     * �ж��û����Ƿ����ã�����ͷ��
+     */
+    public static JSONArray headImageInfo(String phoneNum)
+    {
+        return infoHelper(phoneNum, "HeadImageInfoServlet");
+    }
+
+
     /**************************************************************
-     * 辅助方法
+     *����һ��ͼƬ
+     *map.get("status") == 1 -> map.get("phoneNum") map.get("file")
+     *map.get("status") == -1 -> map.get("errorStr")
+     */
+    public static Map<String, Object> getOneImage(String phoneNum, String fileDir)
+    {
+        List<String> list = new ArrayList<String>();
+        list.add(phoneNum);
+        return HttpUtil.downloadImage(list, fileDir).get(0);
+    }
+
+    /*************************************************************
+     *���ض���ͼƬ
+     *�ȱ���
+     *map.get("status") == 1 -> map.get("phoneNum") map.get("file")
+     *map.get("status") == -1 -> map.get("errorStr")
+     */
+    public static List<Map<String, Object>> getMultipleImage(List<String> phoneNumList, String fileDir)
+    {
+        return HttpUtil.downloadImage(phoneNumList, fileDir);
+    }
+
+
+    /**************************************************************
+     * ��������
      */
     private static JSONArray infoHelper(String phoneNum, String servlet)
     {
