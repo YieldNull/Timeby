@@ -54,9 +54,6 @@
             android:name=".gui.SettingPasswordActivity"
             android:label="@string/title_activity_reset_password" />
         <activity
-            android:name=".gui.SettingNotifyActivity"
-            android:label="@string/title_activity_setting_notify" />
-        <activity
             android:name=".gui.SettingFeedbackActivity"
             android:label="@string/title_activity_setting_feedback" />
         <activity
@@ -68,7 +65,7 @@
         <activity android:name=".gui.ReportActivity" />
         <activity android:name=".gui.MainConcludeActivity" />
         <activity android:name=".gui.MessageActivity" />
-        <activity android:name=".gui.MainReminderActivity" />
+        <activity android:name=".gui.SettingReminderActivity" />
 
         <activity android:name=".gui.ResetPasswordPhoneActivity" />
         <activity android:name=".gui.ResetPasswordActivity" />

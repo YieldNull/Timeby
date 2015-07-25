@@ -26,7 +26,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
 import static com.nectar.timeby.R.id.setting_page_logout_arrow;
@@ -184,7 +183,7 @@ public class SettingActivity extends Activity {
                     if (relativeLayout == chanPwdStrip)
                         intent.setClass(SettingActivity.this, ResetPasswordPhoneActivity.class);
                     else if (relativeLayout == timeNotiStrip)
-                        intent.setClass(SettingActivity.this, SettingNotifyActivity.class);
+                        intent.setClass(SettingActivity.this, SettingReminderActivity.class);
                     else if (relativeLayout == shareStrip)
                         showShare();
                     else if (relativeLayout == feedbackStrip)
