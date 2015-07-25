@@ -157,7 +157,7 @@ public class LoginActivity extends Activity {
         PrefsUtil.login(this, mUserStr, mPasswordStr, mPhoneStr);
 
         //进入MainActivity
-        Log.i(TAG, "Starting DemoActivity");
+        Log.i(TAG, "Starting MainActivity");
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);//进入主界面后将之前的Activity栈清空

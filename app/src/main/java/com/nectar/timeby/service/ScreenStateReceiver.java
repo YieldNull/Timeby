@@ -26,14 +26,14 @@ public class ScreenStateReceiver extends BroadcastReceiver {
         //将控制逻辑转给TimeCountService
 
         if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+            Log.i(TAG, "Screen on");
             if (PrefsUtil.isOnTask(context)) {
-                Log.i(TAG, "Screen on");
                 context.startService(TimeCountService
                         .genIntent(context, TimeCountService.TYPE_SCREEN_ON));
             }
         } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+            Log.i(TAG, "Screen off");
             if (PrefsUtil.isOnTask(context)) {
-                Log.i(TAG, "Screen off");
                 context.startService(TimeCountService
                         .genIntent(context, TimeCountService.TYPE_SCREEN_OFF));
             }

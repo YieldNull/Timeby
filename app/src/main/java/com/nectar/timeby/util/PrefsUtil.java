@@ -3,7 +3,7 @@ package com.nectar.timeby.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.nectar.timeby.gui.ResetPasswordActivity;
+import com.nectar.timeby.gui.*;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -13,6 +13,9 @@ import java.util.Map;
  * Created by finalize on 7/19/15.
  */
 public class PrefsUtil {
+    public static final String PREFS_MAP_INSTALL = "install";
+    public static final String PREFS_KEY_INSTALL_FIRST = "install_first";
+
     public static final String PREFS_MAP_USER = "user";
     public static final String PREFS_KEY_USER_NAME = "userName";
     public static final String PREFS_KEY_USER_PHONE = "phoneNum";
@@ -273,6 +276,20 @@ public class PrefsUtil {
                 PrefsUtil.PREFS_MAP_USER, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = setting.edit();
         editor.putString(PREFS_KEY_USER_PASSWORD, mPasswordStr);
+        editor.commit();
+    }
+
+    public static boolean isFirstUse(Context context) {
+        SharedPreferences install = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_INSTALL, Context.MODE_PRIVATE);
+        return install.getBoolean(PREFS_KEY_INSTALL_FIRST, true);
+    }
+
+    public static void setFirstUse(Context context, boolean isFirstUse) {
+        SharedPreferences install = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_INSTALL, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = install.edit();
+        editor.putBoolean(PREFS_KEY_INSTALL_FIRST, isFirstUse);
         editor.commit();
     }
 }

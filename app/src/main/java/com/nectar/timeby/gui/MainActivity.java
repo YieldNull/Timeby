@@ -13,12 +13,16 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
+import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.nectar.timeby.R;
 import com.nectar.timeby.gui.fragment.DrawerFragment;
 import com.nectar.timeby.gui.fragment.MainFragment;
 import com.nectar.timeby.gui.interfaces.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.interfaces.OnDrawerToggleClickListener;
+import com.nectar.timeby.service.AlarmListener;
+import com.nectar.timeby.service.BootReceiver;
 import com.nectar.timeby.service.PollingService;
+import com.nectar.timeby.service.ScreenService;
 import com.nectar.timeby.util.PrefsUtil;
 
 import java.lang.reflect.Field;
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity
         implements OnDrawerToggleClickListener,
         DrawerFragment.OnDrawerItemSelectedListener {
 
-    private static final String TAG = "DemoActivity";
+    private static final String TAG = "MainActivity";
     private DrawerLayout mDrawerLayout;
 
     private FragmentManager mFragmentManager;
@@ -41,18 +45,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.i(TAG, "Starting polling service");
-        Intent theIntent = new Intent(this, PollingService.class);
-        theIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startService(theIntent);
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_main);
         initDrawer();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         if (!PrefsUtil.isLogin(this)) {
             Log.i(TAG, "Not login, entering login activity");
@@ -69,7 +63,19 @@ public class MainActivity extends AppCompatActivity
             finish();
             return;
         }
+
+        if (PrefsUtil.isFirstUse(this)) {
+            PrefsUtil.setFirstUse(this, false);
+
+            Log.i(TAG, "App first use, starting polling service");
+            WakefulIntentService.scheduleAlarms(new AlarmListener(), this, false);
+
+
+            Log.i(TAG, "Starting ScreenService");
+            startService(new Intent(this, ScreenService.class));
+        }
     }
+
 
     /**
      * 初始化抽屉
