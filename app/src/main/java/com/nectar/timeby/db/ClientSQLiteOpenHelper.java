@@ -19,8 +19,10 @@ public class ClientSQLiteOpenHelper extends SQLiteOpenHelper {
                 "userName VARCHAR(20),nickName VARCHAR(20),sex VARCHAR(3) DEFAULT '男'," +
                 "headImage VARCHAR(40),password VARCHAR(20),age INTEGER DEFAULT 0," +
                 "numberOfShell INTEGER,numberOfHammer INTEGER)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS l(phoneNumberB VARCHAR(20),phoneNumberA VARCHAR(20),remark VARCHAR(20)," +
+        db.execSQL("CREATE TABLE IF NOT EXISTS Friendship(phoneNumberB VARCHAR(20),phoneNumberA VARCHAR(20),remark VARCHAR(20)," +
                 "PRIMARY KEY(phoneNumberB,phoneNumberA),FOREIGN KEY (phoneNumberB) REFERENCES User(phoneNumber),FOREIGN KEY (phoneNumberA) REFERENCES User(phoneNumber))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Task(startTime INTEGER,endTime INTEGER,phoneNumberA VARCHAR(20)," +
+                "taskContent VARCHAR(20),foucusDegree INTEGER,Effiency INTEGER,SuccessOrNot INTEGER,PRIMARY KEY(phoneNumberA,startTime))");
     }
 
     @Override
