@@ -38,6 +38,7 @@ public class ClientDao {
 
     /*
      *然后是完善用户信息时，对用户的那条数据进行更新
+     * 参数：属性名，属性值
      */
     public int updateUserInfo(String attribute, String value) {
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -135,11 +136,13 @@ public class ClientDao {
 
     /*
      *查询好友信息
+     * 参数：用户号码
      */
-    public ArrayList<FriendShip> findFriendInfo() {
+    public ArrayList<FriendShip> findFriendInfo(String phoneNumberA) {
         SQLiteDatabase db = helper.getReadableDatabase();
         ArrayList<FriendShip> friendShips = new ArrayList<FriendShip>();
-        Cursor cursor = db.query("Friendship", new String[]{"phoneNumberB", "phoneNumberA", "remark"}, null, null, null, null, null);
+        //好吧，这里好像还有点问题
+        Cursor cursor = db.query("Friendship", new String[]{"phoneNumberB", "phoneNumberA", "remark"}, "phoneNumberA=?", new String[]{phoneNumberA}, null, null, null);
         while (cursor.moveToNext()) {
             FriendShip friendShip = new FriendShip();
             friendShip.setPhoneNumberB(cursor.getString(cursor.getColumnIndex("phoneNumberB")));
@@ -150,5 +153,56 @@ public class ClientDao {
         db.close();
         return friendShips;
     }
+
+
+    /**
+     * 任务表操作：
+     *
+     */
+
+     // 鉴于失败任务不需要填写相关的信息，故新建任务时只需要起止时间及用户信息
+     public long addTask(String startTime,String endTime, String phoneNumberA){
+         SQLiteDatabase db = helper.getWritableDatabase();
+         ContentValues content = new ContentValues();
+         content.put("phoneNumberA",phoneNumberA);
+         content.put("startTime",startTime);
+         content.put("endTime",endTime);
+         long result = db.insert("Task", null, content);
+         db.close();
+         return result;
+     }
+
+    /*然后是完善信息部分，就是填写成功与否，还有专注度及效率，，，这里成功与否用Integer值 1和0进行区分
+     *鉴于你妹的，需要什么多用户，所以完善信息时需要传主键，也就是用户号码及任务开始时间
+     */
+    public void updateTask(String phoneNumberA,int startTime,String attribute,String value){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        db.execSQL("UPDATE Task SET " + attribute + " = " + value + "where phoneNumberA = " + phoneNumberA + " AND startTime = " + startTime);
+    }
+
+    /**
+     * 查询任务的内容
+     * 参数：用户号码
+     */
+    public ArrayList<Task> queryTimeOfTask(String phoneNumberA){
+        SQLiteDatabase db = helper.getReadableDatabase();
+        ArrayList<Task> tasks = new ArrayList<Task>();
+        Cursor cursor = db.query("Task",new String[]{"startTime","endTime","taskContent","foucusDegree","efficiency","successOrNot"},null,null,null,null,null);
+        while (cursor.moveToNext()) {
+            Task task = new Task();
+            task.setStartTime(cursor.getInt(cursor.getColumnIndex("startTime")));
+            task.setEndTime(cursor.getInt(cursor.getColumnIndex("endTime")));
+            task.setTaskContent(cursor.getString(cursor.getColumnIndex("taskContent")));
+            task.setFoucusDegree(cursor.getInt(cursor.getColumnIndex("foucusDegree")));
+            task.setEfficiency(cursor.getInt(cursor.getColumnIndex("efficiency")));
+            task.setSuccessOrNot(cursor.getInt(cursor.getColumnIndex("successOrNot")));
+        }
+        db.close();
+        return tasks;
+    }
+
+
+
+
 
 }
