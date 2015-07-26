@@ -5,7 +5,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
-import com.nectar.timeby.service.ordered.MessageReceiver;
+import com.nectar.timeby.service.MessageReceiver;
 import com.nectar.timeby.util.HttpProcess;
 
 import org.json.JSONArray;
@@ -121,7 +121,7 @@ public class PollingService extends WakefulIntentService {
         intent.putExtra(MessageReceiver.INTENT_EXTRA_REMARK, name);
 
         intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_FRIENDS_ADD_SUCCESS);
-        sendBroadcast(intent);
+        sendOrderedBroadcast(intent,null);
 
     }
 
@@ -137,7 +137,7 @@ public class PollingService extends WakefulIntentService {
         intent.putExtra(MessageReceiver.INTENT_EXTRA_REMARK, name);
 
         intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_FRIENDS_ADD_REQUEST);
-        sendBroadcast(intent);
+        sendOrderedBroadcast(intent,null);
     }
 
     @Override

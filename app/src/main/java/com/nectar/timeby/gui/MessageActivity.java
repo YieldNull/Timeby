@@ -10,17 +10,17 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.nectar.timeby.R;
+import com.nectar.timeby.db.ClientDao;
+import com.nectar.timeby.db.Message;
 import com.nectar.timeby.gui.fragment.SysMsgFragment;
 import com.nectar.timeby.gui.fragment.UserMsgFragment;
 import com.nectar.timeby.gui.widget.TopNotification;
-import com.nectar.timeby.service.ordered.MessageReceiver;
+import com.nectar.timeby.service.MessageReceiver;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -87,35 +87,6 @@ public class MessageActivity extends Activity {
                 onBackPressed();
             }
         });
-    }
-
-
-    //在主界面时使用优先级较高的Receiver截断广播，不使用Notification，直接在主界面提示
-    private BroadcastReceiver onNotify = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String content = intent.getStringExtra(MessageReceiver.INTENT_EXTRA_CONTENT);
-            new TopNotification(MessageActivity.this, content, 3 * 1000).show();
-
-            abortBroadcast();
-        }
-    };
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Log.i(TAG, "onResume");
-        IntentFilter filter = new IntentFilter(MessageReceiver.INTENT_ACTION);
-        filter.setPriority(2);
-        registerReceiver(onNotify, filter);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        unregisterReceiver(onNotify);
     }
 
     private void setDefaultFragment() {

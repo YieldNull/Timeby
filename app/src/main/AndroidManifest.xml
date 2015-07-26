@@ -157,11 +157,11 @@
             android:exported="false"></service>
 
         <receiver
-            android:name=".service.ordered.MessageReceiver"
+            android:name=".service.MessageReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.nectar.timeby.service.ordered.MessageReceiver.BROADCAST" />
+                <action android:name="com.nectar.timeby.service.MessageReceiver.BROADCAST" />
             </intent-filter>
         </receiver>
     </application>

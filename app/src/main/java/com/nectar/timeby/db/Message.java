@@ -7,7 +7,22 @@ import java.util.Date;
  * Created by finalize on 7/26/15.
  */
 public class Message {
-    //long time, String title, String content, int type, int disposed
+
+    public static final int MSG_TYPE_SYSTEM = 0;
+    public static final int MSG_TYPE_USER = 1;
+    public static final int MSG_DISPOSED_NOT = 0;
+    public static final int MSG_DISPOSED_AGREE = 1;
+    public static final int MSG_DISPOSED_REFUSE = 2;
+
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     private int type;
     private int disposed;

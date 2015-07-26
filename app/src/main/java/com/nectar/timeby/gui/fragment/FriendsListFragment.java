@@ -72,21 +72,21 @@ public class FriendsListFragment extends Fragment {
 
 
     private void getFriends() {
-        //如果本地已经有好友信息，则使用本地的信息
-        ArrayList<FriendShip> friends = mDBManager.findFriendInfo(mPhone);
-        if (friends.size() != 0) {
-            Log.i(TAG, "Read contacts from local database");
-
-            for (FriendShip f : friends) {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put(MAP_KEY_PHONE, f.getPhoneNumberB());
-                map.put(MAP_KEY_NICKNAME, f.getRemark());
-                mFriendsList.add(map);
-
-                mListAdapter.notifyDataSetChanged();
-            }
-            return;
-        }
+//        //如果本地已经有好友信息，则使用本地的信息
+//        ArrayList<FriendShip> friends = mDBManager.findFriendInfo(mPhone);
+//        if (friends.size() != 0) {
+//            Log.i(TAG, "Read contacts from local database");
+//
+//            for (FriendShip f : friends) {
+//                Map<String, String> map = new HashMap<String, String>();
+//                map.put(MAP_KEY_PHONE, f.getPhoneNumberB());
+//                map.put(MAP_KEY_NICKNAME, f.getRemark());
+//                mFriendsList.add(map);
+//
+//                mListAdapter.notifyDataSetChanged();
+//            }
+//            return;
+//        }
 
         //如果本地没有好友信息，先将信息从服务器搞下来，然后存入本地
         new Thread(new Runnable() {

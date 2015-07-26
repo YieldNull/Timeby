@@ -142,7 +142,7 @@ public class ClientDao {
         SQLiteDatabase db = helper.getReadableDatabase();
         ArrayList<FriendShip> friendShips = new ArrayList<FriendShip>();
         //好吧，这里好像还有点问题
-        Cursor cursor = db.query("Friendship", new String[]{"phoneNumberB", "phoneNumberA", "remark"}, "phoneNumberA=?", new String[]{phoneNumberA}, null, null, null);
+        Cursor cursor = db.query("Friendship", new String[]{"phoneNumberB", "phoneNumberA", "remark"}, "phoneNumberA=?", new String[]{phoneNumberA}, null, null, "remark");
         while (cursor.moveToNext()) {
             FriendShip friendShip = new FriendShip();
             friendShip.setPhoneNumberB(cursor.getString(cursor.getColumnIndex("phoneNumberB")));
@@ -209,13 +209,14 @@ public class ClientDao {
      * @param type     消息类型，0为系统消息，1为用户消息。系统消息没有标题
      * @param disposed 是否处理过，0为没有处理，1表示处理了，系统消息此字段为null
      */
-    public void addMessage(long time, String title, String content, int type, int disposed) {
+    public void addMessage(long time, String title, String content, String phoneNum, int type, int disposed) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues contentV = new ContentValues();
         contentV.put("time", time);
         contentV.put("title", title);
         contentV.put("content", content);
         contentV.put("type", type);
+        contentV.put("phoneNum", phoneNum);
         contentV.put("disposed", disposed);
         db.insert("Message", null, contentV);
         db.close();
@@ -232,11 +233,12 @@ public class ClientDao {
         ArrayList<Message> messages = new ArrayList<Message>();
 
         Cursor cursor = db.query("Message",
-                new String[]{"type", "disposed", "time", "title", "content", "phoneNum"},
-                "type=?", new String[]{type + ""}, null, null, null);
+                new String[]{"_id", "type", "disposed", "time", "title", "content", "phoneNum"},
+                "type=?", new String[]{type + ""}, null, null, "time desc");
 
         while (cursor.moveToNext()) {
             Message message = new Message();
+            message.setId(cursor.getInt(cursor.getColumnIndex("_id")));
             message.setType(cursor.getInt(cursor.getColumnIndex("type")));
             message.setDisposed(cursor.getInt(cursor.getColumnIndex("disposed")));
             message.setTime(cursor.getLong(cursor.getColumnIndex("time")));
@@ -249,5 +251,17 @@ public class ClientDao {
         db.close();
 
         return messages;
+    }
+
+
+    /**
+     * 更新消息的处理状态
+     *
+     * @param msg
+     */
+    public void updateMessage(Message msg) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        db.execSQL("UPDATE Message SET disposed =" + msg.getDisposed()
+                + " WHERE _id= " + msg.getId());
     }
 }

@@ -43,6 +43,10 @@ public class AddFriendsFromContact extends Activity {
     private static final String CONTACT_MAP_KEY_NAME = "name";
 
     private static final int MSG_REFRESH_LIST = 0x0001;
+    private static final int MSG_SERVER_ERROR = 0x0002;
+    private static final int MSG_SUCCESS = 0x0003;
+    private static final int MSG_FAILURE = 0x0004;
+
     private static final String MAP_KEY_PHONE = "phone";
     private static final String MAP_KEY_NICKNAME = "nickname";
 
@@ -73,9 +77,25 @@ public class AddFriendsFromContact extends Activity {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if (msg.what == MSG_REFRESH_LIST) {
-                    Log.i(TAG, "REFRESH");
-                    mContactListAdapter.notifyDataSetChanged();
+
+                switch (msg.what) {
+                    case MSG_REFRESH_LIST:
+                        Log.i(TAG, "REFRESH");
+                        mContactListAdapter.notifyDataSetChanged();
+                        break;
+                    case MSG_SERVER_ERROR:
+                        Toast.makeText(AddFriendsFromContact.this,
+                                "服务器错误，请稍后再试", Toast.LENGTH_SHORT).show();
+                        break;
+                    case MSG_FAILURE:
+                        Toast.makeText(AddFriendsFromContact.this, "您已发送申请，请等待对方回复", Toast.LENGTH_SHORT).show();
+                        break;
+                    case MSG_SUCCESS:
+                        Toast.makeText(AddFriendsFromContact.this,
+                                "已发送申请", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
                 }
             }
         };
@@ -161,8 +181,6 @@ public class AddFriendsFromContact extends Activity {
                                 mTextButton.setText("已申请");
                                 mTextButton.setTextColor(getResources()
                                         .getColor(R.color.add_friends_from_contact_added));
-                                Toast.makeText(AddFriendsFromContact.this,
-                                        "已发送申请", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -190,13 +208,20 @@ public class AddFriendsFromContact extends Activity {
                 try {
                     if (data.get("status").equals(-1)) {
                         Log.i(TAG, "sendAddRequest:server error");
+                        mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
+
                     } else if (data.get("status").equals(0)) {
                         Log.i(TAG, "sendAddRequest:server error");
+                        mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
+
                     } else if (data.get("status").equals(1)) {
                         if (data.getString("result").equals("true")) {
                             Log.i(TAG, "sendAddRequest:success");
+                            mHandler.sendEmptyMessage(MSG_SUCCESS);
+
                         } else if (data.getString("result").equals("false")) {
                             Log.i(TAG, "sendAddRequest:failure");
+                            mHandler.sendEmptyMessage(MSG_FAILURE);
                         }
                     }
                 } catch (JSONException e) {

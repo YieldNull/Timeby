@@ -7,8 +7,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.nectar.timeby.gui.MainActivity;
-import com.nectar.timeby.service.ordered.MessageReceiver;
+import com.nectar.timeby.service.MessageReceiver;
 import com.nectar.timeby.util.PrefsUtil;
 
 
