@@ -156,6 +156,8 @@ public class TimeCountService extends Service {
                     Log.i(TAG, "Arrived end time,counter quit!");
                     mCountDownTimer.cancel();
 
+                    sendFinishBroadcast();
+
                     stopSelf();
                 }
             }
@@ -173,12 +175,21 @@ public class TimeCountService extends Service {
         mCountDownTimer.start();
     }
 
+    private void sendFinishBroadcast() {
+        Intent intent = new Intent();
+        intent.setAction(MessageReceiver.INTENT_ACTION);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TITLE, "任务成功");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_CONTENT, "您的任务成功完成");
+        intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_TASK_SUCCESS);
+        sendBroadcast(intent);
+    }
+
     private void sendFailBroadcast() {
         Intent intent = new Intent();
         intent.setAction(MessageReceiver.INTENT_ACTION);
         intent.putExtra(MessageReceiver.INTENT_EXTRA_TITLE, "任务失败");
         intent.putExtra(MessageReceiver.INTENT_EXTRA_CONTENT, "离开APP过长时间，您的任务失败");
-        intent.putExtra(MessageReceiver.INTENT_FLAG,MessageReceiver.FLAG_TASK_FAIL);
+        intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_TASK_FAIL);
         sendBroadcast(intent);
     }
 }

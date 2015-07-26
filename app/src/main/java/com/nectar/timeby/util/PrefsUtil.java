@@ -1,5 +1,6 @@
 package com.nectar.timeby.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -290,6 +291,24 @@ public class PrefsUtil {
     }
 
     /**
+     * 取消任务
+     *
+     * @param context
+     */
+    public static void cancelTask(Context context) {
+        SharedPreferences task = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = task.edit();
+
+        editor.putLong(PREFS_KEY_TASK_START_TIME_MILLIS, 0);
+        editor.putLong(PREFS_KEY_TASK_END_TIME_MILLIS, 0);
+        editor.putInt(PREFS_KEY_TASK_TYPE, -1);
+        editor.putBoolean(PREFS_KEY_TASK_FAIL, false);
+        editor.commit();
+    }
+
+    /**
      * 获取任务结束时间
      *
      * @param context
@@ -297,6 +316,10 @@ public class PrefsUtil {
      */
     public static long getTaskEndTime(Context context) {
         return readTask(context).get(PREFS_KEY_TASK_END_TIME_MILLIS);
+    }
+
+    public static long getTaskStartTime(Context context) {
+        return readTask(context).get(PREFS_KEY_TASK_START_TIME_MILLIS);
     }
 
     /**
@@ -402,4 +425,5 @@ public class PrefsUtil {
         editor.putBoolean(PREFS_KEY_DRAWER_NOTIFY, hasRefresh);
         editor.commit();
     }
+
 }

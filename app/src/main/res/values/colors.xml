@@ -41,4 +41,5 @@
     <color name="layout_divider">#598a84</color>
     <color name="add_friends_from_contact_added">#a7a6a6</color>
     <color name="msg_select">#583b2b</color>
+    <color name="friends_list_request">#bdefda</color>
 </resources>

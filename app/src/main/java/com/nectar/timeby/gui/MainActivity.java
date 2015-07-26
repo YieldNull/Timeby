@@ -37,9 +37,10 @@ public class MainActivity extends AppCompatActivity
         implements OnDrawerToggleClickListener,
         DrawerFragment.OnDrawerItemSelectedListener {
 
+    public static final String EXRAL_NOTIFY_CONTENT = "notify_content";
     private static final String TAG = "MainActivity";
-    private DrawerLayout mDrawerLayout;
 
+    private DrawerLayout mDrawerLayout;
     private FragmentManager mFragmentManager;
     private OnDrawerStatusChangedListener mDrawerStatusChangedListener;
 
@@ -78,6 +79,11 @@ public class MainActivity extends AppCompatActivity
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_main);
         initDrawer();
 
+        //显示顶部提示
+        String content = getIntent().getStringExtra(EXRAL_NOTIFY_CONTENT);
+        if (content != null) {
+            new TopNotification(this, content, 3000).show();
+        }
     }
 
 

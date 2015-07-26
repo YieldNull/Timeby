@@ -30,10 +30,6 @@ import java.util.Map;
 public class CountDownActivity extends Activity {
 
     private static final String TAG = "CountDownActivity";
-    public static final int TASK_TYPE_SOLO = 0x0001;
-    public static final int TASK_TYPE_COOPER = 0x0002;
-    public static final int TASK_TYPE_PK = 0x0003;
-
     private static final int MSG_CLOCK_TICK = 0x0004;
     private static final int MSG_CLOCK_STOP = 0x0005;
 
@@ -103,6 +99,10 @@ public class CountDownActivity extends Activity {
                     case MSG_CLOCK_STOP:
                         refreshTimeText();
                         mHandler.removeCallbacks(mTickRunnable);
+
+                        startActivity(new Intent(
+                                CountDownActivity.this, MainConcludeActivity.class));
+
                         break;
                 }
             }

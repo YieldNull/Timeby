@@ -20,6 +20,7 @@ import com.mob.tools.MobUIShell;
 import com.nectar.timeby.R;
 import com.nectar.timeby.gui.AddFriendsFromContact;
 import com.nectar.timeby.gui.CountDownActivity;
+import com.nectar.timeby.gui.FriendsActivity;
 import com.nectar.timeby.gui.interfaces.OnDrawerStatusChangedListener;
 import com.nectar.timeby.gui.interfaces.OnDrawerToggleClickListener;
 import com.nectar.timeby.gui.widget.ClockWidget;
@@ -45,12 +46,25 @@ public class MainFragment extends Fragment
         implements OnDrawerStatusChangedListener {
 
     private static final String TAG = "MainFragment";
+    public static final String INTENT_TASK_TYPE = "task_type";
 
-    private ImageView mDrawerToggle;
+    public static final int TASK_TYPE_SOLO = 0x0001;
+    public static final int TASK_TYPE_COOPER = 0x0002;
+    public static final int TASK_TYPE_PK = 0x0003;
+
+    //用于切换起始时间的更改，当点击结束时间时为true
+    private boolean isEndSet;
+    private boolean isEndOnSetting;
+    private static int TYPE_START = 0x0001;
+    private static int TYPE_END = 0x0002;
+
+
     private TaskTypeSelectDialog mTaskTypeSelectDialog;
-    private ClockWidget mClockWidget;
     private OnDrawerToggleClickListener mListener;
 
+    private ClockWidget mClockWidget;
+
+    private ImageView mDrawerToggle;
     private TextView mStartAPMText;
     private TextView mStartHourText;
     private TextView mStartMinText;
@@ -63,11 +77,6 @@ public class MainFragment extends Fragment
     private int mCurrHour;
     private int mCurrMinu;
 
-    //用于切换起始时间的更改，当点击结束时间时为true
-    private boolean isEndSet;
-    private boolean isEndOnSetting;
-    private static int TYPE_START = 0x0001;
-    private static int TYPE_END = 0x0002;
 
     private int mSumMin, mStartHour, mStartMin, mEndHour, mEndMin;
 
@@ -145,7 +154,7 @@ public class MainFragment extends Fragment
                 if (PrefsUtil.hasTask(getActivity())) {
                     new TopNotification(getActivity(), "有任务尚未开始", 4 * 1000).show();
                 } else if (mSumMin == 0) {
-                    new TopNotification(getActivity(), "请先设置任务时间", 4 * 1000).show();
+                    new TopNotification(getActivity(), "开始、结束时间不能相同", 4 * 1000).show();
                 } else {
                     mTaskTypeSelectDialog.showDialog();
                 }
@@ -157,17 +166,19 @@ public class MainFragment extends Fragment
         mTaskTypeSelectDialog.setSelectDialogListener(new TaskTypeSelectDialog.DialogListener() {
             @Override
             public void onSelectSolo() {
-                setAlarm(CountDownActivity.TASK_TYPE_SOLO);
+                setAlarm(TASK_TYPE_SOLO);
             }
 
             @Override
             public void onSelectCooper() {
-                setAlarm(CountDownActivity.TASK_TYPE_COOPER);
+                Log.i(TAG, "cooper");
+                setAlarm(TASK_TYPE_COOPER);
             }
 
             @Override
             public void onSelectPK() {
-                setAlarm(CountDownActivity.TASK_TYPE_PK);
+                Log.i(TAG, "pk");
+                setAlarm(TASK_TYPE_PK);
             }
 
             @Override
@@ -327,17 +338,32 @@ public class MainFragment extends Fragment
         AlarmManager manager = (AlarmManager) getActivity()
                 .getSystemService(Context.ALARM_SERVICE);
 
-        Intent intent = new Intent(getActivity(), CountDownActivity.class);
+
+        manager.set(AlarmManager.RTC_WAKEUP, triggerTime, getAlarmIntent(getActivity()));
+
+
+        if (type == TASK_TYPE_SOLO) {
+            new TopNotification(getActivity(), getStartTimeHint(DValue), 3 * 1000).show();
+        } else {
+            Intent i = new Intent(getActivity(), FriendsActivity.class);
+            i.putExtra(INTENT_TASK_TYPE, type);
+            startActivity(i);
+        }
+    }
+
+    private static PendingIntent getAlarmIntent(Context context) {
+        Intent intent = new Intent(context, CountDownActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                intent, 0);
+        return pendingIntent;
+    }
 
-        manager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
-
-
-        new TopNotification(getActivity(), getStartTimeHint(DValue), 3 * 1000).show();
-
+    public static void cancelAlarm(Context context) {
+        AlarmManager manager = (AlarmManager) context
+                .getSystemService(Context.ALARM_SERVICE);
+        manager.cancel(getAlarmIntent(context));
     }
 
     /**

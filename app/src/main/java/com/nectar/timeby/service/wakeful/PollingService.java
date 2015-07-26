@@ -5,12 +5,17 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
+import com.nectar.timeby.gui.fragment.MainFragment;
 import com.nectar.timeby.service.MessageReceiver;
 import com.nectar.timeby.util.HttpProcess;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 
 /**
@@ -42,6 +47,11 @@ public class PollingService extends WakefulIntentService {
         }).start();
     }
 
+    /**
+     * 分析从服务器获取到的数据
+     *
+     * @param data
+     */
     private void analyseData(JSONArray data) {
         try {
             JSONObject statusJson = data.getJSONObject(0);
@@ -69,16 +79,17 @@ public class PollingService extends WakefulIntentService {
                             String phoneNum = messageJson.getString("phonenumB");
                             String name = messageJson.getString("name");
 
-                            handAddFriendSuccess(phoneNum, name);
+                            handleAddFriendSuccess(phoneNum, name);
                         }
                         //申请任务消息(type 1:合作模式 2:竞争模式）
                         else if (messageJson.getString("messageType").equals("3")) {
-//                            str = "申请者：" + messageJson.getString("phonenumA")
-//                                    + ", 申请者备注：" + messageJson.getString("remark")
-//                                    + ", 用户：" + messageJson.getString("phonenumB")
-//                                    + ", 开始时间：" + messageJson.getString("starttime")
-//                                    + ", 结束时间：" + messageJson.getString("endtime")
-//                                    + ", 类型：" + messageJson.getString("type");
+                            String phoneNum = messageJson.getString("phonenumA");
+                            String name = messageJson.getString("remark");
+                            String startTime = messageJson.getString("starttime");
+                            String endTime = messageJson.getString("endtime");
+                            String typeStr = messageJson.getString("type");
+
+                            handleTaskRequest(phoneNum, name, startTime, endTime, typeStr);
                         }
                         //申请任务消息成功反馈
                         else if (messageJson.getString("messageType").equals("4")) {
@@ -109,7 +120,57 @@ public class PollingService extends WakefulIntentService {
         }
     }
 
-    private void handAddFriendSuccess(String phoneNum, String name) {
+    /**
+     * 处理任务合作申请
+     *
+     * @param phoneNum
+     * @param name
+     * @param startTime
+     * @param endTime
+     * @param typeStr
+     */
+    private void handleTaskRequest(String phoneNum, String name,
+                                   String startTime, String endTime, String typeStr) {
+
+        Log.i(TAG, "Receive task request");
+        Log.i(TAG, "user:" + name + " phone:" + phoneNum);
+        Log.i(TAG, "Start time:" + startTime);
+        Log.i(TAG, "End time:" + endTime);
+
+        //类型转int
+        int type = 0;
+        String typeMsg = "";
+        if (typeStr.equals("1")) {
+            type = MainFragment.TASK_TYPE_COOPER;
+            typeMsg = "合作";
+            Log.i(TAG, "Type:Cooperation");
+        } else {
+            type = MainFragment.TASK_TYPE_PK;
+            typeMsg = "PK";
+            Log.i(TAG, "Type:PK");
+        }
+
+        Intent intent = new Intent();
+        intent.setAction(MessageReceiver.INTENT_ACTION);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TITLE, "任务申请");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_CONTENT, name + "申请与您" + typeMsg + "完成任务");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_PHONE, phoneNum);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_REMARK, name);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TASK_START_TIME, startTime);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TASK_END_TIME, endTime);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TASK_TYPE, type);
+
+        intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_TASK_REQUEST);
+        sendOrderedBroadcast(intent, null);
+    }
+
+    /**
+     * 处理添加好友成功消息
+     *
+     * @param phoneNum
+     * @param name
+     */
+    private void handleAddFriendSuccess(String phoneNum, String name) {
         Log.i(TAG, "Add friend success");
         Log.i(TAG, "user:" + name + " phone:" + phoneNum);
 
@@ -121,10 +182,15 @@ public class PollingService extends WakefulIntentService {
         intent.putExtra(MessageReceiver.INTENT_EXTRA_REMARK, name);
 
         intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_FRIENDS_ADD_SUCCESS);
-        sendOrderedBroadcast(intent,null);
-
+        sendOrderedBroadcast(intent, null);
     }
 
+    /**
+     * 处理好友申请
+     *
+     * @param phoneNum
+     * @param name
+     */
     private void handleAddFriendRequest(String phoneNum, String name) {
         Log.i(TAG, "Received add friend request");
         Log.i(TAG, "user:" + name + " phone:" + phoneNum);
@@ -137,18 +203,7 @@ public class PollingService extends WakefulIntentService {
         intent.putExtra(MessageReceiver.INTENT_EXTRA_REMARK, name);
 
         intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_FRIENDS_ADD_REQUEST);
-        sendOrderedBroadcast(intent,null);
+        sendOrderedBroadcast(intent, null);
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
-    }
 }
