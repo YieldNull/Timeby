@@ -30,5 +30,5 @@ dependencies {
     compile 'uk.co.chrisjenx:calligraphy:2.1.0'
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     compile 'com.commonsware.cwac:wakeful:1.0.+'
-    compile files('libs/httpmime-4.2.5.jar')
+    compile 'com.baoyz.swipemenulistview:library:1.2.1'
 }

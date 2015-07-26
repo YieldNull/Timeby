@@ -101,7 +101,7 @@ public class CountDownActivity extends Activity {
                         mHandler.removeCallbacks(mTickRunnable);
 
                         startActivity(new Intent(
-                                CountDownActivity.this, MainConcludeActivity.class));
+                                CountDownActivity.this, ConcludeActivity.class));
 
                         break;
                 }

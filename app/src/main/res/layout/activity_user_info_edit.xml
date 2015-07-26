@@ -49,9 +49,9 @@
 
             <ImageView
                 android:id="@+id/imageView_user_edit_photo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_user_headimg_default" />
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:src="@drawable/ic_launcher" />
         </LinearLayout>
 
         <LinearLayout

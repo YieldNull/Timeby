@@ -11,7 +11,7 @@ import android.util.Log;
 import com.nectar.timeby.R;
 import com.nectar.timeby.db.ClientDao;
 import com.nectar.timeby.db.Message;
-import com.nectar.timeby.gui.MainConcludeActivity;
+import com.nectar.timeby.gui.ConcludeActivity;
 import com.nectar.timeby.gui.MessageActivity;
 import com.nectar.timeby.util.PrefsUtil;
 
@@ -97,7 +97,7 @@ public class MessageReceiver extends BroadcastReceiver {
                     null, Message.MSG_TYPE_SYSTEM, Message.MSG_DISPOSED_NOT);
 
             //设置跳转
-            reIntent = new Intent(context, MainConcludeActivity.class);
+            reIntent = new Intent(context, ConcludeActivity.class);
             reIntent.putExtra(INTENT_FLAG, FLAG_TASK_FAIL);
 
         } else if (flag == FLAG_FRIENDS_ADD_SUCCESS) {//添加好友成功

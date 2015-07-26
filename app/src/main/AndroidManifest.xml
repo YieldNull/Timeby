@@ -64,7 +64,7 @@
             android:name=".gui.AddFriendsFromContact"
             android:label="@string/title_activity_add_friends_by_maillist" />
         <activity android:name=".gui.ReportActivity" />
-        <activity android:name=".gui.MainConcludeActivity" />
+        <activity android:name=".gui.ConcludeActivity" />
         <activity android:name=".gui.MessageActivity" />
         <activity android:name=".gui.SettingReminderActivity" />
         <activity android:name=".gui.ResetPasswordPhoneActivity" />

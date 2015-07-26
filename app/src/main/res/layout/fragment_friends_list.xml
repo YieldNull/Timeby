@@ -5,17 +5,15 @@
     android:background="@color/friends_select"
     android:orientation="vertical">
 
-    <ListView
+
+    <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/listView_friends_contacts"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="1dip"
         android:layout_marginRight="1dip"
-        android:layout_weight="1.0"
-        android:divider="#ffffe3"
-        android:scrollbars="none"
-        android:scrollingCache="true"></ListView>
+        android:scrollbars="none" />
 
 </LinearLayout>
 

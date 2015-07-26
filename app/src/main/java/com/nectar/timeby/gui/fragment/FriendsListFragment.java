@@ -2,8 +2,8 @@ package com.nectar.timeby.gui.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,20 +12,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.nectar.timeby.R;
 import com.nectar.timeby.db.ClientDao;
 import com.nectar.timeby.db.FriendShip;
-import com.nectar.timeby.gui.MainActivity;
 import com.nectar.timeby.gui.interfaces.OnSubmitTaskListener;
-import com.nectar.timeby.gui.widget.TopNotification;
 import com.nectar.timeby.util.HttpProcess;
 import com.nectar.timeby.util.PrefsUtil;
 
@@ -66,7 +66,7 @@ public class FriendsListFragment extends Fragment
 
     private ArrayList<Map<String, String>> mFriendsList;
     private ContactListAdapter mListAdapter;
-    private ListView mListView;
+    private SwipeMenuListView mListView;
 
     //如果是选择用户共同完成任务，此为合作方手机号列表
     private ArrayList<String> mCoopFriends;
@@ -91,7 +91,7 @@ public class FriendsListFragment extends Fragment
         if (getArguments() != null) {
             mTaskType = getArguments().getInt(ARG_PARAM_TASK_TYPE);
 
-            mCoopFriends=new ArrayList<>();
+            mCoopFriends = new ArrayList<>();
         }
     }
 
@@ -99,9 +99,26 @@ public class FriendsListFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View mRootView = inflater.inflate(R.layout.fragment_friends_list, container, false);
 
-        mListView = (ListView) mRootView.findViewById(R.id.listView_friends_contacts);
-        mFriendsList = new ArrayList<>();
+        mPhone = PrefsUtil.getUserPhone(getActivity());
+        mDBManager = new ClientDao(getActivity());
 
+        mFriendsList = new ArrayList<>();
+        mListView = (SwipeMenuListView) mRootView.findViewById(R.id.listView_friends_contacts);
+
+        initHandler();
+
+        if (mTaskType == -1) {
+            initSwipeMenu();
+        }
+
+        mListAdapter = new ContactListAdapter();
+        mListView.setAdapter(mListAdapter);
+
+        getFriends();
+        return mRootView;
+    }
+
+    private void initHandler() {
         mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -128,14 +145,62 @@ public class FriendsListFragment extends Fragment
                 }
             }
         };
-        mPhone = PrefsUtil.getUserPhone(getActivity());
-        mDBManager = new ClientDao(getActivity());
+    }
 
-        mListAdapter = new ContactListAdapter();
-        mListView.setAdapter(mListAdapter);
+    private void initSwipeMenu() {
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                // create "open" item
+                SwipeMenuItem openItem = new SwipeMenuItem(
+                        getActivity().getApplicationContext());
+                // set item background
+                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
+                        0xCE)));
+                // set item width
+                openItem.setWidth(120);
+                // set item title
+                openItem.setTitle("备注");
+                // set item title fontsize
+                openItem.setTitleSize(16);
+                // set item title font color
+                openItem.setTitleColor(Color.WHITE);
+                // add to menu
+                menu.addMenuItem(openItem);
 
-        getFriends();
-        return mRootView;
+
+                SwipeMenuItem deleteItem = new SwipeMenuItem(
+                        getActivity().getApplicationContext());
+                // set item background
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                        0x3F, 0x25)));
+                // set item width
+                deleteItem.setWidth(120);
+                // set
+                deleteItem.setTitle("删除");
+                deleteItem.setTitleSize(16);
+                deleteItem.setTitleColor(Color.WHITE);
+                // add to menu
+                menu.addMenuItem(deleteItem);
+            }
+        };
+
+        mListView.setMenuCreator(creator);
+
+        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu swipeMenu, int index) {
+                switch (index) {
+                    case 0:
+                        Log.i(TAG, position + "Remark");
+                        break;
+                    case 1:
+                        Log.i(TAG, position + "Delete");
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     public static FriendsListFragment newInstance(int taskType) {
@@ -206,7 +271,7 @@ public class FriendsListFragment extends Fragment
         final JSONArray jsonArray = new JSONArray();
         for (String phone : mCoopFriends) {
             jsonArray.put(phone);
-            Log.i(TAG,phone);
+            Log.i(TAG, phone);
         }
 
         int type = mTaskType == MainFragment.TASK_TYPE_COOPER ? 1 : 2;

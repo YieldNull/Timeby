@@ -251,7 +251,6 @@ public class UserInfoEditActivity extends Activity {
             ImageView mImageView;
         }
 
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View itemView = convertView;

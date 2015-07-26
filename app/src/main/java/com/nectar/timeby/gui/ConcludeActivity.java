@@ -13,12 +13,16 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import com.nectar.timeby.R;
+import com.nectar.timeby.gui.widget.TopNotification;
+
 import java.util.ArrayList;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainConcludeActivity extends Activity {
+public class ConcludeActivity extends Activity {
 
     private SeekBar mSeekBar1;
     private SeekBar mSeekBar2;
@@ -44,6 +48,7 @@ public class MainConcludeActivity extends Activity {
         mSeekBar2 = (SeekBar) findViewById(R.id.EfficiencysB);
         mPercent1 = (TextView) findViewById(R.id.ConcentrationPer);
         mPercent2 = (TextView) findViewById(R.id.EfficiencyPer);
+
         mSeekBar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -94,7 +99,7 @@ public class MainConcludeActivity extends Activity {
                 pw.showAsDropDown(btnEvent);
 
                 ListView lv = (ListView) view.findViewById(R.id.lv_pop);
-                lv.setAdapter(new ListViewAdapter2(MainConcludeActivity.this, eventList));
+                lv.setAdapter(new ListViewAdapter2(ConcludeActivity.this, eventList));
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -108,6 +113,8 @@ public class MainConcludeActivity extends Activity {
 
             }
         });
+
+        new TopNotification(this, "任务成功，请进行自我评价", 3000);
     }
 
     public ArrayList<String> getList() {
