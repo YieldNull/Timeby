@@ -57,23 +57,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_main);
-        initDrawer();
-
+        //各种判断
         if (!PrefsUtil.isLogin(this)) {
             Log.i(TAG, "Not login, entering login activity");
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
         }
 
         if (PrefsUtil.isOnTask(this)) {
             Log.i(TAG, "On task, entering countdown page");
-            Intent intent = new Intent(this, CountDownActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, CountDownActivity.class));
             finish();
             return;
         }
@@ -88,6 +83,11 @@ public class MainActivity extends AppCompatActivity
             Log.i(TAG, "Starting ScreenService");
             startService(new Intent(this, ScreenService.class));
         }
+
+        setContentView(R.layout.activity_main);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_main);
+        initDrawer();
+
     }
 
 
@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
+        Log.i(TAG, "onResume");
         IntentFilter filter = new IntentFilter(MessageReceiver.INTENT_ACTION);
         filter.setPriority(2);
         registerReceiver(onNotify, filter);

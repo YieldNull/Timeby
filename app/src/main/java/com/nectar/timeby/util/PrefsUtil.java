@@ -42,6 +42,10 @@ public class PrefsUtil {
     public static final String PREFS_KEY_SETTING_SLEEP_TIME = "setting_sleep_time";
 
 
+    public static final String PREFS_MAP_DRAWER_NOTIFY = "drawer_notify";
+    public static final String PREFS_KEY_DRAWER_NOTIFY = "drawer_message_come";
+
+
     /**
      * 登录，存入手机号、用户名、密码。初始化用户信息
      *
@@ -239,6 +243,29 @@ public class PrefsUtil {
         return taskMap;
     }
 
+    /**
+     * 是否有任务尚未开始
+     *
+     * @param context
+     * @return
+     */
+    public static boolean hasTask(Context context) {
+        SharedPreferences task = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
+        long start = task.getLong(PREFS_KEY_TASK_START_TIME_MILLIS, 0);
+
+        if (start > System.currentTimeMillis())
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * 当前任务是否失败
+     *
+     * @param context
+     * @return
+     */
     public static boolean isTaskFail(Context context) {
         SharedPreferences task = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
@@ -246,6 +273,12 @@ public class PrefsUtil {
         return task.getBoolean(PREFS_KEY_TASK_FAIL, false);
     }
 
+    /**
+     * 设置任务是否失败
+     *
+     * @param context
+     * @param isFailed
+     */
     public static void setIsTaskFailed(Context context, boolean isFailed) {
         SharedPreferences task = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
@@ -339,6 +372,34 @@ public class PrefsUtil {
                 PrefsUtil.PREFS_MAP_INSTALL, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = install.edit();
         editor.putBoolean(PREFS_KEY_INSTALL_FIRST, isFirstUse);
+        editor.commit();
+    }
+
+
+    /**
+     * 抽屉图标是否刷新
+     *
+     * @param context
+     * @return
+     */
+    public static boolean hasDrawerRefresh(Context context) {
+        SharedPreferences drawer = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_DRAWER_NOTIFY, Context.MODE_PRIVATE);
+        return drawer.getBoolean(PREFS_KEY_DRAWER_NOTIFY, false);
+
+    }
+
+    /**
+     * 设置抽屉图标是否刷新
+     *
+     * @param context
+     * @param hasRefresh
+     */
+    public static void setDrawerRefresh(Context context, boolean hasRefresh) {
+        SharedPreferences drawer = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_DRAWER_NOTIFY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = drawer.edit();
+        editor.putBoolean(PREFS_KEY_DRAWER_NOTIFY, hasRefresh);
         editor.commit();
     }
 }

@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nectar.timeby.R;
+import com.nectar.timeby.util.PrefsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,7 @@ public class DrawerFragment extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnDrawerItemSelectedListener");
         }
+
     }
 
     @Override
@@ -148,21 +150,43 @@ public class DrawerFragment extends Fragment {
                 viewHolder = new ViewHolder();
                 viewHolder.listViewItemImage = (ImageView) view
                         .findViewById(R.id.drawer_list_item_image);
-                viewHolder.listViewItemImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selectItem(postion);
+
+                //消息图标要判断是否有消息到达
+                if (postion != 2) {
+                    viewHolder.listViewItemImage.setImageResource(drawerListItem.getImageId());
+                    viewHolder.listViewItemImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            selectItem(postion);
+                        }
+                    });
+                } else {
+                    //使用消息到达图标
+                    if (PrefsUtil.hasDrawerRefresh(getActivity())) {
+                        viewHolder.listViewItemImage.setImageResource(
+                                R.drawable.icn_drawer_message_on);
+                    } else {
+                        viewHolder.listViewItemImage.setImageResource(drawerListItem.getImageId());
                     }
-                });
+
+                    viewHolder.listViewItemImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //点击后，还原消息图标
+                            PrefsUtil.setDrawerRefresh(getActivity(), false);
+                            selectItem(postion);
+                        }
+                    });
+                }
+
                 viewHolder.listViewItemText = (TextView) view
                         .findViewById(R.id.drawer_list_item_text);
+                viewHolder.listViewItemText.setText(drawerListItem.getText());
                 view.setTag(viewHolder);
             } else {
                 view = convertView;
                 viewHolder = (ViewHolder) view.getTag();
             }
-            viewHolder.listViewItemImage.setImageResource(drawerListItem.getImageId());
-            viewHolder.listViewItemText.setText(drawerListItem.getText());
             return view;
         }
 
@@ -170,6 +194,5 @@ public class DrawerFragment extends Fragment {
             ImageView listViewItemImage;
             TextView listViewItemText;
         }
-
     }
 }

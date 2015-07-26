@@ -48,13 +48,17 @@ public class MessageReceiver extends BroadcastReceiver {
 
         Notification note = new Notification(R.drawable.ic_launcher,
                 title, System.currentTimeMillis());
+        note.flags = Notification.FLAG_AUTO_CANCEL;
 
         Intent reIntent = null;
 
         if (flag == FLAG_TASK_FAIL) {
             //设置任务失败，设置跳转界面为主界面
             reIntent = new Intent(context, MainActivity.class);
+            reIntent.putExtra(INTENT_FLAG, FLAG_TASK_FAIL);
+
             PrefsUtil.setIsTaskFailed(context, true);
+            PrefsUtil.setDrawerRefresh(context, true);
         }
 
         if (reIntent != null) {

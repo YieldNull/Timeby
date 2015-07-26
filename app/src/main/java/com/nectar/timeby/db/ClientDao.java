@@ -157,25 +157,24 @@ public class ClientDao {
 
     /**
      * 任务表操作：
-     *
      */
 
-     // 鉴于失败任务不需要填写相关的信息，故新建任务时只需要起止时间及用户信息
-     public long addTask(String startTime,String endTime, String phoneNumberA){
-         SQLiteDatabase db = helper.getWritableDatabase();
-         ContentValues content = new ContentValues();
-         content.put("phoneNumberA",phoneNumberA);
-         content.put("startTime",startTime);
-         content.put("endTime",endTime);
-         long result = db.insert("Task", null, content);
-         db.close();
-         return result;
-     }
+    // 鉴于失败任务不需要填写相关的信息，故新建任务时只需要起止时间及用户信息
+    public long addTask(String startTime, String endTime, String phoneNumberA) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put("phoneNumberA", phoneNumberA);
+        content.put("startTime", startTime);
+        content.put("endTime", endTime);
+        long result = db.insert("Task", null, content);
+        db.close();
+        return result;
+    }
 
     /*然后是完善信息部分，就是填写成功与否，还有专注度及效率，，，这里成功与否用Integer值 1和0进行区分
      *鉴于你妹的，需要什么多用户，所以完善信息时需要传主键，也就是用户号码及任务开始时间
      */
-    public void updateTask(String phoneNumberA,int startTime,String attribute,String value){
+    public void updateTask(String phoneNumberA, int startTime, String attribute, String value) {
         SQLiteDatabase db = helper.getWritableDatabase();
         db.execSQL("UPDATE Task SET " + attribute + " = " + value + "where phoneNumberA = " + phoneNumberA + " AND startTime = " + startTime);
     }
@@ -184,10 +183,10 @@ public class ClientDao {
      * 查询任务的内容
      * 参数：用户号码
      */
-    public ArrayList<Task> queryTimeOfTask(String phoneNumberA){
+    public ArrayList<Task> queryTimeOfTask(String phoneNumberA) {
         SQLiteDatabase db = helper.getReadableDatabase();
         ArrayList<Task> tasks = new ArrayList<Task>();
-        Cursor cursor = db.query("Task",new String[]{"startTime","endTime","taskContent","foucusDegree","efficiency","successOrNot"},null,null,null,null,null);
+        Cursor cursor = db.query("Task", new String[]{"startTime", "endTime", "taskContent", "foucusDegree", "efficiency", "successOrNot"}, null, null, null, null, null);
         while (cursor.moveToNext()) {
             Task task = new Task();
             task.setStartTime(cursor.getInt(cursor.getColumnIndex("startTime")));
@@ -200,9 +199,4 @@ public class ClientDao {
         db.close();
         return tasks;
     }
-
-
-
-
-
 }

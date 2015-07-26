@@ -142,7 +142,9 @@ public class MainFragment extends Fragment
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mSumMin == 0) {
+                if (PrefsUtil.hasTask(getActivity())) {
+                    new TopNotification(getActivity(), "有任务尚未开始", 4 * 1000).show();
+                } else if (mSumMin == 0) {
                     new TopNotification(getActivity(), "请先设置任务时间", 4 * 1000).show();
                 } else {
                     mTaskTypeSelectDialog.showDialog();
@@ -318,7 +320,8 @@ public class MainFragment extends Fragment
         long endMillis = triggerTime + mSumMin * 60 * 1000;
         PrefsUtil.storeTask(getActivity(), startMillis, endMillis, type);
 
-        Log.i(TAG, (triggerTime - System.currentTimeMillis()) / 1000 + "");
+        int DValue = (int) ((triggerTime - System.currentTimeMillis()) / 1000);
+        Log.i(TAG, DValue + "");
 
         //设置Alarm，定时当达到任务开启时间时打开倒计时页面
         AlarmManager manager = (AlarmManager) getActivity()
@@ -333,22 +336,36 @@ public class MainFragment extends Fragment
         manager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
 
 
-        new TopNotification(getActivity(), getStartTimeHint(triggerTime), 3 * 1000).show();
+        new TopNotification(getActivity(), getStartTimeHint(DValue), 3 * 1000).show();
 
-        mSubmitButton.setEnabled(false);
     }
 
-    private String getStartTimeHint(long triggerTime) {
-        int DValue = (int) ((triggerTime - System.currentTimeMillis()) / 1000);
+    /**
+     * 获取当前时间到开始时间的差值，用于顶部提示框
+     *
+     * @param DValue
+     * @return
+     */
+    private String getStartTimeHint(int DValue) {
+
+        DValue += 1;
         int hour = DValue / 3600;
-        int min = DValue % 60;
+        int min = (DValue - hour * 3600) / 60;
 
-        return getTimeStr(hour) + "时" + getTimeStr(min) + "分进入倒计时页面";
+        Log.i(TAG, "DValue" + hour + " " + min);
+        return getTimeStr(hour) + "时" + getTimeStr(min) + "分后进入倒计时页面";
     }
 
+    /**
+     * 将int型的时间格式化为字符串
+     *
+     * @param time
+     * @return
+     */
     private CharSequence getTimeStr(int time) {
         return time > 9 ? "" + time : "0" + time;
     }
+
 
     /**
      * 计算Alarm触发时间的RTC值
