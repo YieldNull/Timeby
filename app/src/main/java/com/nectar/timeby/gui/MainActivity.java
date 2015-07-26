@@ -43,16 +43,6 @@ public class MainActivity extends AppCompatActivity
     private FragmentManager mFragmentManager;
     private OnDrawerStatusChangedListener mDrawerStatusChangedListener;
 
-    //在主界面时使用优先级较高的Receiver截断广播，不使用Notification，直接在主界面提示
-    private BroadcastReceiver onNotify = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String content = intent.getStringExtra(MessageReceiver.INTENT_EXTRA_CONTENT);
-            new TopNotification(MainActivity.this, content, 3 * 1000).show();
-
-            abortBroadcast();
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,16 +80,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Log.i(TAG, "onResume");
-        IntentFilter filter = new IntentFilter(MessageReceiver.INTENT_ACTION);
-        filter.setPriority(2);
-        registerReceiver(onNotify, filter);
-    }
 
     @Override
     public void onBackPressed() {
@@ -180,13 +160,6 @@ public class MainActivity extends AppCompatActivity
                 addFragment(new MainFragment(), true);
                 break;
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        unregisterReceiver(onNotify);
     }
 
     @Override

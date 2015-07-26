@@ -23,6 +23,8 @@ public class ClientSQLiteOpenHelper extends SQLiteOpenHelper {
                 "PRIMARY KEY(phoneNumberB,phoneNumberA),FOREIGN KEY (phoneNumberB) REFERENCES User(phoneNumber),FOREIGN KEY (phoneNumberA) REFERENCES User(phoneNumber))");
         db.execSQL("CREATE TABLE IF NOT EXISTS Task(startTime INTEGER,endTime INTEGER,phoneNumberA VARCHAR(20)," +
                 "taskContent VARCHAR(20),foucusDegree INTEGER,Effiency INTEGER,SuccessOrNot INTEGER,PRIMARY KEY(phoneNumberA,startTime))");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS Message(_id INTEGER PRIMARY KEY AUTOINCREMENT, time INTEGER, title VARCHAR(32), content VARCHAR(64), phoneNum VARCHAR(16),type INTEGER, disposed INTEGER)");
     }
 
     @Override

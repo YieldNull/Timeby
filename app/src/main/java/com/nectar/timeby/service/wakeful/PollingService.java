@@ -1,12 +1,11 @@
 package com.nectar.timeby.service.wakeful;
 
-import android.app.Service;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
+import com.nectar.timeby.service.ordered.MessageReceiver;
 import com.nectar.timeby.util.HttpProcess;
 
 import org.json.JSONArray;
@@ -33,14 +32,14 @@ public class PollingService extends WakefulIntentService {
     @Override
     protected void doWakefulWork(Intent intent) {
         final String phone = intent.getStringExtra(INTENT_PHONE_NUM);
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Log.i(TAG, "Polling tick");
-//                JSONArray json = HttpProcess.messageInform(phone);
-//                analyseData(json);
-//            }
-//        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(TAG, "Polling tick");
+                JSONArray json = HttpProcess.messageInform(phone);
+                analyseData(json);
+            }
+        }).start();
     }
 
     private void analyseData(JSONArray data) {
@@ -60,16 +59,17 @@ public class PollingService extends WakefulIntentService {
                         JSONObject messageJson = data.getJSONObject(i);
                         //申请好友消息(可能有多个）
                         if (messageJson.getString("messageType").equals("1")) {
-//                            str = "申请者：" + messageJson.getString("phonenumA")
-//                                    + ", 申请者昵称：" + messageJson.getString("name")
-//                                    + ", 用户：" + messageJson.getString("phonenumB")
-//                                    + ", 申请时间：" + messageJson.getString("applytime");
+                            String phoneNum = messageJson.getString("phonenumA");
+                            String name = messageJson.getString("name");
+
+                            handleAddFriendRequest(phoneNum, name);
                         }
                         //申请好友成功反馈
                         else if (messageJson.getString("messageType").equals("2")) {
-//                            str = "申请者(该用户）：" + messageJson.getString("phonenumA")
-//                                    + ", 添加的好友：" + messageJson.getString("phonenumB")
-//                                    + ", 添加的好友昵称：" + messageJson.getString("name");
+                            String phoneNum = messageJson.getString("phonenumB");
+                            String name = messageJson.getString("name");
+
+                            handAddFriendSuccess(phoneNum, name);
                         }
                         //申请任务消息(type 1:合作模式 2:竞争模式）
                         else if (messageJson.getString("messageType").equals("3")) {
@@ -107,6 +107,37 @@ public class PollingService extends WakefulIntentService {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void handAddFriendSuccess(String phoneNum, String name) {
+        Log.i(TAG, "Add friend success");
+        Log.i(TAG, "user:" + name + " phone:" + phoneNum);
+
+        Intent intent = new Intent();
+        intent.setAction(MessageReceiver.INTENT_ACTION);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TITLE, "添加好友");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_CONTENT, "添加 " + name + " 为好友成功");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_PHONE, phoneNum);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_REMARK, name);
+
+        intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_FRIENDS_ADD_SUCCESS);
+        sendBroadcast(intent);
+
+    }
+
+    private void handleAddFriendRequest(String phoneNum, String name) {
+        Log.i(TAG, "Received add friend request");
+        Log.i(TAG, "user:" + name + " phone:" + phoneNum);
+
+        Intent intent = new Intent();
+        intent.setAction(MessageReceiver.INTENT_ACTION);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TITLE, "好友申请");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_CONTENT, name + "申请添加您为好友");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_PHONE, phoneNum);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_REMARK, name);
+
+        intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_FRIENDS_ADD_REQUEST);
+        sendBroadcast(intent);
     }
 
     @Override

@@ -199,4 +199,55 @@ public class ClientDao {
         db.close();
         return tasks;
     }
+
+    /**
+     * 存入消息
+     *
+     * @param time     时间，long 类型
+     * @param title    消息标题
+     * @param content  消息内容
+     * @param type     消息类型，0为系统消息，1为用户消息。系统消息没有标题
+     * @param disposed 是否处理过，0为没有处理，1表示处理了，系统消息此字段为null
+     */
+    public void addMessage(long time, String title, String content, int type, int disposed) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues contentV = new ContentValues();
+        contentV.put("time", time);
+        contentV.put("title", title);
+        contentV.put("content", content);
+        contentV.put("type", type);
+        contentV.put("disposed", disposed);
+        db.insert("Message", null, contentV);
+        db.close();
+    }
+
+    /**
+     * 查询消息
+     *
+     * @param type 消息类型，0为系统消息，1为用户消息
+     * @return
+     */
+    public ArrayList<Message> queryMessage(int type) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        ArrayList<Message> messages = new ArrayList<Message>();
+
+        Cursor cursor = db.query("Message",
+                new String[]{"type", "disposed", "time", "title", "content", "phoneNum"},
+                "type=?", new String[]{type + ""}, null, null, null);
+
+        while (cursor.moveToNext()) {
+            Message message = new Message();
+            message.setType(cursor.getInt(cursor.getColumnIndex("type")));
+            message.setDisposed(cursor.getInt(cursor.getColumnIndex("disposed")));
+            message.setTime(cursor.getLong(cursor.getColumnIndex("time")));
+            message.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+            message.setContent(cursor.getString(cursor.getColumnIndex("content")));
+            message.setPhoneNum(cursor.getString(cursor.getColumnIndex("phoneNum")));
+
+            messages.add(message);
+        }
+        db.close();
+
+        return messages;
+    }
 }

@@ -3,25 +3,27 @@ package com.nectar.timeby.gui.fragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.nectar.timeby.R;
-
+import com.nectar.timeby.db.ClientDao;
+import com.nectar.timeby.db.Message;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by Dean on 15/7/23.
  */
 public class UserMsgFragment extends Fragment {
+    private static final String TAG = "UserMsgFragment";
+
     private ListView userMsgListView;
-    private ArrayList<Msg> userMsgList = new ArrayList<Msg>();
+    private ArrayList<Message> userMsgList = new ArrayList<Message>();
     private MsgAdapter adapter;
 
     @Override
@@ -37,59 +39,27 @@ public class UserMsgFragment extends Fragment {
         return view;
     }
 
-    public class Msg {
-        private String content;
-        private String name;
-        private String sHour;
-        private String sMin;
-
-        public Msg(String content, String name) {
-            this.content = content;
-            this.name = name;
-
+    private void initUserMsgs() {
+        ClientDao db = new ClientDao(getActivity());
+        ArrayList<Message> messages = db.queryMessage(0);
+        Log.d(TAG, messages.size() + "");
+        for (Message message : messages) {
+            userMsgList.add(message);
         }
-
-        public String getContent() {
-            return content;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getDate() {
-            Calendar cal = Calendar.getInstance();
-            int month = cal.get(Calendar.MONTH);
-            int day = cal.get(Calendar.DAY_OF_MONTH) + 1;
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int min = cal.get(Calendar.MINUTE);
-            if (hour < 10) {
-                sHour = "0" + hour + "";
-            } else {
-                sHour = "" + hour;
-            }
-            if (min < 10) {
-                sMin = "0" + min + "";
-            } else {
-                sMin = "" + min;
-            }
-            String date = "" + month + "月" + day + "日   " + sHour + ":" + sMin;
-            return date;
-        }
-
     }
 
-    public class MsgAdapter extends ArrayAdapter<Msg> {
+
+    public class MsgAdapter extends ArrayAdapter<Message> {
         private int resourceId;
 
-        public MsgAdapter(Context context, int textViewResourceId, List<Msg> objects) {
+        public MsgAdapter(Context context, int textViewResourceId, List<Message> objects) {
             super(context, textViewResourceId, objects);
             resourceId = textViewResourceId;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Msg msg = getItem(position);
+            Message msg = getItem(position);
             View view;
             ViewHolder viewHolder;
             if (convertView == null) {
@@ -98,14 +68,23 @@ public class UserMsgFragment extends Fragment {
                 viewHolder.msg_item = (TextView) view.findViewById(R.id.user_msg_item_text);
                 viewHolder.msg_name = (TextView) view.findViewById(R.id.user_msg_name_text);
                 viewHolder.msg_time = (TextView) view.findViewById(R.id.user_msg_time_text);
+                viewHolder.msg_agree = (TextView) view.findViewById(R.id.user_msg_item_text_agree);
+                viewHolder.msg_time = (TextView) view.findViewById(R.id.user_msg_item_text_refuse);
                 view.setTag(viewHolder);
             } else {
                 view = convertView;
                 viewHolder = (ViewHolder) view.getTag();
             }
             viewHolder.msg_item.setText(msg.getContent());
-            viewHolder.msg_name.setText(msg.getName());
-            viewHolder.msg_time.setText(msg.getDate());
+            viewHolder.msg_name.setText(msg.getTitle());
+            viewHolder.msg_time.setText(msg.getTimeStr());
+            if (msg.getDisposed() == 1) {
+                viewHolder.msg_agree.setText("已处理");
+                viewHolder.msg_refuse.setText("");
+            } else {
+                viewHolder.msg_agree.setText("同意");
+                viewHolder.msg_refuse.setText("拒绝");
+            }
             return view;
         }
 
@@ -113,16 +92,10 @@ public class UserMsgFragment extends Fragment {
             TextView msg_item;
             TextView msg_name;
             TextView msg_time;
+
+            TextView msg_agree;
+            TextView msg_refuse;
+
         }
-
     }
-
-    private void initUserMsgs() {
-        Msg msg1 = new Msg("ccccccccccccccccccccccc", "小星星");
-        userMsgList.add(msg1);
-        Msg msg2 = new Msg("ddddddddddddddddddddddd", "小月亮");
-        userMsgList.add(msg2);
-
-    }
-
 }

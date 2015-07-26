@@ -1,31 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/msg_box"
     android:orientation="vertical"
-    android:padding="10dp"
-    android:background="@drawable/msg_box">
+    android:padding="10dp">
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/user_msg_name_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16dp"/>
+            android:text="何小白"
+            android:textSize="16dp" />
+
         <TextView
             android:id="@+id/user_msg_time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentRight="true"
+            android:text="6月27日 13:49"
+            android:textSize="16dp" />
     </RelativeLayout>
+
     <TextView
         android:id="@+id/user_msg_item_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_margin="10dp"
-        android:textSize="20dp"/>
+        android:text="何小白申请添加您为好友"
+        android:textSize="20dp" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/user_msg_item_text_agree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="同意" />
+
+        <TextView
+            android:id="@+id/user_msg_item_text_refuse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/user_msg_item_text_agree"
+            android:text="拒绝" />
+
+    </RelativeLayout>
 </LinearLayout>

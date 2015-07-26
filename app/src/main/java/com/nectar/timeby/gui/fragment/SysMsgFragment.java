@@ -3,6 +3,7 @@ package com.nectar.timeby.gui.fragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,105 +12,73 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nectar.timeby.R;
+import com.nectar.timeby.db.ClientDao;
+import com.nectar.timeby.db.Message;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by Dean on 15/7/23.
  */
 public class SysMsgFragment extends Fragment {
-    private ListView sysMsgListView;
-    private ArrayList<Msg> sysMsgList = new ArrayList<Msg>();
-    private MsgAdapter adapter;
+    private static final String TAG = "SysMsgFragment";
+    private ListView sysMessageListView;
+    private ArrayList<Message> sysMessageList = new ArrayList<Message>();
+    private MessageAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sys_msg, container, false);
-        initSysMsgs();
-        adapter = new MsgAdapter(getActivity(), R.layout.list_item_msg_sys, sysMsgList);
-        sysMsgListView = (ListView) view.findViewById(R.id.sys_msg_list);
-        sysMsgListView.setAdapter(adapter);
+        initSysMessages();
+        adapter = new MessageAdapter(getActivity(), R.layout.list_item_msg_sys, sysMessageList);
+        sysMessageListView = (ListView) view.findViewById(R.id.sys_msg_list);
+        sysMessageListView.setAdapter(adapter);
         return view;
     }
 
-    public class Msg {
-        private String content;
-        private String sHour;
-        private String sMin;
-
-        public Msg(String content) {
-            this.content = content;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public String getDate() {
-            Calendar cal = Calendar.getInstance();
-            int month = cal.get(Calendar.MONTH) + 1;
-            int day = cal.get(Calendar.DAY_OF_MONTH);
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int min = cal.get(Calendar.MINUTE);
-            if (hour < 10) {
-                sHour = "0" + hour + "";
-            } else {
-                sHour = "" + hour;
-            }
-            if (min < 10) {
-                sMin = "0" + min + "";
-            } else {
-                sMin = "" + min;
-            }
-            String date = "" + month + "月" + day + "日   " + sHour + ":" + sMin;
-            return date;
+    private void initSysMessages() {
+        ClientDao db = new ClientDao(getActivity());
+        ArrayList<Message> messages = db.queryMessage(0);
+        Log.d(TAG, messages.size()+"");
+        for (Message message : messages) {
+            sysMessageList.add(message);
         }
     }
 
-    public class MsgAdapter extends ArrayAdapter<Msg> {
+
+    public class MessageAdapter extends ArrayAdapter<Message> {
         private int resourceId;
 
-        public MsgAdapter(Context context, int textViewResourceId, List<Msg> objects) {
+        public MessageAdapter(Context context, int textViewResourceId, List<Message> objects) {
             super(context, textViewResourceId, objects);
             resourceId = textViewResourceId;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Msg msg = getItem(position);
+            Message Message = getItem(position);
             View view;
             ViewHolder viewHolder;
             if (convertView == null) {
                 view = LayoutInflater.from(getContext()).inflate(resourceId, null);
                 viewHolder = new ViewHolder();
-                viewHolder.msg_item = (TextView) view.findViewById(R.id.sys_msg_item_text);
-                viewHolder.msg_time = (TextView) view.findViewById(R.id.sys_msg_time_text);
+                viewHolder.Message_item = (TextView) view.findViewById(R.id.sys_msg_item_text);
+                viewHolder.Message_time = (TextView) view.findViewById(R.id.sys_msg_time_text);
                 view.setTag(viewHolder);
             } else {
                 view = convertView;
                 viewHolder = (ViewHolder) view.getTag();
             }
-            viewHolder.msg_item.setText(msg.getContent());
-            viewHolder.msg_time.setText(msg.getDate());
+            viewHolder.Message_item.setText(Message.getContent());
+            viewHolder.Message_time.setText(Message.getTimeStr());
             return view;
         }
 
         class ViewHolder {
-            TextView msg_time;
-            TextView msg_item;
+            TextView Message_time;
+            TextView Message_item;
         }
-
-    }
-
-    private void initSysMsgs() {
-        Msg msg1 = new Msg("aaaaaaaaaaaaaaaaaaaaaa");
-        sysMsgList.add(msg1);
-        Msg msg2 = new Msg("bbbbbbbbbbbbbbbbbbbbbbb");
-        sysMsgList.add(msg2);
-        Msg msg3 = new Msg("aaaaaaaaaaaaaaaaaaaaaa");
-        sysMsgList.add(msg3);
     }
 }

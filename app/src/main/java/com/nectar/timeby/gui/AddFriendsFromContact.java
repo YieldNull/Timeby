@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nectar.timeby.R;
 import com.nectar.timeby.db.ClientDao;
@@ -92,6 +93,9 @@ public class AddFriendsFromContact extends Activity {
     }
 
 
+    /**
+     * ListView 的适配器
+     */
     private class ContactListAdapter extends BaseAdapter {
 
         @Override
@@ -128,9 +132,9 @@ public class AddFriendsFromContact extends Activity {
                 String phone = mRegisteredContacts.get(position);
                 holder.mContactName.setText(getContactName(phone));
                 if (mAddedContacts.contains(phone)) {
-                    holder.setButtonEnable(false);
+                    holder.setButtonEnable(false, phone);
                 } else {
-                    holder.setButtonEnable(true);
+                    holder.setButtonEnable(true, phone);
                 }
 
                 convertView.setTag(holder);
@@ -144,10 +148,25 @@ public class AddFriendsFromContact extends Activity {
             public TextView mContactName;
             public TextView mTextButton;
 
-            public void setButtonEnable(boolean isEnable) {
+            public void setButtonEnable(boolean isEnable, final String phone) {
                 if (isEnable) {
                     mTextButton.setBackgroundResource(R.drawable.btn_addfriend_from_contact_add);
                     mTextButton.setText(null);
+
+                    mTextButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (sendAddRequest(phone)) {
+                                mTextButton.setBackgroundDrawable(null);
+                                mTextButton.setText("已申请");
+                                mTextButton.setTextColor(getResources()
+                                        .getColor(R.color.add_friends_from_contact_added));
+                                Toast.makeText(AddFriendsFromContact.this,
+                                        "已发送申请", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
                 } else {
                     mTextButton.setBackgroundDrawable(null);
                     mTextButton.setText("已添加");
@@ -158,7 +177,44 @@ public class AddFriendsFromContact extends Activity {
         }
     }
 
+    private boolean sendAddRequest(final String phone) {
+        if (!HttpUtil.isNetAvailable(this)) {
+            Toast.makeText(this, "无网络连接，请打开数据网络", Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject data = HttpProcess.friendApplication(mPhone, phone);
+                try {
+                    if (data.get("status").equals(-1)) {
+                        Log.i(TAG, "sendAddRequest:server error");
+                    } else if (data.get("status").equals(0)) {
+                        Log.i(TAG, "sendAddRequest:server error");
+                    } else if (data.get("status").equals(1)) {
+                        if (data.getString("result").equals("true")) {
+                            Log.i(TAG, "sendAddRequest:success");
+                        } else if (data.getString("result").equals("false")) {
+                            Log.i(TAG, "sendAddRequest:failure");
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.w(TAG, e.getMessage());
+                }
+            }
+        }).start();
+
+        return true;
+    }
+
+
+    /**
+     * 通过手机号获取手机通讯录中联系人的名字
+     *
+     * @param phone
+     * @return
+     */
     private String getContactName(String phone) {
         for (Map<String, String> contact : mPhoneContacts) {
             if (contact.get(CONTACT_MAP_KEY_PHONE).equals(phone)) {
@@ -168,6 +224,11 @@ public class AddFriendsFromContact extends Activity {
         return null;
     }
 
+    /**
+     * 获取联系人列表，先获取手机通讯录，
+     * 然后再从本地数据库中读取好友列表，
+     * 然后再向服务器请求手机通讯录中已经注册过的联系人列表
+     */
     private void getContactList() {
         Log.i(TAG, "Starting get contact list from server");
         if (!HttpUtil.isNetAvailable(this)) {
@@ -215,7 +276,9 @@ public class AddFriendsFromContact extends Activity {
                         } else if (statusJson.getString("result").equals("false")) {
                             JSONArray phoneNumJson = data.getJSONArray(1);
                             for (int i = 0; i < phoneNumJson.length(); ++i) {
-                                mRegisteredContacts.add(phoneNumJson.getString(i));
+                                if (!mRegisteredContacts.contains(phoneNumJson.getString(i))) {
+                                    mRegisteredContacts.add(phoneNumJson.getString(i));
+                                }
                             }
                         }
                     }
@@ -278,6 +341,9 @@ public class AddFriendsFromContact extends Activity {
     }
 
 
+    /**
+     * 批量注册联系人，测试时使用
+     */
     private void registerTestContacts() {
         new Thread(new Runnable() {
             @Override
