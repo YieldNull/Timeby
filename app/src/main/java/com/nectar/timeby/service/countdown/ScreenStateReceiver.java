@@ -1,6 +1,5 @@
-package com.nectar.timeby.service;
+package com.nectar.timeby.service.countdown;
 
-import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,14 +9,14 @@ import android.util.Log;
 import com.nectar.timeby.util.PrefsUtil;
 
 /**
- * 接收屏幕开关的广播信息，进而开启NotifyActivity
+ * 接收屏幕开关的广播信息，并将控制逻辑转给TimeCountService
  */
 public class ScreenStateReceiver extends BroadcastReceiver {
     private static final String TAG = "ScreenStateReceiver";
 
 
     public ScreenStateReceiver() {
-        Log.i(TAG, "Created ScreenStateReceiver");
+        Log.i(TAG, "ScreenStateReceiver Created ");
     }
 
     @Override

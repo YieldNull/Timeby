@@ -1,4 +1,4 @@
-package com.nectar.timeby.service;
+package com.nectar.timeby.service.countdown;
 
 /**
  * Created by finalize on 7/23/15.

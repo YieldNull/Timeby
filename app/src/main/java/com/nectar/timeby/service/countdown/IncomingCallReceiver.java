@@ -1,4 +1,4 @@
-package com.nectar.timeby.service;
+package com.nectar.timeby.service.countdown;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;

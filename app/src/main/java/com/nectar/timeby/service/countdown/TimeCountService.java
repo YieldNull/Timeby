@@ -1,4 +1,4 @@
-package com.nectar.timeby.service;
+package com.nectar.timeby.service.countdown;
 
 import android.app.Service;
 import android.content.Context;
@@ -7,10 +7,14 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.nectar.timeby.gui.MainActivity;
+import com.nectar.timeby.service.ordered.MessageReceiver;
 import com.nectar.timeby.util.PrefsUtil;
 
 
 /**
+ * 包内主控制器
+ * <p/>
  * 监听退出APP，计算退出时间，若退出时间达到预定值，则任务失败
  * 屏幕关闭后停止计时，屏幕开启且未进入APP时计时，打进电话时停止计时
  * <p/>
@@ -152,19 +156,30 @@ public class TimeCountService extends Service {
                 if (mCurrMillis > mStopMillis) {
                     Log.i(TAG, "Arrived end time,counter quit!");
                     mCountDownTimer.cancel();
-                    stopSelf();
 
-                    //TODO show task fail notification
+                    stopSelf();
                 }
             }
 
             @Override
             public void onFinish() {
                 Log.i(TAG, "Leave APP over time! Your task failed!");
+
+                //提示任务失败
+                sendFailBroadcast();
+
                 stopSelf();
             }
         };
         mCountDownTimer.start();
     }
 
+    private void sendFailBroadcast() {
+        Intent intent = new Intent();
+        intent.setAction(MessageReceiver.INTENT_ACTION);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TITLE, "任务失败");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_CONTENT, "离开APP过长时间，您的任务失败");
+        intent.putExtra(MessageReceiver.INTENT_FLAG,MessageReceiver.FLAG_TASK_FAIL);
+        sendBroadcast(intent);
+    }
 }

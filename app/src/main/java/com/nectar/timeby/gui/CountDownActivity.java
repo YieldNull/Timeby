@@ -16,8 +16,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nectar.timeby.R;
-import com.nectar.timeby.service.APPStateReceiver;
-import com.nectar.timeby.service.ScreenStateReceiver;
+import com.nectar.timeby.service.countdown.APPStateReceiver;
+import com.nectar.timeby.service.countdown.ScreenStateReceiver;
 import com.nectar.timeby.util.PrefsUtil;
 
 import java.util.ArrayList;

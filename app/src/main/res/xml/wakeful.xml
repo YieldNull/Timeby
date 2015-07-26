@@ -1,1 +1,1 @@
-<WakefulIntentService listener="com.nectar.timeby.service.AlarmListener" />
+<WakefulIntentService listener="com.nectar.timeby.service.wakeful.AlarmListener" />

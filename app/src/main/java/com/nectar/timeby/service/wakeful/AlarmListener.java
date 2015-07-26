@@ -1,4 +1,4 @@
-package com.nectar.timeby.service;
+package com.nectar.timeby.service.wakeful;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

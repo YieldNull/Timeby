@@ -1,4 +1,4 @@
-package com.nectar.timeby.service;
+package com.nectar.timeby.service.wakeful;
 
 import android.app.Service;
 import android.content.Intent;
@@ -15,12 +15,8 @@ import org.json.JSONObject;
 
 
 /**
- * 后台运行的Service，用于与接收好友的请求等工作，开机自起
+ * 开机获取Wake锁，轮询，用于与接收好友的请求等工作，开机自起
  * 定时向服务器请求数据。
- * <p/>
- * 创建后注册ScreenStateReceiver,销毁时撤销ScreenStateReceiver
- * 因为屏幕与电源有关，不能在Mainifest中注册refer:
- * http://stackoverflow.com/questions/12681884/android-broadcast-receiver-doesnt-receive-action-screen-on
  */
 public class PollingService extends WakefulIntentService {
 
@@ -37,14 +33,14 @@ public class PollingService extends WakefulIntentService {
     @Override
     protected void doWakefulWork(Intent intent) {
         final String phone = intent.getStringExtra(INTENT_PHONE_NUM);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(TAG, "Polling tick");
-                JSONArray json = HttpProcess.messageInform(phone);
-                analyseData(json);
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Log.i(TAG, "Polling tick");
+//                JSONArray json = HttpProcess.messageInform(phone);
+//                analyseData(json);
+//            }
+//        }).start();
     }
 
     private void analyseData(JSONArray data) {

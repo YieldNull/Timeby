@@ -33,7 +33,7 @@ public class PrefsUtil {
     public static final String PREFS_KEY_TASK_START_TIME_MILLIS = "task_start";
     public static final String PREFS_KEY_TASK_END_TIME_MILLIS = "task_end";
     public static final String PREFS_KEY_TASK_TYPE = "task_type";
-
+    public static final String PREFS_KEY_TASK_FAIL = "task_fail";
 
     public static final String PREFS_MAP_SETTING = "setting";
     public static final String PREFS_KEY_SETTING_NOTIFICATION_BGD = "setting_notification_bgd";
@@ -192,6 +192,9 @@ public class PrefsUtil {
         long endTime = task.getLong(PREFS_KEY_TASK_END_TIME_MILLIS, 0);
         long current = System.currentTimeMillis();
 
+        if (isTaskFail(context))
+            return false;
+
         if (startTime < current && endTime > current) {
             return true;
         } else {
@@ -236,7 +239,29 @@ public class PrefsUtil {
         return taskMap;
     }
 
+    public static boolean isTaskFail(Context context) {
+        SharedPreferences task = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
 
+        return task.getBoolean(PREFS_KEY_TASK_FAIL, false);
+    }
+
+    public static void setIsTaskFailed(Context context, boolean isFailed) {
+        SharedPreferences task = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = task.edit();
+
+        editor.putBoolean(PREFS_KEY_TASK_FAIL, isFailed);
+        editor.commit();
+    }
+
+    /**
+     * 获取任务结束时间
+     *
+     * @param context
+     * @return
+     */
     public static long getTaskEndTime(Context context) {
         return readTask(context).get(PREFS_KEY_TASK_END_TIME_MILLIS);
     }
@@ -265,12 +290,24 @@ public class PrefsUtil {
 
     }
 
+    /**
+     * 获取预设可离开时间
+     *
+     * @param context
+     * @return
+     */
     public static int getSupposedEscapeTime(Context context) {
         SharedPreferences setting = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_SETTING, Context.MODE_PRIVATE);
         return setting.getInt(PREFS_KEY_SETTING_ESCAPE_TIME, 0);
     }
 
+    /**
+     * 更新密码
+     *
+     * @param context
+     * @param mPasswordStr
+     */
     public static void updatePassword(Context context, String mPasswordStr) {
         SharedPreferences setting = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_USER, Context.MODE_PRIVATE);
@@ -279,12 +316,24 @@ public class PrefsUtil {
         editor.commit();
     }
 
+    /**
+     * 获取是否是第一次使用APP
+     *
+     * @param context
+     * @return
+     */
     public static boolean isFirstUse(Context context) {
         SharedPreferences install = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_INSTALL, Context.MODE_PRIVATE);
         return install.getBoolean(PREFS_KEY_INSTALL_FIRST, true);
     }
 
+    /**
+     * 设置是否第一次使用APP
+     *
+     * @param context
+     * @param isFirstUse
+     */
     public static void setFirstUse(Context context, boolean isFirstUse) {
         SharedPreferences install = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_INSTALL, Context.MODE_PRIVATE);
