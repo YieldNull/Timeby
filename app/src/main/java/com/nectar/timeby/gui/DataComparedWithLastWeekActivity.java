@@ -48,11 +48,17 @@ public class DataComparedWithLastWeekActivity extends Activity {
         ((ImageView)findViewById(R.id.data_compared_with_last_week_activity_return)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                overridePendingTransition(R.anim.stay_motionless, R.anim.right_bottom_disappear);
+                onBackPressed();
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.stay_motionless, R.anim.right_bottom_disappear);
     }
 
     @Override

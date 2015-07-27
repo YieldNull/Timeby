@@ -92,10 +92,16 @@ public class LineChart2Activity extends Activity {
         ((ImageView)findViewById(R.id.line_chart2_activity_return)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                overridePendingTransition(R.anim.stay_motionless, R.anim.left_bottom_disappear);
+                onBackPressed();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.stay_motionless, R.anim.left_bottom_disappear);
     }
 
     @Override

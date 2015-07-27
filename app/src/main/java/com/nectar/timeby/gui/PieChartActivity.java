@@ -1,6 +1,7 @@
 package com.nectar.timeby.gui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -92,10 +93,16 @@ public class PieChartActivity extends Activity {
         ((ImageView)findViewById(R.id.pie_chart_activity_return)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                overridePendingTransition(R.anim.stay_motionless, R.anim.left_top_disappear);
+                onBackPressed();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.stay_motionless, R.anim.left_top_disappear);
     }
 
     @Override
