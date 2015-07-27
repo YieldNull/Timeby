@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.nectar.timeby.R;
 import com.nectar.timeby.db.ClientDao;
 import com.nectar.timeby.db.FriendShip;
+import com.nectar.timeby.gui.widget.TopNotification;
 import com.nectar.timeby.util.HttpProcess;
 import com.nectar.timeby.util.HttpUtil;
 import com.nectar.timeby.util.PrefsUtil;
@@ -81,6 +82,10 @@ public class AddFriendsFromContact extends Activity {
                 switch (msg.what) {
                     case MSG_REFRESH_LIST:
                         Log.i(TAG, "REFRESH");
+                        if (mRegisteredContacts.size() == 0) {
+                            Toast.makeText(AddFriendsFromContact.this,
+                                    "您通讯录中没有人注册过本软件", Toast.LENGTH_SHORT).show();
+                        }
                         mContactListAdapter.notifyDataSetChanged();
                         break;
                     case MSG_SERVER_ERROR:
@@ -201,6 +206,7 @@ public class AddFriendsFromContact extends Activity {
             return false;
         }
 
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -259,6 +265,9 @@ public class AddFriendsFromContact extends Activity {
         if (!HttpUtil.isNetAvailable(this)) {
             return;
         }
+
+        new TopNotification(this, "正在获取联系人信息，请稍等", 3000).show();
+
 
         new Thread(new Runnable() {
             @Override

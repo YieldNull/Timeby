@@ -141,7 +141,8 @@ public class FriendsActivity extends Activity implements FriendsListFragment.OnF
                                 "请先选择好友以共同完成任务", Toast.LENGTH_SHORT).show();
                     } else {
                         replaceButtonColor(false, true, false);
-                        replaceFragment(new FriendsRankFragment());
+                        replaceFragment(FriendsRankFragment.newInstance(
+                                FriendsRankFragment.LIST_TYPE_WINNER));
                     }
                     break;
                 case R.id.button_friends_failure:
@@ -150,7 +151,8 @@ public class FriendsActivity extends Activity implements FriendsListFragment.OnF
                                 "请先选择好友以共同完成任务", Toast.LENGTH_SHORT).show();
                     } else {
                         replaceButtonColor(false, false, true);
-                        replaceFragment(new FriendsRankFragment());
+                        replaceFragment(FriendsRankFragment.newInstance(
+                                FriendsRankFragment.LIST_TYPE_FAILURE));
                     }
 
                     break;

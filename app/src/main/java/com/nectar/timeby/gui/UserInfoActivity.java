@@ -91,7 +91,7 @@ public class UserInfoActivity extends Activity {
     private void initInfo() {
         Map<String, String> infoMap = PrefsUtil.readUserInfo(this);
         mNickNameText.setText(infoMap.get(PrefsUtil.PREFS_KEY_USER_INFO_NICKNAME));
-        mYearText.setText(infoMap.get(PrefsUtil.PREFS_KEY_USER_INFO_YEAR));
+        mYearText.setText("年龄 "+infoMap.get(PrefsUtil.PREFS_KEY_USER_INFO_YEAR));
         mShellText.setText(infoMap.get(PrefsUtil.PREFS_KEY_USER_INFO_SHELL));
         mHammerText.setText(infoMap.get(PrefsUtil.PREFS_KEY_USER_INFO_HAMMER));
 

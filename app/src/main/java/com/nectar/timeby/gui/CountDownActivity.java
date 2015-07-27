@@ -71,6 +71,7 @@ public class CountDownActivity extends Activity {
     private Handler mHandler;
     private Runnable mTickRunnable;
 
+
     private int mType;
 
     /**
@@ -88,7 +89,9 @@ public class CountDownActivity extends Activity {
         setContentView(R.layout.activity_main_countdown);
 
         mType = getIntent().getIntExtra(MainFragment.INTENT_TASK_TYPE, -1);
-        if (mType != -1) {
+        if ((mType == MainFragment.TASK_TYPE_COOPER)
+                || (mType == MainFragment.TASK_TYPE_PK)) {
+
             if (PrefsUtil.hasFriendsAccept(this)) {
                 downloadFriendsInfo();
             } else if (PrefsUtil.getTaskRequestFrom(this)
@@ -98,7 +101,6 @@ public class CountDownActivity extends Activity {
                 new TopNotification(this, "没有好友同意您的请求\n您将独自完成任务", 3000).show();
             }
         }
-
 
         mHourText = (TextView) findViewById(R.id.textView_main_countdown_hour);
         mMinText = (TextView) findViewById(R.id.textView_main_countdown_min);
@@ -294,12 +296,20 @@ public class CountDownActivity extends Activity {
         @Override
         public int getCount() {
             //设置列表项的数量
-            return mDataList.size();
+            if (mDataList.size() == 0) {
+                return 1;
+            } else {
+                return mDataList.size();
+            }
         }
 
         @Override
         public Object getItem(int position) {
-            return mDataList.get(position);
+            if (mDataList.size() != 0) {
+                return mDataList.get(position);
+            } else {
+                return null;
+            }
         }
 
         @Override
@@ -310,6 +320,11 @@ public class CountDownActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
+
+            if (mDataList.size() == 0) {
+                return CountDownActivity.this.getLayoutInflater().inflate(
+                        R.layout.list_item_woniu, parent, false);
+            }
 
             if (convertView == null) {
                 //获取引用

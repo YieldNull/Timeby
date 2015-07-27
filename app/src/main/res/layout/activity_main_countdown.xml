@@ -74,5 +74,6 @@
     <ListView
         android:id="@+id/listView_main_countdown"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:listSelector="@android:color/transparent" />
 </LinearLayout>

@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MainActivity extends ActionBarActivity {
+public class ServerDemo extends ActionBarActivity {
 
     private TextView myTextView;
     private Map<String, Object> map = new HashMap<String, Object>();

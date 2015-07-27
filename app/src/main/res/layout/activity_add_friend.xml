@@ -2,92 +2,96 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#d9d9d9"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ffffe3"
         android:layout_weight="0.4"
+        android:background="#ffffe3"
         android:gravity="center_vertical"
         android:padding="15dp">
+
         <ImageButton
             android:id="@+id/imgageButton_addfriend_return"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:background="#ffffe3"
-            android:src="@drawable/return_anchor_standard"
-            />
+            android:src="@drawable/return_anchor_standard" />
     </RelativeLayout>
+
     <RelativeLayout
-        android:layout_weight="1.7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:background="#ffffe3">
+        android:layout_weight="1.7"
+        android:background="#ffffe3"
+        android:gravity="bottom">
+
         <ImageButton
             android:id="@+id/imageButton_addfriend_mobilecommunication"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ffffe3"
-            android:src="@drawable/btn_addfriend_mobilecommunication2"/>
+            android:src="@drawable/btn_addfriend_mobilecommunication2" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/imageButton_addfriend_mobilecommunication"
             android:background="#9d9d9d"
-            android:layout_below="@id/imageButton_addfriend_mobilecommunication">
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
                 android:background="#ffffe3"></LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
 
                 >
 
                 <EditText
                     android:id="@+id/tv_addfriend_input"
-                    android:paddingLeft="11dp"
-                    android:paddingTop="6dp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="1dp"
                     android:layout_weight="7.8"
                     android:background="#ffffe3"
-                    android:layout_marginRight="1dp"
-                    android:textColor="#9d9d9d"
                     android:hint="输入用户名/手机号"
+                    android:paddingLeft="11dp"
+                    android:paddingTop="6dp"
+                    android:textColor="#9d9d9d"
                     android:textColorHint="#ca9d9d9d"
-                    android:textSize="19sp"/>
+                    android:textSize="19sp" />
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_alignBottom="@id/tv_addfriend_input"
+                    android:layout_alignParentRight="true"
                     android:layout_weight="1.2"
                     android:background="#ffffe3"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignBottom="@id/tv_addfriend_input">
+                    android:orientation="horizontal">
 
                     <ImageButton
+                        android:id="@+id/imageButton_add_friend_search"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingRight="7dp"
                         android:layout_marginLeft="7dp"
-                        android:scaleType="fitCenter"
                         android:layout_marginTop="0dp"
                         android:background="#ffffe3"
+                        android:paddingRight="7dp"
+                        android:scaleType="fitCenter"
 
-                        android:src="@drawable/btn_addfriend_search"
-                        />
+                        android:src="@drawable/btn_addfriend_search" />
                 </LinearLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
@@ -96,36 +100,58 @@
         </LinearLayout>
 
 
-
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:background="#ffffe3"
         android:layout_weight="9"
-        android:paddingTop="40dp"
-        android:paddingLeft="20dp">
-        <TextView
-            android:id="@+id/tv_addfriend_info"
-            android:paddingTop="3dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="好友信息区"
-            android:textSize="23sp"/>
-        <ImageButton
-            android:id="@+id/imageButton_addfriend_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignBottom="@id/tv_addfriend_info"
-            android:src="@drawable/btn_addfriend_add"
-            android:background="#ffffe3"/>
+        android:background="#ffffe3"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.github.siyamed.shapeimageview.CircularImageView
+                android:id="@+id/imageView_friends_headimg"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/img_friends_headimg_default" />
+
+            <TextView
+                android:id="@+id/textView_friends_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="30dp"
+                android:layout_toRightOf="@id/imageView_friends_headimg"
+                android:singleLine="true"
+                android:text="喝酒还"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textSize="22dp" />
+
+
+            <TextView
+                android:id="@+id/textView_friends_list_request"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:background="@color/friends_list_request"
+                android:paddingBottom="8dp"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:paddingTop="8dp"
+                android:text="邀请"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
     </RelativeLayout>
-
-
-
-
 </LinearLayout>
