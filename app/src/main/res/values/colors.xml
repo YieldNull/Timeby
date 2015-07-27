@@ -54,4 +54,9 @@
     <color name="sky_blue">#00ffff</color>
     <color name="yellow_green">#c9dd72</color>
 
+    <color name="pie_brown">#f2b69d</color>
+    <color name="pie_grey">#ebe8e1</color>
+    <color name="pie_blue">#9af0ee</color>
+    <color name="pie_reddish">#f27277</color>
+    <color name="pie_green">#d3e3ca</color>
 </resources>

@@ -59,11 +59,11 @@ public class PieChartActivity extends Activity {
         PieDataSet pieDataSet=new PieDataSet(entryArrayList,"各事件");
         pieDataSet.setSliceSpace(4f);
         pieDataSet.setSelectionShift(5f);
-        pieDataSet.setColors(new int[] { R.color.reddish,
-                R.color.light_blue,
-                R.color.light_green,
-                R.color.yellow_green,
-                R.color.sky_blue},
+        pieDataSet.setColors(new int[] { R.color.pie_brown,
+                        R.color.pie_blue,
+                        R.color.pie_grey,
+                        R.color.pie_reddish,
+                        R.color.pie_green},
                 this);
         //ArrayList<PieDataSet> pieDataSetArrayList=new ArrayList<PieDataSet>();
         //pieDataSetArrayList.add(pieDataSet);
@@ -77,7 +77,7 @@ public class PieChartActivity extends Activity {
         PieData pieData=new PieData(stringArrayList,pieDataSet);
         pieData.setValueFormatter(new PercentFormatter());
         pieData.setValueTextSize(15f);
-        pieData.setValueTextColor(Color.WHITE);
+        pieData.setValueTextColor(Color.BLACK);
         pieChart.setData(pieData);
         pieChart.invalidate();
 
