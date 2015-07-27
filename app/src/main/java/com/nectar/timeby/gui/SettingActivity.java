@@ -404,11 +404,11 @@ public class SettingActivity extends Activity {
         // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
         oks.setTitle(getString(R.string.share));
         // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
-        oks.setTitleUrl("https://www.baidu.com");
+        oks.setTitleUrl("http://finalize.sinaapp.com/timeby");
         // text是分享文本，所有平台都需要这个字段
-        oks.setText("我是Timeby分享测试文本");
+        oks.setText("欢迎下载 Timeby APP");
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
-        Bitmap bitmap = BitmapFactory.decodeResource(SettingActivity.this.getResources(), R.drawable.logo_facebook);
+        Bitmap bitmap = BitmapFactory.decodeResource(SettingActivity.this.getResources(), R.drawable.ic_launcher);
         FileOutputStream fileOutputStream = null;
         try {
             fileOutputStream = this.openFileOutput("shared_picture.png", Context.MODE_PRIVATE);
@@ -424,13 +424,13 @@ public class SettingActivity extends Activity {
         }
         oks.setImagePath(getFilesDir() + "/shared_picture.png");//确保SDcard下面存在此张图片
         // url仅在微信（包括好友和朋友圈）中使用
-        oks.setUrl("https://www.baidu.com");
+        oks.setUrl("http://finalize.sinaapp.com/timeby");
         // comment是我对这条分享的评论，仅在人人网和QQ空间使用
-        oks.setComment("我是测试评论文本");
+        oks.setComment("欢迎下载 Timeby APP");
         // site是分享此内容的网站名称，仅在QQ空间使用
         oks.setSite(getString(R.string.app_name));
         // siteUrl是分享此内容的网站地址，仅在QQ空间使用
-        oks.setSiteUrl("https://www.baidu.com");
+        oks.setSiteUrl("http://finalize.sinaapp.com/timeby");
 
         // 启动分享GUI
         oks.show(this);
