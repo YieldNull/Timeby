@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
         //各种判断
         if (!PrefsUtil.isLogin(this)) {
             Log.i(TAG, "Not login, entering login activity");
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, ViewFlipperActivity.class));
             finish();
             return;
         }
