@@ -36,11 +36,12 @@ public class MessageReceiver extends BroadcastReceiver {
     public static final String INTENT_EXTRA_TASK_END_TIME = "intent_end_time";
     public static final String INTENT_EXTRA_TASK_TYPE = "intent_task_type";
 
-    public static final int FLAG_TASK_FAIL = 0x0001;
+    public static final int FLAG_FRIENDS_ADD_REQUEST = 0x0001;
+    public static final int FLAG_FRIENDS_ADD_SUCCESS = 0x0002;
+    public static final int FLAG_TASK_FAIL = 0x0003;
     public static final int FLAG_TASK_SUCCESS = 0x0004;
-    public static final int FLAG_FRIENDS_ADD_REQUEST = 0x0002;
-    public static final int FLAG_FRIENDS_ADD_SUCCESS = 0x0003;
-    public static final int FLAG_TASK_REQUEST = 0x0004;
+    public static final int FLAG_TASK_REQUEST = 0x0005;
+    public static final int FLAG_TASK_ACCEPT = 0x0006;
 
     private static final int NOTIFY_ME_ID = 0x1234;
 
@@ -162,6 +163,13 @@ public class MessageReceiver extends BroadcastReceiver {
             reIntent.putExtra(INTENT_EXTRA_TASK_END_TIME, endLong);
             reIntent.putExtra(INTENT_EXTRA_TASK_TYPE, type);
             reIntent.putExtra(INTENT_FLAG, FLAG_TASK_REQUEST);
+        } else if (flag == FLAG_TASK_ACCEPT) {
+
+            //任务还没开始则设置已有好友同意
+            long start = PrefsUtil.getTaskStartTime(context);
+            if (start > System.currentTimeMillis()) {
+                PrefsUtil.setFriendsAccept(context, true);
+            }
         }
 
         //发送Notification

@@ -93,22 +93,25 @@ public class PollingService extends WakefulIntentService {
                         }
                         //申请任务消息成功反馈
                         else if (messageJson.getString("messageType").equals("4")) {
-//                            str = "已有好友加入  申请者（该用户）：" + messageJson.getString("phonenumA")
-//                                    + ", 开始时间：" + messageJson.getString("starttime");
+
+                            handleFriendsAgree();
                         }
                         //合作模式某用户失败反馈消息
                         else if (messageJson.getString("messageType").equals("5")) {
-//                            str = "失败用户：" + messageJson.getString("phonenumA")
-//                                    + ", 备注或昵称：" + messageJson.getString("name")
-//                                    + ", 开始时间：" + messageJson.getString("starttime")
-//                                    + ", 失败时间：" + messageJson.getString("failtime");
+                            String phoneNum = messageJson.getString("phonenumA");
+                            String name = messageJson.getString("name");
+                            String startTime = messageJson.getString("starttime");
+                            String failedTime = messageJson.getString("failtime");
+
+                            handleCoopFailure(phoneNum, name, startTime, failedTime);
                         }
-                        //合作模式某用户失败反馈消息
+                        //竞争模式某用户失败反馈消息
                         else if (messageJson.getString("messageType").equals("6")) {
-//                            str = "失败用户：" + messageJson.getString("phonenumA")
-//                                    + ", 备注或昵称：" + messageJson.getString("name")
-//                                    + ", 开始时间：" + messageJson.getString("starttime")
-//                                    + ", 失败时间：" + messageJson.getString("failtime");
+                            String phoneNum = messageJson.getString("phonenumA");
+                            String name = messageJson.getString("name");
+                            String startTime = messageJson.getString("starttime");
+                            String failedTime = messageJson.getString("failtime");
+                            handlePKFailure(phoneNum, name, startTime, failedTime);
                         }
                     }
                 } else if (statusJson.getString("result").equals("false")) {
@@ -118,6 +121,26 @@ public class PollingService extends WakefulIntentService {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void handlePKFailure(String phoneNum, String name, String startTime, String failedTime) {
+
+    }
+
+    private void handleCoopFailure(String phoneNum, String name, String startTime, String failedTime) {
+
+    }
+
+    /**
+     * 任务申请已有好友同意
+     */
+    private void handleFriendsAgree() {
+        Log.i(TAG, "Friends agree to do task with you");
+
+        Intent intent = new Intent();
+        intent.setAction(MessageReceiver.INTENT_ACTION);
+        intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_TASK_ACCEPT);
+        sendOrderedBroadcast(intent, null);
     }
 
     /**

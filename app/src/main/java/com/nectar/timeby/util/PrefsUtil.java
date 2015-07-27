@@ -35,6 +35,7 @@ public class PrefsUtil {
     public static final String PREFS_KEY_TASK_END_TIME_MILLIS = "task_end";
     public static final String PREFS_KEY_TASK_TYPE = "task_type";
     public static final String PREFS_KEY_TASK_FAIL = "task_fail";
+    public static final String PREFS_KEY_TASK_WITH_FRIENDS = "task_with_friends";
 
     public static final String PREFS_MAP_SETTING = "setting";
     public static final String PREFS_KEY_SETTING_NOTIFICATION_BGD = "setting_notification_bgd";
@@ -223,6 +224,33 @@ public class PrefsUtil {
         editor.putLong(PREFS_KEY_TASK_START_TIME_MILLIS, startMillis);
         editor.putLong(PREFS_KEY_TASK_END_TIME_MILLIS, endMillis);
         editor.putLong(PREFS_KEY_TASK_TYPE, type);
+        editor.commit();
+    }
+
+    /**
+     * 是否有朋友同意
+     *
+     * @param context
+     * @return
+     */
+    public static boolean hasFriendsAccept(Context context) {
+        SharedPreferences task = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
+
+        return task.getBoolean(PREFS_KEY_TASK_WITH_FRIENDS, false);
+    }
+
+    /**
+     * 设置是否有朋友同意
+     *
+     * @param context
+     * @param hasAccept
+     */
+    public static void setFriendsAccept(Context context, boolean hasAccept) {
+        SharedPreferences task = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = task.edit();
+        editor.putBoolean(PREFS_KEY_TASK_WITH_FRIENDS, hasAccept);
         editor.commit();
     }
 

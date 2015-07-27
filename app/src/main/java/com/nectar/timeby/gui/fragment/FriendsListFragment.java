@@ -40,6 +40,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.header.StoreHouseHeader;
+
 /**
  * Created by fangdongliang on 15/7/23.
  */
@@ -49,7 +53,7 @@ public class FriendsListFragment extends Fragment
 
     public static final String ARG_PARAM_TASK_TYPE = "task_type";
 
-    private static final String TAG = "FriendsActivity";
+    private static final String TAG = "FriendsListActivity";
     private static final String MAP_KEY_PHONE = "phone";
     private static final String MAP_KEY_NICKNAME = "nickname";
 
@@ -64,13 +68,14 @@ public class FriendsListFragment extends Fragment
     private ClientDao mDBManager;
     private Handler mHandler;
 
-    private ArrayList<Map<String, String>> mFriendsList;
+
     private ContactListAdapter mListAdapter;
     private SwipeMenuListView mListView;
+    private ArrayList<Map<String, String>> mFriendsList;
+
 
     //如果是选择用户共同完成任务，此为合作方手机号列表
     private ArrayList<String> mCoopFriends;
-
     private OnFinishListener mListener;
 
     public interface OnFinishListener {
@@ -103,6 +108,7 @@ public class FriendsListFragment extends Fragment
         mDBManager = new ClientDao(getActivity());
 
         mFriendsList = new ArrayList<>();
+
         mListView = (SwipeMenuListView) mRootView.findViewById(R.id.listView_friends_contacts);
 
         initHandler();
@@ -193,14 +199,24 @@ public class FriendsListFragment extends Fragment
                 switch (index) {
                     case 0:
                         Log.i(TAG, position + "Remark");
+                        handleRemarkFriend(position);
                         break;
                     case 1:
                         Log.i(TAG, position + "Delete");
+                        handleDeleteFriend(position);
                         break;
                 }
                 return false;
             }
         });
+    }
+
+    private void handleDeleteFriend(int position) {
+
+    }
+
+    private void handleRemarkFriend(int position) {
+
     }
 
     public static FriendsListFragment newInstance(int taskType) {

@@ -23,6 +23,10 @@ repositories {
     maven {
         url "https://repo.commonsware.com.s3.amazonaws.com"
     }
+
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -31,4 +35,5 @@ dependencies {
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     compile 'com.commonsware.cwac:wakeful:1.0.+'
     compile 'com.baoyz.swipemenulistview:library:1.2.1'
+    compile 'in.srain.cube:ultra-ptr:1.0.10'
 }

@@ -13,6 +13,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="1dip"
         android:layout_marginRight="1dip"
+        android:divider="#a7a6a6"
         android:scrollbars="none" />
 
 </LinearLayout>
