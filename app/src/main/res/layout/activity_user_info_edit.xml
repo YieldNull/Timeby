@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:background="@color/user_top_bgd"
-            android:src="@drawable/btn_user_return" />
+            android:src="@drawable/return_anchor_standard" />
 
         <ImageButton
             android:id="@+id/imageButton_user_edit_submit"

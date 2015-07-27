@@ -15,9 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dip"
-            android:text="@string/setting_page_arrow_left"
-            android:textColor="#adccad"
-            android:textSize="32dip" />
+            android:background="@drawable/return_anchor_standard" />
 
         <TextView
             android:layout_width="wrap_content"

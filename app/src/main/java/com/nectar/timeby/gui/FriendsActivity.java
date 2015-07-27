@@ -172,23 +172,23 @@ public class FriendsActivity extends Activity implements FriendsListFragment.OnF
         if (isListSelected) {
             mAddButton.setEnabled(true);
             mAddButton.setVisibility(View.VISIBLE);
-            mListButton.setBackgroundColor(getResources().getColor(R.color.friends_select));
+            mListButton.setBackgroundResource(R.drawable.btn_friends_select);
         } else {
-            mListButton.setBackgroundColor(getResources().getColor(R.color.friends_bgd));
+            mListButton.setBackgroundResource(R.drawable.btn_friends_bgd);
             mAddButton.setEnabled(false);
             mAddButton.setVisibility(View.INVISIBLE);
         }
 
         if (isWinnerSelected) {
-            mWinnerButton.setBackgroundColor(getResources().getColor(R.color.friends_select));
+            mWinnerButton.setBackgroundResource(R.drawable.btn_friends_select);
         } else {
-            mWinnerButton.setBackgroundColor(getResources().getColor(R.color.friends_bgd));
+            mWinnerButton.setBackgroundResource(R.drawable.btn_friends_bgd);
         }
 
         if (isFailureSelected) {
-            mFailureButton.setBackgroundColor(getResources().getColor(R.color.friends_select));
+            mFailureButton.setBackgroundResource(R.drawable.btn_friends_select);
         } else {
-            mFailureButton.setBackgroundColor(getResources().getColor(R.color.friends_bgd));
+            mFailureButton.setBackgroundResource(R.drawable.btn_friends_bgd);
         }
     }
 

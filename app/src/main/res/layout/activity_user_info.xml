@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:background="@color/user_top_bgd"
-            android:src="@drawable/btn_user_return" />
+            android:src="@drawable/return_anchor_standard" />
 
         <ImageButton
             android:id="@+id/imageButton_user_edit"
@@ -47,14 +47,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_weight="0.6"
+            android:layout_weight="0.5"
             android:orientation="horizontal">
 
             <com.github.siyamed.shapeimageview.CircularImageView
                 android:id="@+id/imageView_user_photo"
                 android:layout_width="128dp"
                 android:layout_height="128dp"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/ic_launcher_round" />
         </LinearLayout>
 
         <LinearLayout
