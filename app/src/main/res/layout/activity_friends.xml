@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/btn_friends_return" />
+            android:src="@drawable/return_anchor_standard" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="1dp"
             android:layout_weight="1"
-            android:background="@color/friends_select"
+            android:background="@drawable/btn_friends_select"
             android:gravity="center"
             android:text="@string/friends_list"
             android:textColor="@color/friends_nav_text"
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
-            android:background="@color/friends_bgd"
+            android:background="@drawable/btn_friends_bgd"
             android:gravity="center"
             android:text="@string/friends_winner"
             android:textColor="@color/friends_nav_text"
@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
-            android:background="@color/friends_bgd"
+            android:background="@drawable/btn_friends_bgd"
             android:gravity="center"
             android:text="@string/friends_failure"
             android:textColor="@color/friends_nav_text"

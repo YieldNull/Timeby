@@ -9,8 +9,8 @@ import android.util.Log;
  * 监听APP退出，开启TimeCounterService
  */
 public class APPStateReceiver extends BroadcastReceiver {
-    public static final String ACTION_NAME_QUIT = "com.nectar.timeby.service.QUIT_APP";
-    public static final String ACTION_NAME_ENTER = "com.nectar.timeby.service.ENTER_APP";
+    public static final String ACTION_NAME_QUIT = "com.nectar.timeby.service.countdown.QUIT_APP";
+    public static final String ACTION_NAME_ENTER = "com.nectar.timeby.service.countdown.ENTER_APP";
 
     private static final String TAG = "APPStateReceiver";
 

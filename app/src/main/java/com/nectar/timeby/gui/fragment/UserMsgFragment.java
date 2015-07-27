@@ -1,5 +1,6 @@
 package com.nectar.timeby.gui.fragment;
 
+import android.app.AlarmManager;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -16,9 +17,11 @@ import android.widget.Toast;
 import com.nectar.timeby.R;
 import com.nectar.timeby.db.ClientDao;
 import com.nectar.timeby.db.Message;
+import com.nectar.timeby.gui.widget.TopNotification;
 import com.nectar.timeby.util.HttpProcess;
 import com.nectar.timeby.util.HttpUtil;
 import com.nectar.timeby.util.PrefsUtil;
+import com.nectar.timeby.util.TimeUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,16 +36,42 @@ public class UserMsgFragment extends Fragment {
     private static final String TAG = "UserMsgFragment";
 
     private static final int MSG_SERVER_ERROR = 0x0002;
-    private static final int MSG_AGREE_SUCCESS = 0x0003;
-    private static final int MSG_AGREE_FAILURE = 0x0004;
-    private static final int MSG_REFUSE_SUCCESS = 0x0005;
-    private static final int MSG_REFUSE_FAILURE = 0x0006;
+    private static final int MSG_AGREE_FRIENDS_SUCCESS = 0x0003;
+    private static final int MSG_AGREE_FRIENDS_FAILURE = 0x0004;
+    private static final int MSG_REFUSE_FRIENDS_SUCCESS = 0x0005;
+    private static final int MSG_REFUSE_FRIENDS_FAILURE = 0x0006;
+    private static final int MSG_AGREE_TASK_SUCCESS = 0x0007;
+    private static final int MSG_AGREE_TASK_FAILURE = 0x0008;
+    private static final int MSG_REFUSE_TASK_SUCCESS = 0x0009;
+    private static final int MSG_REFUSE_TASK_FAILURE = 0x00010;
 
+    private static final String ARG_PARAM_TASK_TYPE = "task_type";
+
+
+    private int mTaskType;
     private Handler mHandler;
 
     private ListView userMsgListView;
     private ArrayList<Message> userMsgList = new ArrayList<Message>();
     private MsgAdapter adapter;
+
+
+    public static UserMsgFragment newInstance(int taskType) {
+        UserMsgFragment fragment = new UserMsgFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_PARAM_TASK_TYPE, taskType);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            mTaskType = getArguments().getInt(ARG_PARAM_TASK_TYPE);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,12 +88,15 @@ public class UserMsgFragment extends Fragment {
                 super.handleMessage(msg);
                 switch (msg.what) {
                     case MSG_SERVER_ERROR:
-                    case MSG_AGREE_FAILURE:
-                    case MSG_REFUSE_FAILURE:
+                    case MSG_REFUSE_TASK_FAILURE:
+                    case MSG_REFUSE_FRIENDS_FAILURE:
+                    case MSG_AGREE_TASK_FAILURE:
+                    case MSG_AGREE_FRIENDS_FAILURE:
                         Toast.makeText(getActivity(), "服务器错误，请稍后再试", Toast.LENGTH_SHORT).show();
                         break;
 
-                    case MSG_AGREE_SUCCESS:
+                    case MSG_AGREE_FRIENDS_SUCCESS:
+                    case MSG_AGREE_TASK_SUCCESS:
                         Toast.makeText(getActivity(), "已同意申请", Toast.LENGTH_SHORT).show();
                         userMsgList.get(msg.arg1).setDisposed(Message.MSG_DISPOSED_AGREE);
 
@@ -75,7 +107,8 @@ public class UserMsgFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                         break;
 
-                    case MSG_REFUSE_SUCCESS:
+                    case MSG_REFUSE_FRIENDS_SUCCESS:
+                    case MSG_REFUSE_TASK_SUCCESS:
                         Toast.makeText(getActivity(), "已拒绝申请", Toast.LENGTH_SHORT).show();
                         userMsgList.get(msg.arg1).setDisposed(Message.MSG_DISPOSED_REFUSE);
 
@@ -89,14 +122,32 @@ public class UserMsgFragment extends Fragment {
                     default:
                         break;
                 }
+
+                if (msg.what == MSG_AGREE_TASK_SUCCESS) {
+                    setAlarm();
+                } else if (msg.what == MSG_REFUSE_TASK_SUCCESS) {
+                    PrefsUtil.cancelTask(getActivity());
+                }
             }
         };
         return view;
     }
 
+    private void setAlarm() {
+        //设置Alarm，定时当达到任务开启时间时打开倒计时页面
+        AlarmManager manager = (AlarmManager) getActivity()
+                .getSystemService(Context.ALARM_SERVICE);
+
+        long startTime = PrefsUtil.getTaskStartTime(getActivity());
+        manager.set(AlarmManager.RTC_WAKEUP, startTime,
+                MainFragment.getAlarmIntent(getActivity(), mTaskType));
+        String content = "您已同意申请\n" + TimeUtil.getTimeStr(startTime) + "进入倒计时页面";
+        new TopNotification(getActivity(), content, 3000);
+    }
+
     private void initUserMsgs() {
         ClientDao db = new ClientDao(getActivity());
-        ArrayList<Message> messages = db.queryMessage(Message.MSG_TYPE_USER);
+        ArrayList<Message> messages = db.queryUserMessage();
         Log.d(TAG, messages.size() + "");
         for (Message message : messages) {
             userMsgList.add(message);
@@ -139,7 +190,7 @@ public class UserMsgFragment extends Fragment {
             } else if (msg.getDisposed() == Message.MSG_DISPOSED_REFUSE) {
                 viewHolder.msg_agree.setText("已拒绝");
                 viewHolder.msg_refuse.setText("");
-            } else {
+            } else if (msg.getDisposed() == Message.MSG_DISPOSED_NOT) {
                 viewHolder.msg_agree.setText("同意");
                 viewHolder.msg_refuse.setText("拒绝");
 
@@ -147,14 +198,22 @@ public class UserMsgFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        handleAddFriends(position, msg, true);
+                        if (msg.getType() == Message.MSG_TYPE_USER_FRIENDS) {
+                            handleAddFriends(position, msg, true);
+                        } else {
+                            handleTaskRequest(position, msg, true);
+                        }
                     }
                 });
 
                 viewHolder.msg_refuse.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        handleAddFriends(position, msg, false);
+                        if (msg.getType() == Message.MSG_TYPE_USER_FRIENDS) {
+                            handleAddFriends(position, msg, true);
+                        } else {
+                            handleTaskRequest(position, msg, true);
+                        }
                     }
                 });
             }
@@ -172,7 +231,75 @@ public class UserMsgFragment extends Fragment {
         }
     }
 
+    /**
+     * 处理任务请求
+     *
+     * @param position
+     * @param message
+     * @param isAgree
+     */
+    private void handleTaskRequest(final int position, final Message message, final boolean isAgree) {
+        if (!HttpUtil.isNetAvailable(getActivity())) {
+            Toast.makeText(getActivity(), "无网络连接，请打开数据网络", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        final String oper = isAgree ? "true" : "false";
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String phone = PrefsUtil.getUserPhone(getActivity());
+                String requestPhone = PrefsUtil.getTaskRequestFrom(getActivity());
+                String startTime = TimeUtil.getTimeStr(PrefsUtil.getTaskStartTime(getActivity()));
+
+                JSONObject data = HttpProcess.taskApplicationResult(
+                        phone, requestPhone, startTime, oper);
+                try {
+                    if (data.get("status").equals(-1)) {
+                        mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
+                    } else if (data.get("status").equals(0)) {
+                        mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
+                    } else if (data.get("status").equals(1)) {
+                        if (data.getString("result").equals("true")) {
+                            //成功之后，传递massage对象，用于更新数据库
+                            //传递position用于更新显示状态
+                            if (isAgree) {
+                                android.os.Message msg = android.os.Message.obtain();
+                                msg.arg1 = position;
+                                msg.obj = message;
+                                msg.what = MSG_AGREE_TASK_SUCCESS;
+                                mHandler.sendMessage(msg);
+
+                            } else {
+                                android.os.Message msg = android.os.Message.obtain();
+                                msg.arg1 = position;
+                                msg.obj = message;
+                                msg.what = MSG_REFUSE_TASK_SUCCESS;
+                                mHandler.sendMessage(msg);
+                            }
+                        } else if (data.getString("result").equals("false")) {
+                            if (isAgree)
+                                mHandler.sendEmptyMessage(MSG_AGREE_TASK_FAILURE);
+                            else
+                                mHandler.sendEmptyMessage(MSG_REFUSE_TASK_FAILURE);
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.w(TAG, e.getMessage());
+                }
+
+            }
+        }).start();
+    }
+
+
+    /**
+     * 处理好友请求
+     *
+     * @param position
+     * @param message
+     * @param isAgree
+     */
     private void handleAddFriends(final int position, final Message message, final boolean isAgree) {
         if (!HttpUtil.isNetAvailable(getActivity())) {
             Toast.makeText(getActivity(), "无网络连接，请打开数据网络", Toast.LENGTH_SHORT).show();
@@ -206,23 +333,23 @@ public class UserMsgFragment extends Fragment {
                                 android.os.Message msg = android.os.Message.obtain();
                                 msg.arg1 = position;
                                 msg.obj = message;
-                                msg.what = MSG_AGREE_SUCCESS;
+                                msg.what = MSG_AGREE_FRIENDS_SUCCESS;
                                 mHandler.sendMessage(msg);
 
                             } else {
                                 android.os.Message msg = android.os.Message.obtain();
                                 msg.arg1 = position;
                                 msg.obj = message;
-                                msg.what = MSG_REFUSE_SUCCESS;
+                                msg.what = MSG_REFUSE_FRIENDS_SUCCESS;
                                 mHandler.sendMessage(msg);
                             }
 
                         } else if (data.getString("result").equals("false")) {
 
                             if (isAgree)
-                                mHandler.sendEmptyMessage(MSG_AGREE_FAILURE);
+                                mHandler.sendEmptyMessage(MSG_AGREE_FRIENDS_FAILURE);
                             else
-                                mHandler.sendEmptyMessage(MSG_REFUSE_FAILURE);
+                                mHandler.sendEmptyMessage(MSG_REFUSE_FRIENDS_FAILURE);
                         }
                     }
                 } catch (JSONException e) {

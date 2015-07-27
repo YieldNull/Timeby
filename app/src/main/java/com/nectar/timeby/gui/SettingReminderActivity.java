@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -35,6 +36,15 @@ public class SettingReminderActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_reminder);
+
+        ImageButton button = (ImageButton) findViewById(R.id.btn_return);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         ctl_model = (TextView) findViewById(R.id.tv_model);
         ctl_reminder = (TextView) findViewById(R.id.time_reminder);
         modelList = getList();

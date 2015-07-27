@@ -123,13 +123,50 @@ public class PollingService extends WakefulIntentService {
         }
     }
 
-    private void handlePKFailure(String phoneNum, String name, String startTime, String failedTime) {
 
+    /**
+     * 处理好友申请
+     *
+     * @param phoneNum
+     * @param name
+     */
+    private void handleAddFriendRequest(String phoneNum, String name) {
+        Log.i(TAG, "Received add friend request");
+        Log.i(TAG, "user:" + name + " phone:" + phoneNum);
+
+        Intent intent = new Intent();
+        intent.setAction(MessageReceiver.INTENT_ACTION);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TITLE, "好友申请");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_CONTENT, name + "申请添加您为好友");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_PHONE, phoneNum);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_REMARK, name);
+
+        intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_FRIENDS_ADD_REQUEST);
+        sendOrderedBroadcast(intent, null);
     }
 
-    private void handleCoopFailure(String phoneNum, String name, String startTime, String failedTime) {
 
+    /**
+     * 处理添加好友成功消息
+     *
+     * @param phoneNum
+     * @param name
+     */
+    private void handleAddFriendSuccess(String phoneNum, String name) {
+        Log.i(TAG, "Add friend success");
+        Log.i(TAG, "user:" + name + " phone:" + phoneNum);
+
+        Intent intent = new Intent();
+        intent.setAction(MessageReceiver.INTENT_ACTION);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TITLE, "添加好友");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_CONTENT, "添加 " + name + " 为好友成功");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_PHONE, phoneNum);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_REMARK, name);
+
+        intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_FRIENDS_ADD_SUCCESS);
+        sendOrderedBroadcast(intent, null);
     }
+
 
     /**
      * 任务申请已有好友同意
@@ -142,6 +179,7 @@ public class PollingService extends WakefulIntentService {
         intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_TASK_ACCEPT);
         sendOrderedBroadcast(intent, null);
     }
+
 
     /**
      * 处理任务合作申请
@@ -187,45 +225,50 @@ public class PollingService extends WakefulIntentService {
         sendOrderedBroadcast(intent, null);
     }
 
+
     /**
-     * 处理添加好友成功消息
+     * PK过程中有好友失败
      *
      * @param phoneNum
      * @param name
+     * @param startTime
+     * @param failedTime
      */
-    private void handleAddFriendSuccess(String phoneNum, String name) {
-        Log.i(TAG, "Add friend success");
-        Log.i(TAG, "user:" + name + " phone:" + phoneNum);
-
+    private void handlePKFailure(String phoneNum, String name, String startTime, String failedTime) {
         Intent intent = new Intent();
         intent.setAction(MessageReceiver.INTENT_ACTION);
-        intent.putExtra(MessageReceiver.INTENT_EXTRA_TITLE, "添加好友");
-        intent.putExtra(MessageReceiver.INTENT_EXTRA_CONTENT, "添加 " + name + " 为好友成功");
+
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TITLE, "好友失败");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_CONTENT, name + "在任务中失败，您取得了胜利");
         intent.putExtra(MessageReceiver.INTENT_EXTRA_PHONE, phoneNum);
         intent.putExtra(MessageReceiver.INTENT_EXTRA_REMARK, name);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TASK_START_TIME, startTime);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TASK_FAIL_TIME, failedTime);
 
-        intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_FRIENDS_ADD_SUCCESS);
+        intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_TASK_PK_FAIL);
         sendOrderedBroadcast(intent, null);
     }
 
     /**
-     * 处理好友申请
+     * 合作过程中有好友失败
      *
      * @param phoneNum
      * @param name
+     * @param startTime
+     * @param failedTime
      */
-    private void handleAddFriendRequest(String phoneNum, String name) {
-        Log.i(TAG, "Received add friend request");
-        Log.i(TAG, "user:" + name + " phone:" + phoneNum);
-
+    private void handleCoopFailure(String phoneNum, String name, String startTime, String failedTime) {
         Intent intent = new Intent();
         intent.setAction(MessageReceiver.INTENT_ACTION);
-        intent.putExtra(MessageReceiver.INTENT_EXTRA_TITLE, "好友申请");
-        intent.putExtra(MessageReceiver.INTENT_EXTRA_CONTENT, name + "申请添加您为好友");
+
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TITLE, "好友失败");
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_CONTENT, name + "在任务中失败");
         intent.putExtra(MessageReceiver.INTENT_EXTRA_PHONE, phoneNum);
         intent.putExtra(MessageReceiver.INTENT_EXTRA_REMARK, name);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TASK_START_TIME, startTime);
+        intent.putExtra(MessageReceiver.INTENT_EXTRA_TASK_FAIL_TIME, failedTime);
 
-        intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_FRIENDS_ADD_REQUEST);
+        intent.putExtra(MessageReceiver.INTENT_FLAG, MessageReceiver.FLAG_TASK_COOP_FAIL);
         sendOrderedBroadcast(intent, null);
     }
 

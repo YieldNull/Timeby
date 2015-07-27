@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/img_setting_feedback_bgd"
+    android:background="@color/main_bgd"
     android:orientation="vertical">
 
     <LinearLayout
@@ -9,13 +9,23 @@
         android:layout_height="0dp"
         android:layout_weight="1.18"
         android:gravity="center_vertical"
-        android:paddingLeft="12dp">
+        android:paddingLeft="12dp"
+        android:orientation="horizontal"
+        android:background="@drawable/img_setting_feedback_top"
+        android:weightSum="1">
 
         <ImageView
+            android:id="@+id/feedback_return"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_addfriend_return" />
-
+            android:src="@drawable/return_anchor_standard" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="意 见 反 馈"
+            android:textSize="25sp"
+            android:layout_weight="0.75"
+            android:gravity="center" />
     </LinearLayout>
 
     <LinearLayout

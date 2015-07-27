@@ -9,10 +9,13 @@ import java.util.Date;
 public class Message {
 
     public static final int MSG_TYPE_SYSTEM = 0;
-    public static final int MSG_TYPE_USER = 1;
+    public static final int MSG_TYPE_USER_FRIENDS = 1;
+    public static final int MSG_TYPE_USER_TASK = 2;
+
     public static final int MSG_DISPOSED_NOT = 0;
     public static final int MSG_DISPOSED_AGREE = 1;
     public static final int MSG_DISPOSED_REFUSE = 2;
+    public static final int MSG_DISPOSED_NONE = 3;//无需处理
 
     private int id;
 

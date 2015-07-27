@@ -36,6 +36,7 @@ public class PrefsUtil {
     public static final String PREFS_KEY_TASK_TYPE = "task_type";
     public static final String PREFS_KEY_TASK_FAIL = "task_fail";
     public static final String PREFS_KEY_TASK_WITH_FRIENDS = "task_with_friends";
+    public static final String PREFS_KEY_TASK_REQUEST_FROM = "task_request_from";
 
     public static final String PREFS_MAP_SETTING = "setting";
     public static final String PREFS_KEY_SETTING_NOTIFICATION_BGD = "setting_notification_bgd";
@@ -216,15 +217,19 @@ public class PrefsUtil {
      * @param endMillis
      * @param type
      */
-    public static void storeTask(Context context, long startMillis, long endMillis, int type) {
+    public static void initTask(Context context, long startMillis, long endMillis, int type) {
         SharedPreferences user = context.getSharedPreferences(
                 PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = user.edit();
 
         editor.putLong(PREFS_KEY_TASK_START_TIME_MILLIS, startMillis);
         editor.putLong(PREFS_KEY_TASK_END_TIME_MILLIS, endMillis);
-        editor.putLong(PREFS_KEY_TASK_TYPE, type);
+        editor.putInt(PREFS_KEY_TASK_TYPE, type);
         editor.commit();
+
+        setIsTaskFailed(context, false);
+        setFriendsAccept(context, false);
+        setTaskRequestFrom(context, getUserPhone(context));
     }
 
     /**
@@ -252,6 +257,21 @@ public class PrefsUtil {
         SharedPreferences.Editor editor = task.edit();
         editor.putBoolean(PREFS_KEY_TASK_WITH_FRIENDS, hasAccept);
         editor.commit();
+    }
+
+    public static void setTaskRequestFrom(Context context, String phone) {
+        SharedPreferences task = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = task.edit();
+        editor.putString(PREFS_KEY_TASK_REQUEST_FROM, phone);
+
+        editor.commit();
+    }
+
+    public static String getTaskRequestFrom(Context context) {
+        SharedPreferences task = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
+        return task.getString(PREFS_KEY_TASK_REQUEST_FROM, PrefsUtil.getUserPhone(context));
     }
 
     /**
@@ -302,6 +322,13 @@ public class PrefsUtil {
         return task.getBoolean(PREFS_KEY_TASK_FAIL, false);
     }
 
+
+    public static int getTaskType(Context context) {
+        SharedPreferences task = context.getSharedPreferences(
+                PrefsUtil.PREFS_MAP_TASK, Context.MODE_PRIVATE);
+        return task.getInt(PREFS_KEY_TASK_TYPE, -1);
+    }
+
     /**
      * 设置任务是否失败
      *
@@ -334,6 +361,9 @@ public class PrefsUtil {
         editor.putInt(PREFS_KEY_TASK_TYPE, -1);
         editor.putBoolean(PREFS_KEY_TASK_FAIL, false);
         editor.commit();
+
+        setFriendsAccept(context, false);
+        setTaskRequestFrom(context, getUserPhone(context));
     }
 
     /**
@@ -453,5 +483,4 @@ public class PrefsUtil {
         editor.putBoolean(PREFS_KEY_DRAWER_NOTIFY, hasRefresh);
         editor.commit();
     }
-
 }

@@ -1,40 +1,46 @@
-<LinearLayout
-    android:id="@+id/relativeLayout1"
-    android:layout_height="fill_parent"
-    android:layout_width="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="1dp"
+    android:background="@color/friends_select"
+    android:padding="10dp">
+
+    <com.github.siyamed.shapeimageview.CircularImageView
+        android:id="@+id/imageView_countdown_headimg"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/img_friends_headimg_default" />
 
     <TextView
-        android:id="@+id/FirstText"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:text="First"
-        android:layout_weight="2"
-        android:gravity="center|left"
-        android:layout_gravity="center_vertical"
-        android:textSize="20dp"
-        android:layout_marginLeft="40dp">
-    </TextView>
-
-    <TextView
-        android:id="@+id/SecondText"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:text="Second"
-        android:layout_weight="0.6"
-        android:layout_gravity="center_vertical"
-        android:gravity="center"
-        android:textSize="20dp">
-    </TextView>
-
-    <ImageView
-        android:id="@+id/ThirdImg"
-        android:layout_width="30dp"
-        android:layout_height="25dp"
-        android:text="Third"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="40dp">
-    </ImageView>
+        android:id="@+id/textView_countdown_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp"
+        android:layout_toRightOf="@id/imageView_countdown_headimg"
+        android:singleLine="true"
+        android:text="喝酒还"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textSize="22dp" />
 
 
-</LinearLayout>  
+    <!--<TextView-->
+    <!--android:id="@+id/textView_friends_list_request"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginRight="10dp"-->
+    <!--android:background="@android:color/holo_red_light"-->
+    <!--android:paddingBottom="8dp"-->
+    <!--android:paddingLeft="14dp"-->
+    <!--android:paddingRight="14dp"-->
+    <!--android:paddingTop="8dp"-->
+    <!--android:text="邀请"-->
+    <!--android:textColor="@android:color/white"-->
+    <!--android:textSize="14sp" />-->
+
+</RelativeLayout>
