@@ -111,6 +111,9 @@ public class CountDownActivity extends Activity {
         mAdapter = new ContactListAdapter();
         mDataListView.setAdapter(mAdapter);
 
+        if(mType==MainFragment.TASK_TYPE_SOLO){
+            mDataListView.setDivider(null);
+        }
         initTick();
         initHandler();
 

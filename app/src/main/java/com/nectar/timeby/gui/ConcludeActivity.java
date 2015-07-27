@@ -185,11 +185,13 @@ public class ConcludeActivity extends Activity {
                                 "服务器错误，请稍后再试", Toast.LENGTH_SHORT).show();
                         break;
                     case MSG_FAILURE:
-                        Toast.makeText(ConcludeActivity.this,
-                                "发送请求失败，请稍后再试", Toast.LENGTH_SHORT).show();
-                        break;
+//                        Toast.makeText(ConcludeActivity.this,
+//                                "发送请求失败，请稍后再试", Toast.LENGTH_SHORT).show();
+//                        break;
 
                     case MSG_SUCCESS:
+                        Toast.makeText(ConcludeActivity.this,
+                                "提交成功", Toast.LENGTH_SHORT).show();
                         onBackPressed();
 
                         break;

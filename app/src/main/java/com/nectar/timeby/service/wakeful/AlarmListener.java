@@ -20,7 +20,7 @@ public class AlarmListener implements WakefulIntentService.AlarmListener {
         //4秒后启动轮训，每隔30秒
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() + 1000,
-                1000 * 30, pendingIntent);
+                1000 * 8, pendingIntent);
     }
 
     @Override
