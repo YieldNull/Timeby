@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nectar.timeby">
+    package="com.nectar.timeby" >
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -22,11 +22,11 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".gui.MainActivity"
             android:label="@string/app_name"
-            android:noHistory="true">
+            android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -81,13 +81,13 @@
         <receiver
             android:name=".service.BootReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.commonsware.cwac.wakeful.AlarmReceiver">
+        <receiver android:name="com.commonsware.cwac.wakeful.AlarmReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -99,7 +99,7 @@
         <receiver
             android:name=".service.countdown.APPStateReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.nectar.timeby.service.countdown.QUIT_APP" />
                 <action android:name="com.nectar.timeby.service.countdown.ENTER_APP" />
@@ -108,7 +108,7 @@
         <receiver
             android:name=".service.countdown.ScreenStateReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_ON" />
                 <action android:name="android.intent.action.SCREEN_OFF" />
@@ -117,7 +117,7 @@
         <receiver
             android:name=".service.countdown.IncomingCallReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
@@ -132,7 +132,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+            android:windowSoftInputMode="stateHidden|adjustResize" >
             <intent-filter>
                 <data android:scheme="tencent100371282" />
 
@@ -149,7 +149,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name=".gui.ShowReportFormActivity"
             android:label="@string/app_name" >
@@ -174,16 +173,21 @@
         <service
             android:name=".service.countdown.ScreenService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <receiver
             android:name=".service.MessageReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.nectar.timeby.service.MessageReceiver.BROADCAST" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".gui.ViewFlipperActivity"
+            android:label="@string/title_activity_view_flipper" >
+        </activity>
     </application>
 
 </manifest>
