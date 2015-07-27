@@ -28,6 +28,7 @@ import com.nectar.timeby.db.FriendShip;
 import com.nectar.timeby.gui.interfaces.OnSubmitTaskListener;
 import com.nectar.timeby.util.HttpProcess;
 import com.nectar.timeby.util.PrefsUtil;
+import com.nectar.timeby.util.TimeUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -290,20 +291,21 @@ public class FriendsListFragment extends Fragment
             Log.i(TAG, phone);
         }
 
-        int type = mTaskType == MainFragment.TASK_TYPE_COOPER ? 1 : 2;
+        final int type = mTaskType == MainFragment.TASK_TYPE_COOPER ? 1 : 2;
         long startTime = PrefsUtil.getTaskStartTime(getActivity());
         long endTime = PrefsUtil.getTaskEndTime(getActivity());
-        DateFormat formator = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String start = formator.format(new Date(startTime));
-        String end = formator.format(new Date(endTime));
-        Log.i(TAG, start + "," + end);
+
+        final String startStr = TimeUtil.getTimeStr(startTime);
+        final String endStr = TimeUtil.getTimeStr(endTime);
+
+        Log.i(TAG, startStr + "," + endStr);
 
         mHandler.sendEmptyMessage(MSG_SUCCESS);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 JSONObject data = HttpProcess.taskApplication(
-                        mPhone, jsonArray, "2015-10-10 10:00:00", "2015-10-10 11:00:00", 2);
+                        mPhone, jsonArray, startStr, endStr, type);
                 try {
                     if (data.get("status").equals(-1)) {
                         mHandler.sendEmptyMessage(MSG_SERVER_ERROR);

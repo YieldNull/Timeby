@@ -90,7 +90,7 @@ public class FriendsActivity extends Activity implements FriendsListFragment.OnF
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    MainFragment.cancelAlarm(FriendsActivity.this);
+                    MainFragment.cancelAlarm(FriendsActivity.this, mTaskType);
                     PrefsUtil.cancelTask(FriendsActivity.this);
 
                     Intent intent = new Intent(FriendsActivity.this, MainActivity.class);

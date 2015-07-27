@@ -40,7 +40,7 @@ public class SysMsgFragment extends Fragment {
 
     private void initSysMessages() {
         ClientDao db = new ClientDao(getActivity());
-        ArrayList<Message> messages = db.queryMessage(Message.MSG_TYPE_SYSTEM);
+        ArrayList<Message> messages = db.querySysMessage();
         Log.d(TAG, messages.size() + "");
         for (Message message : messages) {
             sysMessageList.add(message);

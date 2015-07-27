@@ -1,6 +1,7 @@
 package com.nectar.timeby.gui;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
@@ -17,6 +18,7 @@ import android.widget.ImageButton;
 import com.nectar.timeby.R;
 import com.nectar.timeby.db.ClientDao;
 import com.nectar.timeby.db.Message;
+import com.nectar.timeby.gui.fragment.MainFragment;
 import com.nectar.timeby.gui.fragment.SysMsgFragment;
 import com.nectar.timeby.gui.fragment.UserMsgFragment;
 import com.nectar.timeby.gui.widget.TopNotification;
@@ -31,6 +33,7 @@ public class MessageActivity extends Activity {
     private Button btnUserMsg;
 
     private ImageButton mReturnButton;
+    private int mTaskType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +44,6 @@ public class MessageActivity extends Activity {
                         .build()
         );
         setContentView(R.layout.activity_message);
-
-        setDefaultFragment();
 
         btnSysMsg = (Button) findViewById(R.id.btn_sys_msg);
         btnUserMsg = (Button) findViewById(R.id.btn_user_msg);
@@ -56,11 +57,7 @@ public class MessageActivity extends Activity {
                 btnUserMsg.setTextColor(Color.WHITE);
 
                 SysMsgFragment fragment = new SysMsgFragment();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.msg_layout, fragment);
-                transaction.commit();
-
+                setFragment(fragment);
             }
         });
         btnUserMsg.setOnClickListener(new View.OnClickListener() {
@@ -72,11 +69,9 @@ public class MessageActivity extends Activity {
                 btnSysMsg.setBackgroundColor(getResources().getColor(R.color.message_top));
                 btnSysMsg.setTextColor(Color.WHITE);
 
-                UserMsgFragment fragment = new UserMsgFragment();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.msg_layout, fragment);
-                transaction.commit();
+                UserMsgFragment fragment = UserMsgFragment.newInstance(mTaskType);
+                setFragment(fragment);
+
             }
         });
 
@@ -87,12 +82,29 @@ public class MessageActivity extends Activity {
                 onBackPressed();
             }
         });
+
+        mTaskType = getIntent().getIntExtra(MessageReceiver.INTENT_EXTRA_TASK_TYPE, -1);
+        int msgType = getIntent().getIntExtra(MessageReceiver.INTENT_EXTRA_MESG_TYPE, -1);
+        choseFragment(msgType);
     }
 
-    private void setDefaultFragment() {
+    /**
+     * 选fragment
+     *
+     * @param msgType
+     */
+    private void choseFragment(int msgType) {
+        if (msgType != Message.MSG_TYPE_SYSTEM) {
+            btnUserMsg.performClick();
+        } else {
+            btnSysMsg.performClick();
+        }
+    }
+
+
+    private void setFragment(Fragment fragment) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        SysMsgFragment fragment = new SysMsgFragment();
         transaction.replace(R.id.msg_layout, fragment);
         transaction.commit();
     }

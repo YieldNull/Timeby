@@ -102,8 +102,8 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.nectar.timeby.service.QUIT_APP" />
-                <action android:name="com.nectar.timeby.service.ENTER_APP" />
+                <action android:name="com.nectar.timeby.service.countdown.QUIT_APP" />
+                <action android:name="com.nectar.timeby.service.countdown.ENTER_APP" />
             </intent-filter>
         </receiver>
         <receiver

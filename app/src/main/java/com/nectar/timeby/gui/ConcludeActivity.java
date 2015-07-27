@@ -2,20 +2,33 @@ package com.nectar.timeby.gui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nectar.timeby.R;
 import com.nectar.timeby.gui.widget.TopNotification;
+import com.nectar.timeby.util.HttpProcess;
+import com.nectar.timeby.util.HttpUtil;
+import com.nectar.timeby.util.PrefsUtil;
+import com.nectar.timeby.util.TimeUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -24,6 +37,12 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ConcludeActivity extends Activity {
 
+    private static final String TAG = "ConcludeActivity";
+    private static final int IS_FINISH = 1;
+    private static final int MSG_SUCCESS = 2;
+    private static final int MSG_FAILURE = 3;
+    private static final int MSG_SERVER_ERROR = 4;
+
     private SeekBar mSeekBar1;
     private SeekBar mSeekBar2;
     private TextView mPercent1;
@@ -31,8 +50,26 @@ public class ConcludeActivity extends Activity {
     private ArrayList<String> eventList;
     private TextView btnEvent;
     private PopupWindow pw;
-    int clickPosition = -1;
 
+
+    private int clickPosition = -1;
+
+    private Button mCancelButon;
+    private Button mSubmitButton;
+
+    private Handler mHandler;
+
+    private String mTaskContentStr;
+    private float mFoucusDegree, mEfficiency;
+
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +80,22 @@ public class ConcludeActivity extends Activity {
                         .build()
         );
         setContentView(R.layout.activity_conclude);
+
+        mCancelButon = (Button) findViewById(R.id.cCancell);
+        mSubmitButton = (Button) findViewById(R.id.cEnsure);
+        mCancelButon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performSubmit();
+            }
+        });
 
         mSeekBar1 = (SeekBar) findViewById(R.id.ConcentrationsB);
         mSeekBar2 = (SeekBar) findViewById(R.id.EfficiencysB);
@@ -114,8 +167,85 @@ public class ConcludeActivity extends Activity {
             }
         });
 
+        initHandler();
         new TopNotification(this, "任务成功，请进行自我评价", 3000);
     }
+
+
+    /**
+     * 初始化handler
+     */
+    private void initHandler() {
+        mHandler = new Handler() {
+            public void handleMessage(Message msg) {
+
+                switch (msg.what) {
+                    case MSG_SERVER_ERROR:
+                        Toast.makeText(ConcludeActivity.this,
+                                "服务器错误，请稍后再试", Toast.LENGTH_SHORT).show();
+                        break;
+                    case MSG_FAILURE:
+                        Toast.makeText(ConcludeActivity.this,
+                                "发送请求失败，请稍后再试", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case MSG_SUCCESS:
+                        onBackPressed();
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+    }
+
+    /**
+     * 提交申请
+     */
+    private void performSubmit() {
+
+        if (!HttpUtil.isNetAvailable(this)) {
+            Toast.makeText(this, "无网络连接，请打开数据网络", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mTaskContentStr = btnEvent.getText().toString();
+        mFoucusDegree = (float) mSeekBar1.getProgress();
+        mEfficiency = (float) mSeekBar2.getProgress();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(TAG, "Sending conclusion to server");
+                String mPhoneStr = PrefsUtil.getUserPhone(ConcludeActivity.this);
+                String mStartTimeStr = TimeUtil.getTimeStr(
+                        PrefsUtil.getTaskStartTime(ConcludeActivity.this));
+                String mEndTimeStr = TimeUtil.getTimeStr(
+                        PrefsUtil.getTaskEndTime(ConcludeActivity.this));
+
+                JSONObject data = HttpProcess.submitTaskSummary(
+                        mPhoneStr, mStartTimeStr, mEndTimeStr, mTaskContentStr, mFoucusDegree, mEfficiency);
+
+                try {
+                    if (data.get("status").equals(-1)) {
+                        mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
+                    } else if (data.get("status").equals(0)) {
+                        mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
+                    } else if (data.get("status").equals(1)) {
+                        if (data.getString("result").equals("true")) {
+                            mHandler.sendEmptyMessage(MSG_SUCCESS);
+                        } else if (data.getString("result").equals("false")) {
+                            mHandler.sendEmptyMessage(MSG_FAILURE);
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.w(TAG, e.getMessage());
+                }
+            }
+        }).start();
+    }
+
 
     public ArrayList<String> getList() {
         ArrayList<String> list = new ArrayList<String>();
@@ -173,4 +303,5 @@ public class ConcludeActivity extends Activity {
             return convertView;
         }
     }
+
 }

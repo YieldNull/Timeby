@@ -10,15 +10,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nectar.timeby.R;
+import com.nectar.timeby.gui.fragment.MainFragment;
+import com.nectar.timeby.gui.widget.TopNotification;
 import com.nectar.timeby.service.countdown.APPStateReceiver;
 import com.nectar.timeby.service.countdown.ScreenStateReceiver;
+import com.nectar.timeby.util.HttpProcess;
+import com.nectar.timeby.util.HttpUtil;
 import com.nectar.timeby.util.PrefsUtil;
+import com.nectar.timeby.util.TimeUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,8 +41,18 @@ import java.util.Map;
 public class CountDownActivity extends Activity {
 
     private static final String TAG = "CountDownActivity";
+
     private static final int MSG_CLOCK_TICK = 0x0004;
     private static final int MSG_CLOCK_STOP = 0x0005;
+    private static final int MSG_REFRESH_LIST = 0x0006;
+    private static final int MSG_SERVER_ERROR = 0x0007;
+    private static final int MSG_DOWNLOAD_SUCCESS = 0x0008;
+    private static final int MSG_DOWNLOAD_FAILURE = 0x0009;
+
+    private static final String MAP_KEY_PHONE = "phone";
+    private static final String MAP_KEY_NAME = "name";
+    private static final String MAP_KEY_SHELL = "shell";
+    private static final String MAP_KEY_HAMMER = "hammer";
 
     private int mCurrHour;
     private int mCurrMin;
@@ -42,11 +63,15 @@ public class CountDownActivity extends Activity {
     private TextView mMinText;
     private TextView mSecText;
 
+    private ListView mDataListView;
+    private BaseAdapter mAdapter;
+    private ArrayList<HashMap<String, String>> mDataList;
+
+
     private Handler mHandler;
     private Runnable mTickRunnable;
 
-
-    private ListView mResultList;
+    private int mType;
 
     /**
      * 直接退出程序，便于计算在非倒计时界面停留的时间
@@ -62,51 +87,33 @@ public class CountDownActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_countdown);
 
-        ImageButton returnButton = (ImageButton) findViewById(
-                R.id.imageButton_countdown_return);
+        mType = getIntent().getIntExtra(MainFragment.INTENT_TASK_TYPE, -1);
+        if (mType != -1) {
+            if (PrefsUtil.hasFriendsAccept(this)) {
+                downloadFriendsInfo();
+            } else if (PrefsUtil.getTaskRequestFrom(this)
+                    .equals(PrefsUtil.getUserPhone(this))) {
+                downloadFriendsInfo();
+            } else {
+                new TopNotification(this, "没有好友同意您的请求\n您将独自完成任务", 3000).show();
+            }
+        }
+
 
         mHourText = (TextView) findViewById(R.id.textView_main_countdown_hour);
         mMinText = (TextView) findViewById(R.id.textView_main_countdown_min);
         mSecText = (TextView) findViewById(R.id.textView_main_countdown_sec);
-        mResultList = (ListView) findViewById(R.id.listView_main_countdown);
 
-        mTickRunnable = new Runnable() {
-            @Override
-            public void run() {
-                mSumSec -= 1;
-                mCurrSec = mSumSec % 60;
-                mCurrMin = (mSumSec % 3600) / 60;
-                mCurrHour = mSumSec / 3600;
+        mDataListView = (ListView) findViewById(R.id.listView_main_countdown);
+        mDataList = new ArrayList<>();
+        mAdapter = new ContactListAdapter();
+        mDataListView.setAdapter(mAdapter);
 
-                if (mSumSec == 0) {
-                    mHandler.sendEmptyMessage(MSG_CLOCK_STOP);
-                } else {
-                    mHandler.sendEmptyMessage(MSG_CLOCK_TICK);
-                }
+        initTick();
+        initHandler();
 
-                //1秒之后再次发送消息，更新界面
-                mHandler.postDelayed(this, 1000);
-            }
-        };
-
-        mHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case MSG_CLOCK_TICK:
-                        refreshTimeText();
-                        break;
-                    case MSG_CLOCK_STOP:
-                        refreshTimeText();
-                        mHandler.removeCallbacks(mTickRunnable);
-
-                        startActivity(new Intent(
-                                CountDownActivity.this, ConcludeActivity.class));
-
-                        break;
-                }
-            }
-        };
+        ImageButton returnButton = (ImageButton) findViewById(
+                R.id.imageButton_countdown_return);
 
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +122,6 @@ public class CountDownActivity extends Activity {
             }
         });
 
-        initAdapter();
     }
 
     /**
@@ -157,6 +163,59 @@ public class CountDownActivity extends Activity {
         }
     }
 
+    /**
+     * 初始化倒计时
+     */
+    private void initTick() {
+        mTickRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mSumSec -= 1;
+                mCurrSec = mSumSec % 60;
+                mCurrMin = (mSumSec % 3600) / 60;
+                mCurrHour = mSumSec / 3600;
+
+                if (mSumSec == 0) {
+                    mHandler.sendEmptyMessage(MSG_CLOCK_STOP);
+                } else {
+                    mHandler.sendEmptyMessage(MSG_CLOCK_TICK);
+                }
+
+                //1秒之后再次发送消息，更新界面
+                mHandler.postDelayed(this, 1000);
+            }
+        };
+    }
+
+    /**
+     * 初始化Handler
+     */
+    private void initHandler() {
+        mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case MSG_CLOCK_TICK:
+                        refreshTimeText();
+                        break;
+                    case MSG_CLOCK_STOP:
+                        refreshTimeText();
+                        mHandler.removeCallbacks(mTickRunnable);
+
+                        startActivity(new Intent(
+                                CountDownActivity.this, ConcludeActivity.class));
+                        break;
+                    case MSG_DOWNLOAD_SUCCESS:
+                        mAdapter.notifyDataSetInvalidated();
+                        break;
+                    case MSG_DOWNLOAD_FAILURE:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+    }
 
     /**
      * 更新界面显示的倒计时
@@ -178,84 +237,121 @@ public class CountDownActivity extends Activity {
     }
 
 
-    private void initAdapter() {
-        ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+    /**
+     * 下载共同完成任务的信息
+     */
+    private void downloadFriendsInfo() {
+        if (!HttpUtil.isNetAvailable(this)) {
+            new TopNotification(this, "无网络连接\n暂时无法获取好友信息", 3000).show();
+            return;
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String phone = PrefsUtil.getUserPhone(CountDownActivity.this);
+                String requestPhone = PrefsUtil.getTaskRequestFrom(CountDownActivity.this);
+                String startTime = TimeUtil.getTimeStr(
+                        PrefsUtil.getTaskStartTime(CountDownActivity.this));
 
-        HashMap<String, Object> temp = new HashMap<String, Object>();
-        temp.put("FIRST_COLUMN", "萌萌哒贝壳");
-        temp.put("SECOND_COLUMN", "100");
-        temp.put("THIRD_COLUMN", R.drawable.icn_user_shell);
+                JSONArray data = HttpProcess.getTaskInfo(phone, requestPhone, startTime);
+                try {
+                    JSONObject statusJson = data.getJSONObject(0);
+                    if (statusJson.get("status").equals(-1)) {
+                        mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
+                    } else if (statusJson.get("status").equals(0)) {
+                        mHandler.sendEmptyMessage(MSG_SERVER_ERROR);
+                    } else if (statusJson.get("status").equals(1)) {
+                        if (statusJson.getString("result").equals("true"))  //正确返回数据
+                        {
+                            for (int i = 1; i < data.length(); ++i) {
+                                HashMap<String, String> friend = new HashMap<String, String>();
+                                JSONObject dataJson = data.getJSONObject(i);
+                                String phoneNum = dataJson.getString("phonenum");
+                                String name = dataJson.getString("name");
 
-        list.add(temp);
+                                friend.put(MAP_KEY_PHONE, phoneNum);
+                                friend.put(MAP_KEY_NAME, name);
 
-        HashMap<String, Object> temp1 = new HashMap<String, Object>();
-        temp1.put("FIRST_COLUMN", "Diaries");
-        temp1.put("SECOND_COLUMN", "200");
-        temp1.put("THIRD_COLUMN", R.drawable.icn_user_shell);
+                                mDataList.add(friend);
+                            }
 
-        list.add(temp1);
-        mResultList.setAdapter(new CountdownListViewAdapter(this, list));
+                            mHandler.sendEmptyMessage(MSG_DOWNLOAD_SUCCESS);
+                        } else if (statusJson.getString("result").equals("false")) {
+                            mHandler.sendEmptyMessage(MSG_DOWNLOAD_FAILURE);
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.w(TAG, e.getMessage());
+                }
+
+            }
+        }).start();
     }
 
-    /**
-     * 计数页面ListView列表项，by Dean
-     */
-    public static class CountdownListViewAdapter extends BaseAdapter {
-        public ArrayList<HashMap<String, Object>> list;
-        Activity activity;
 
-        public CountdownListViewAdapter(Activity activity, ArrayList<HashMap<String, Object>> list) {
-            super();
-            this.activity = activity;
-            this.list = list;
-        }
+    private class ContactListAdapter extends BaseAdapter {
 
-
+        @Override
         public int getCount() {
-            return list.size();
+            //设置列表项的数量
+            return mDataList.size();
         }
 
-
+        @Override
         public Object getItem(int position) {
-            return list.get(position);
+            return mDataList.get(position);
         }
 
-
+        @Override
         public long getItemId(int position) {
             return 0;
         }
 
-        private class ViewHolder {
-            TextView txtFirst;
-            TextView txtSecond;
-            ImageView imgThrid;
-
-        }
-
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
             ViewHolder holder;
-            LayoutInflater inflater = activity.getLayoutInflater();
 
             if (convertView == null) {
-                convertView = inflater.inflate(R.layout.list_item_countdown, null);
+                //获取引用
                 holder = new ViewHolder();
-                holder.txtFirst = (TextView) convertView.findViewById(R.id.FirstText);
-                holder.txtSecond = (TextView) convertView.findViewById(R.id.SecondText);
-                holder.imgThrid = (ImageView) convertView.findViewById(R.id.ThirdImg);
+                convertView = CountDownActivity.this.getLayoutInflater().inflate(
+                        R.layout.list_item_countdown, parent, false);
+                holder.mContactName = (TextView) convertView.
+                        findViewById(R.id.textView_countdown_name);
+                holder.mHeadImg = (ImageView) convertView.findViewById(
+                        R.id.imageView_countdown_headimg);
 
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            HashMap<String, Object> map = list.get(position);
-            holder.txtFirst.setText((String) map.get("FIRST_COLUMN"));
-            holder.txtSecond.setText((String) map.get("SECOND_COLUMN"));
-            holder.imgThrid.setBackgroundResource((Integer) map.get("THIRD_COLUMN"));
+
+            //设置头像与姓名
+            holder.mContactName.setText(mDataList.get(position).get(MAP_KEY_NAME));
+            holder.setImage(mDataList.get(position).get(MAP_KEY_PHONE));
 
 
             return convertView;
         }
+
+        class ViewHolder {
+            public TextView mContactName;
+            public ImageView mHeadImg;
+
+            public void setImage(String phone) {
+                //TODO 从服务器获取图片信息
+
+                mHeadImg.setImageDrawable(getResources()
+                        .getDrawable(R.drawable.img_friends_headimg_default));
+            }
+
+        }
+    }
+
+    private String getPhoneNum(int position) {
+        String phone = mDataList.get(position).get(MAP_KEY_PHONE);
+
+        return phone;
     }
 }

@@ -14,11 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.mob.tools.MobUIShell;
 import com.nectar.timeby.R;
-import com.nectar.timeby.gui.AddFriendsFromContact;
 import com.nectar.timeby.gui.CountDownActivity;
 import com.nectar.timeby.gui.FriendsActivity;
 import com.nectar.timeby.gui.interfaces.OnDrawerStatusChangedListener;
@@ -26,14 +23,9 @@ import com.nectar.timeby.gui.interfaces.OnDrawerToggleClickListener;
 import com.nectar.timeby.gui.widget.ClockWidget;
 import com.nectar.timeby.gui.widget.TaskTypeSelectDialog;
 import com.nectar.timeby.gui.widget.TopNotification;
-import com.nectar.timeby.util.HttpProcess;
 import com.nectar.timeby.util.PrefsUtil;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * by finalize
@@ -323,13 +315,13 @@ public class MainFragment extends Fragment
      *
      * @param type 任务类型
      */
-    private void setAlarm(int type) {
+    public void setAlarm(int type) {
         long triggerTime = calcAlertTriggerTime();
 
         //将任务信息存到本地
         long startMillis = triggerTime;
         long endMillis = triggerTime + mSumMin * 60 * 1000;
-        PrefsUtil.storeTask(getActivity(), startMillis, endMillis, type);
+        PrefsUtil.initTask(getActivity(), startMillis, endMillis, type);
 
         int DValue = (int) ((triggerTime - System.currentTimeMillis()) / 1000);
         Log.i(TAG, DValue + "");
@@ -339,7 +331,7 @@ public class MainFragment extends Fragment
                 .getSystemService(Context.ALARM_SERVICE);
 
 
-        manager.set(AlarmManager.RTC_WAKEUP, triggerTime, getAlarmIntent(getActivity()));
+        manager.set(AlarmManager.RTC_WAKEUP, triggerTime, getAlarmIntent(getActivity(), type));
 
 
         if (type == TASK_TYPE_SOLO) {
@@ -351,19 +343,33 @@ public class MainFragment extends Fragment
         }
     }
 
-    private static PendingIntent getAlarmIntent(Context context) {
+    /**
+     * 获取PendingIntent
+     *
+     * @param context
+     * @param taskType 任务类型
+     * @return
+     */
+    public static PendingIntent getAlarmIntent(Context context, int taskType) {
         Intent intent = new Intent(context, CountDownActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(MainFragment.INTENT_TASK_TYPE, taskType);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
                 intent, 0);
         return pendingIntent;
     }
 
-    public static void cancelAlarm(Context context) {
+    /**
+     * 取消定时
+     *
+     * @param context
+     * @param taskType 任务类型
+     */
+    public static void cancelAlarm(Context context, int taskType) {
         AlarmManager manager = (AlarmManager) context
                 .getSystemService(Context.ALARM_SERVICE);
-        manager.cancel(getAlarmIntent(context));
+        manager.cancel(getAlarmIntent(context, taskType));
     }
 
     /**

@@ -87,37 +87,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    //在主界面时使用优先级较高的Receiver截断广播，不使用Notification，直接在主界面提示
-    private BroadcastReceiver onNotify = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String content = intent.getStringExtra(MessageReceiver.INTENT_EXTRA_CONTENT);
-            int flag = intent.getIntExtra(MessageReceiver.INTENT_FLAG, -1);
-
-            new TopNotification(MainActivity.this, content, 3 * 1000).show();
-
-            abortBroadcast();
-        }
-    };
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume");
-
-
-        IntentFilter filter = new IntentFilter(MessageReceiver.INTENT_ACTION);
-        filter.setPriority(2);
-        registerReceiver(onNotify, filter);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        unregisterReceiver(onNotify);
-    }
-
     @Override
     public void onBackPressed() {
         //当MainActivity使用不同的fragment进行替换时使用

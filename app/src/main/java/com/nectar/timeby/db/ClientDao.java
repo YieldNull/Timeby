@@ -225,16 +225,15 @@ public class ClientDao {
     /**
      * 查询消息
      *
-     * @param type 消息类型，0为系统消息，1为用户消息
      * @return
      */
-    public ArrayList<Message> queryMessage(int type) {
+    public ArrayList<Message> querySysMessage() {
         SQLiteDatabase db = helper.getReadableDatabase();
         ArrayList<Message> messages = new ArrayList<Message>();
 
         Cursor cursor = db.query("Message",
                 new String[]{"_id", "type", "disposed", "time", "title", "content", "phoneNum"},
-                "type=?", new String[]{type + ""}, null, null, "time desc");
+                "type=?", new String[]{Message.MSG_TYPE_SYSTEM + ""}, null, null, "time desc");
 
         while (cursor.moveToNext()) {
             Message message = new Message();
@@ -253,6 +252,33 @@ public class ClientDao {
         return messages;
     }
 
+    /**
+     * @return
+     */
+    public ArrayList<Message> queryUserMessage() {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        ArrayList<Message> messages = new ArrayList<Message>();
+
+        Cursor cursor = db.query("Message",
+                new String[]{"_id", "type", "disposed", "time", "title", "content", "phoneNum"},
+                "type != ?", new String[]{Message.MSG_TYPE_SYSTEM + ""}, null, null, "time desc");
+
+        while (cursor.moveToNext()) {
+            Message message = new Message();
+            message.setId(cursor.getInt(cursor.getColumnIndex("_id")));
+            message.setType(cursor.getInt(cursor.getColumnIndex("type")));
+            message.setDisposed(cursor.getInt(cursor.getColumnIndex("disposed")));
+            message.setTime(cursor.getLong(cursor.getColumnIndex("time")));
+            message.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+            message.setContent(cursor.getString(cursor.getColumnIndex("content")));
+            message.setPhoneNum(cursor.getString(cursor.getColumnIndex("phoneNum")));
+
+            messages.add(message);
+        }
+        db.close();
+
+        return messages;
+    }
 
     /**
      * 更新消息的处理状态
