@@ -42,4 +42,16 @@
     <color name="add_friends_from_contact_added">#a7a6a6</color>
     <color name="msg_select">#583b2b</color>
     <color name="friends_list_request">#bdefda</color>
+
+    <color name="red">#ffff0000</color>
+    <color name="green">#ff00ff00</color>
+    <color name="blue">#ff0000ff</color>
+    <color name="reddish">#90ff0000</color>
+    <color name="light_green">#9000ff00</color>
+    <color name="light_blue">#900000ff</color>
+    <color name="light_yellow">#90ffff00</color>
+    <color name="purple">#ff00ff</color>
+    <color name="sky_blue">#00ffff</color>
+    <color name="yellow_green">#c9dd72</color>
+
 </resources>
