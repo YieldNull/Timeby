@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nectar/timeby/gui/DataComparedWithLastWeekActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nectar/timeby/gui/LineChart2Activity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nectar/timeby/gui/LineChartActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nectar/timeby/gui/PieChartActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/nectar/timeby/gui/ShowReportFormActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/left_bottom_appear.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/left_bottom_disappear.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/left_top_appear.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/left_top_disappear.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/right_bottom_appear.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/right_bottom_disappear.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/right_top_appear.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/right_top_disappear.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/stay_motionless.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/left_bottom_chart_preview_img.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/left_top_chart_preview_img.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/report_form_center_logo.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/right_bottom_chart_preview_img.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/right_top_chart_preview_img.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/show_report_form_activity_return.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_data_compared_with_last_week.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_line_chart.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_line_chart2.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_pie_chart.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_show_report_form.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/menu/colors.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/menu/menu_data_compared_with_last_week.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/menu/menu_line_chart.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/menu/menu_line_chart2.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/menu/menu_pie_chart.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/menu/menu_show_report_form.xml" charset="UTF-8" />
+  </component>
+</project>

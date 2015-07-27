@@ -1,7 +1,9 @@
 package com.nectar.timeby.gui.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,10 +43,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import in.srain.cube.views.ptr.PtrDefaultHandler;
-import in.srain.cube.views.ptr.PtrFrameLayout;
-import in.srain.cube.views.ptr.header.StoreHouseHeader;
 
 /**
  * Created by fangdongliang on 15/7/23.
@@ -216,8 +215,19 @@ public class FriendsListFragment extends Fragment
 
     }
 
-    private void handleRemarkFriend(int position) {
+    private void handleRemarkFriend(int position){
+        EditText editText = new EditText(getActivity());
+        new AlertDialog.Builder(getActivity())
+                .setTitle("请输入备注:")
+                .setView(editText)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
+                    }
+                })
+                .setNegativeButton("取消",null)
+                .show();
     }
 
     public static FriendsListFragment newInstance(int taskType) {

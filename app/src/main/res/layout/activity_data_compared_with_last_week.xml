@@ -1,0 +1,103 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffe3"
+    tools:context="com.sbz_dy.www.newreportformtest.DataComparedWithLastWeekActivity">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <TextView android:text="与上周数据比较" android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="3"
+            android:textSize="30dip"
+            android:gravity="center"
+            />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <TextView android:text="成功率：" android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:textSize="20dip"
+                android:gravity="center_vertical|right"
+                />
+            <TextView android:layout_width="0dip"
+                android:id="@+id/rate_success"
+                android:text="　 00%"
+                android:textColor="#c0c0c0"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:textSize="20dip"
+                android:gravity="center_vertical|left"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <TextView android:text="专注度：" android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:textSize="20dip"
+                android:gravity="center_vertical|right"
+                />
+            <TextView android:layout_width="0dip"
+                android:id="@+id/rate_concentration"
+                android:text="　 00%"
+                android:textColor="#c0c0c0"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:textSize="20dip"
+                android:gravity="center_vertical|left"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <TextView android:text="效　率：" android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:textSize="20dip"
+                android:gravity="center_vertical|right"
+                />
+            <TextView android:layout_width="0dip"
+                android:id="@+id/rate_efficiency"
+                android:text="　 00%"
+                android:textColor="#c0c0c0"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:textSize="20dip"
+                android:gravity="center_vertical|left"
+                />
+        </LinearLayout>
+
+        <TextView android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="2.5"
+            android:textSize="30dip"
+            />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/data_compared_with_last_week_activity_return"
+        android:layout_width="30dip"
+        android:layout_height="30dip"
+        android:src="@drawable/show_report_form_activity_return"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="8dip"
+        android:layout_marginTop="10dip" />
+
+</RelativeLayout>

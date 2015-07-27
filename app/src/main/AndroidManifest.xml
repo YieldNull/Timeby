@@ -63,7 +63,6 @@
         <activity
             android:name=".gui.AddFriendsFromContact"
             android:label="@string/title_activity_add_friends_by_maillist" />
-        <activity android:name=".gui.ReportActivity" />
         <activity android:name=".gui.ConcludeActivity" />
         <activity android:name=".gui.MessageActivity" />
         <activity android:name=".gui.SettingReminderActivity" />
@@ -150,6 +149,27 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <activity
+            android:name=".gui.ShowReportFormActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".gui.PieChartActivity"
+            android:label="@string/title_activity_pie_chart" >
+        </activity>
+        <activity
+            android:name=".gui.LineChartActivity"
+            android:label="@string/title_activity_line_chart" >
+        </activity>
+        <activity
+            android:name=".gui.LineChart2Activity"
+            android:label="@string/title_activity_line_chart2" >
+        </activity>
+        <activity
+            android:name=".gui.DataComparedWithLastWeekActivity"
+            android:label="@string/title_activity_data_compared_with_last_week" >
+        </activity>
 
         <service
             android:name=".service.countdown.ScreenService"

@@ -69,4 +69,9 @@
     <string name="message_sys">消  息</string>
     <string name="add_friend_from_contact">通讯录</string>
 
+    <string name="title_activity_pie_chart">PieChart</string>
+    <string name="title_activity_line_chart">LineChartActivity</string>
+    <string name="title_activity_line_chart2">LineChart2Activity</string>
+    <string name="title_activity_data_compared_with_last_week">DataComparedWithLastWeekActivity</string>
+
 </resources>

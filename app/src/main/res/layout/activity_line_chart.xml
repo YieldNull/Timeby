@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.sbz_dy.www.newreportformtest.LineChartActivity"
+    android:background="#ffffe3">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingTop="60dip"
+        android:paddingLeft="20dip"
+        android:paddingRight="20dip"
+        android:paddingBottom="30dip" >
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/line_chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/line_chart_activity_return"
+        android:layout_width="30dip"
+        android:layout_height="30dip"
+        android:src="@drawable/show_report_form_activity_return"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="8dip"
+        android:layout_marginTop="10dip" />
+
+</RelativeLayout>

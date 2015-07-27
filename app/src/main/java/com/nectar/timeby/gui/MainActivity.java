@@ -154,8 +154,9 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case 3:
-                intent = new Intent(this, ReportActivity.class);
+                intent = new Intent(this, ShowReportFormActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 break;
             case 4:
                 intent = new Intent(this, SettingActivity.class);
